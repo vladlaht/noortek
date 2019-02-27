@@ -173,7 +173,7 @@ class NoortekWPTheme
             echo "Andmed salvestatud" . $post_Id;
         } catch (Exception $e) {
 
-            wp_die('', '', 500);
+ 
         }
 
 
