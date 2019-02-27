@@ -1,0 +1,189 @@
+<div class="booking-form">
+    <form id="nnk-booking-form" action="http://localhost/noortek/wp-admin/admin-post.php" method="POST">
+        <input type="hidden" name="action" value="custom_action_hook">
+        <div>
+            <strong> Ruumi broneerimiseks palun täitke alljärgnev vorm:</strong>
+            <p style="color:red;">* Tärniga tähistatud alad on kohustuslikud.</p>
+        </div>
+
+        <div id="smartwizard" style="display: none;">
+            <ul>
+                <li><a href="#step-1">Samm 1<br/>
+                        <small>Ruum ja kuupäev</small>
+                    </a></li>
+                <li><a href="#step-2">Samm 2<br/>
+                        <small>Aeg</small>
+                    </a></li>
+                <li><a href="#step-3">Samm 3<br/>
+                        <small>Vahendid,osalejad,eesmärk,lisainfo</small>
+                    </a></li>
+                <li><a href="#step-4">Samm 4<br/>
+                        <small>Eesmärk,lisainfo, vastutav isik</small>
+                    </a></li>
+                <li><a href="#step-5">Samm 5<br/>
+                        <small>Summa ja kinnitamine</small>
+                    </a></li>
+            </ul>
+
+            <div>
+                <div id="step-1" class="">
+                    <div class="form-group">
+                        <label for="select-room">Ruum*</label>
+                        <select class="form-control" id="select-room" name="room" id="room" required="required">
+                            <option disabled selected value hidden> -- Valige ruumi --</option>
+                            {% for room in rooms %}
+                                <option value="{{ room.ID }}">{{ room.post_title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="select-date">Kuupäev*</label>
+                        <input type="text" class="datepicker-here" data-position="right top" name="date" id="date">
+                    </div>
+                </div>
+
+                <div id="step-2" class="">
+                    <div class="form-group">
+                        <div class="timepicker">
+                            <label for="select-time-from">Aeg alates*</label>
+                            <input type="text" class="form-control" id="select-time-from" name="time_from"
+                                   id="time_from">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-time"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="timepicker">
+                            <label for="select-time-until">Aeg kuni*</label>
+                            <input type="text" class="form-control" id="select-time-until" name="time_until"
+                                   id="time_until">
+                            <span class="input-group-addon">
+        <span class="glyphicon glyphicon-time"></span>
+    </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="step-3" class="">
+                    <div class="form-group">
+                        <label for="select-resources">Vajalikud vahendid</label>
+                        {% for key, item in equipment %}
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="check-resources{{ key }}"
+                                       name="resources[]"
+                                       value="{{ item.ID }}">
+                                <label class="form-check-label" for="check-resources{{ key }}">
+                                    {{ item.post_title }}
+
+                                    {{ item.hind }}€ / tund
+
+
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="select-participants-num">Osalejate arv*</label>
+                        <input type="number" class="form-control" id="select-participants-num" name="participants_num"
+                               id="participants_num"
+                               placeholder="Maksimum 30 inimest"
+                               onfocus="placeholder = ''" onblur="placeholder = 'Maksimum 30 inimest'">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="select-purpose">Eesmärk*</label>
+                        <input type="text" class="form-control" id="select-purpose" name="purpose"
+                               placeholder="Kirjelda lühidalt ruumi kasutamise eesmärk"
+                               onfocus="placeholder = ''"
+                               onblur="placeholder = 'Kirjelda lühidalt ruumi kasutamise eesmärk'">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="select-info">Lisainfo</label>
+                        <textarea rows='2' class="form-control" id="select-info" name="info" rows="3"
+                                  placeholder="Kui Teil on soov midagi lisada, siis kirjutage siia"
+                                  onfocus="placeholder = ''"
+                                  onblur="placeholder = 'Kui Teil on soov midagi lisada, siis kirjutage siia'"
+                        ></textarea>
+                    </div>
+                </div>
+                <div id="step-4" class="">
+                    <div>
+                        <strong> Vastutava isiku andmed:</strong>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="select-lastname">Eesnimi*</label>
+                            <input type="text" class="form-control" id="select-firstname" name="firstname">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="select-lastname">Perekonnanimi*</label>
+                            <input type="text" class="form-control" id="select-lastname" name="lastname">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label for="select-phone">Telefoninumber*</label>
+                            <input type="number" class="form-control" id="select-phone" name="phone">
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="select-email">Email aadress*</label>
+                            <input type="email" class="form-control" id="select-email" name="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="select-address">Aadress*</label>
+                        <input type="text" class="form-control" id="select-address" name="address"
+                               placeholder="Linn, tänav, maja number"
+                               onfocus="placeholder = ''" onblur="placeholder = 'Linn, tänav, maja number'">
+                    </div>
+                </div>
+
+                <div id="step-5" class="">
+                    <div class="form-group">
+                        <div>
+                            <span>Ruumide kasutaja vastutus: </span>
+                        </div>
+                        <ul>
+                            <li>Rummi kasutaja vastutab materiaalselt ruumi heakorra ja sisustuse säilitamise eest.</li>
+                            <li>Ruumi üle andes palume vaadata, et kõik oleks korras (aknad kinni, tahvel puhas jne.).</li>
+                        </ul>
+                        <div>
+                            <span >
+                                <strong>KEELATUD:</strong>
+                            </span>
+                        </div>
+                        <div>
+                            1. Suitsetada ja tarbida alkohoolseid jooke NNK sees ja NNK territooriumil
+                        </div>
+                        <div>
+                            2. Reostada NNK sees ja territooriumil
+                        </div>
+                        <div></div>
+                        <div>
+                            3. Keelatud ropendada, teise sõimata või halvustada.
+                        </div>
+                        <div>
+                            4. Keelatud tekitama ebamugavusi teiste kasutajate töö teostamiseks.
+                        </div>
+                        <br>Reeglite rikkumise korral Teie kaotate õiguse edaspidi NNK ruumi kasutada.
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
+                            <label class="form-check-label" for="rules_checkbox">
+                                Olen lugenud reegleid ja nõustun neid järgima.
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
