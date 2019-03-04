@@ -1,23 +1,24 @@
 <?php
+
 require_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
+include 'themeClass/RoomBooking.php';
 
 $theme = new NoortekWPTheme();
 
-class NoortekWPTheme
-{
-    public function __construct()
-    {
+class NoortekWPTheme {
+
+    public function __construct() {
         add_action('wp_enqueue_scripts', [$this, 'register_styles']);
         add_action('wp_enqueue_scripts', [$this, 'register_scripts']);
         add_action('init', [$this, 'register_menu_spaces']);
         add_action('init', [$this, 'register_custom_post_types']);
         add_action('after_setup_theme', [$this, 'add_support']);
         add_theme_support("post-thumbnails");
-        $this->register_short_codes();
         add_action('admin_post_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
         add_action('admin_post_custom_action_hook', [$this, 'the_action_hook_callback']);
         add_action('admin_ajax_custom_action_hook', [$this, 'the_action_hook_callback']);
         add_action('admin_ajax_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
+        $this->enableFeatures();
     }
 
     function add_support()
@@ -35,6 +36,8 @@ class NoortekWPTheme
         wp_enqueue_style('smart_wizard', get_theme_file_uri() . '/css/smart_wizard.min.css');
         wp_enqueue_style('smart_wizard_theme_arrows', get_theme_file_uri() . '/css/smart_wizard_theme_arrows.min.css');
         wp_enqueue_style('font-awesome', get_theme_file_uri() . '/css/fontawesome/css/all.min.css');
+        wp_enqueue_style('fullcalendar', get_theme_file_uri() . '/css/fullcalendar.min.css');
+        wp_enqueue_style('fullcalendarscheduler', get_theme_file_uri() . '/css/scheduler.min.css');
         wp_enqueue_style('style', get_theme_file_uri() . '/style.css');
 
     }
@@ -49,17 +52,22 @@ class NoortekWPTheme
         wp_enqueue_script('smart_wizard', get_theme_file_uri() . '/js/jquery.smartWizard.min.js', false, 1, true);
         wp_enqueue_script('masonry', get_theme_file_uri() . '/js/masonry.pkgd.min.js', false, 1, true);
         wp_enqueue_script('jquery.validate', get_theme_file_uri() . '/js/jquery.validate.min.js', false, 1, true);
+        wp_enqueue_script('moment', get_theme_file_uri() . '/js/moment-with-locale.js', false, 1, true);
+        wp_enqueue_script('fullcalendar', get_theme_file_uri() . '/js/fullcalendar.min.js', false, 1, true);
+        wp_enqueue_script('fullcalendarscheduler', get_theme_file_uri() . '/js/scheduler.min.js', false, 1, true);
+        wp_enqueue_script('mask', get_theme_file_uri() . '/js/jquery.mask.min.js', false, 1, true);
 
         if (true) {
             wp_enqueue_script('index-page', get_theme_file_uri() . '/js/pages/index.js', false, 1, true);
         }
     }
 
-    function register_custom_post_types()
-    {
-        $this->register_custom_post_type('booking', 'Broneering', 'Broneeringud');
-        $this->register_custom_post_type('booking-room', 'Ruum', 'Ruumid');
-        $this->register_custom_post_type('booking-equipment', 'Vahend', 'Vahendid');
+    function enableFeatures(){
+        new RoomBooking();
+    }
+
+    function register_custom_post_types() {
+
     }
 
     function register_menu_spaces()
@@ -72,7 +80,7 @@ class NoortekWPTheme
         );
     }
 
-    function register_custom_post_type($slug, $singular, $plural)
+    public static function register_custom_post_type($slug, $singular, $plural)
     {
         $theme = 'noortek-theme';
 
@@ -113,22 +121,7 @@ class NoortekWPTheme
         register_post_type($slug, $args);
     }
 
-    function register_short_codes()
-    {
-        add_shortcode('booking', [$this, 'register_booking_short_code']);
-    }
 
-    function register_booking_short_code()
-    {
-        $rooms = ['post_type' => 'booking-room'];
-        $equipment = ['post_type' => 'booking-equipment'];
-        $get_rooms = get_posts($rooms);
-        $get_equipments = get_posts($equipment);
-        return Timber::compile('/views/booking.twig', [
-            'rooms' => $get_rooms,
-            'equipment' => $get_equipments
-        ]);
-    }
 
     function the_action_hook_callback()
     {

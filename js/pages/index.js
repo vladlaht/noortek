@@ -4,40 +4,133 @@ $(document).ready(function () {
         itemSelector: '.post-item'
     });
 
-    $('.datepicker.date').datepicker({
+    var disabledDays = [0, 1];
+    $('.datepicker-here').datepicker({
         format: "dd.mm.yy",
         maxViewMode: 2,
         clearBtn: true,
         autoclose: true,
         orientation: "top auto",
-        todayHighlight: true
+        todayHighlight: true,
+        minDate: moment().add(7, 'days').toDate(),
+        onRenderCell: function (date, cellType) {
+            if (cellType == 'day') {
+                var day = date.getDay(),
+                    isDisabled = disabledDays.indexOf(day) != -1;
+
+                return {
+                    disabled: isDisabled
+                }
+            }
+        }
     });
 
-    $('.timepicker').timepicker();
+
+    $('.time').mask('HA:MA', {
+        translation: {
+            'H': {
+                pattern: /[0-2]/, optional: true
+            },
+            'A': {
+                pattern: /[0-9]/, optional: true
+            },
+            'M': {
+                pattern: /[0-5]/, optional: true
+            }
+        }
+    });
+
 
 
     var form = $('#nnk-booking-form');
     var wizard = $('#smartwizard');
-    wizard.smartWizard(
-        {
-            toolbarSettings: {
-                toolbarExtraButtons: [
-                    $('<button></button>').text('Finish')
-                        .addClass('btn btn-info')
+    wizard.smartWizard({
+        useURLhash: false,
+        showStepURLhash: false
 
-                    ]
-            }
-
-        });
+    });
     wizard.show();
-    wizard.on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
-        if(stepDirection != "backward"){
+    wizard.on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
+
+        if (stepDirection !== "backward") {
             var result = form.valid();
+            if (result && stepNumber === 1){
+              var allItems = JSON.decode(localStorage.getItem("times"));
+              var timeFrom = $('input[name=time_from]').val();
+              var timeTo = $('input[name=time_until]').val();
+              timeFrom = moment($('input#date').val() + " " + timeFrom, "DD.MM.YYYY HH:ii");
+              timeTo = moment($('input#date').val() + " " + timeTo, "DD.MM.YYYY HH:ii");
+              $.each(allItems, function(index, item){
+                  if(moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
+                  || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)){
+                      alert("Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega");
+                      result = false;
+                      return false;
+                  }
+
+              })
+            }
             return result;
         }
+
+
+    });
+    wizard.on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
+
+        if (stepNumber === 1 ) {
+            var timetable = $('.timetable');
+
+            timetable.fullCalendar({
+                header: {
+                    left:   'title',
+                    center: '',
+                    right:  ''
+                },
+                timeFormat: 'HH:mm',
+                height: 150,
+                schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                defaultDate:  moment($('input#date').val(), "DD.MM.YYYY"),
+                defaultView: 'timelineDay',
+                minTime: "10:00",
+                maxTime: "19:00"
+            });
+
+            $.ajax({
+                url: ajaxurl,
+                data: {
+                    action: 'room_booking_time',
+                    date: $('input#date').val(),
+                    room: $('input[name=room]:checked').val()
+                },
+                method: 'POST'
+            }).done(function (response) {
+                var items = [];
+                $.each(response.data.result, function (index, value) {
+                    timetable.fullCalendar('renderEvent', {
+                        id: index,
+                        title: value.title,
+                        start: moment(value.from.date),
+                        end: moment(value.to.date)
+                    });
+                    items.push({
+                        title:value.title,
+                        start: moment(value.from.date),
+                        end: moment(value.to.date)
+                    }) ;
+
+                });
+                localStorage.setItem("times", JSON.encode(items));
+
+
+            }).fail(function (response) {
+                alert('error');
+            });
+        }
+
     });
 
     form.validate({
+        errorContainer: "#messageBox1",
         rules: {
             room: {
                 required: true
@@ -85,8 +178,8 @@ $(document).ready(function () {
                 email: true,
                 maxlength: 60
             },
-            rules:{
-              required: true
+            rules: {
+                required: true
             }
         },
         messages: {

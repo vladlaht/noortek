@@ -689,7 +689,7 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
 }
-header {
+body > header {
     background-image:  radial-gradient(ellipse at left bottom, #ff6f2d , #ffd300);
     min-height: 150px;
     margin-bottom: 20px;

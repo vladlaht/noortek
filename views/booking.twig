@@ -1,70 +1,117 @@
 <div class="booking-form">
     <form id="nnk-booking-form" action="http://localhost/noortek/wp-admin/admin-post.php" method="POST">
         <input type="hidden" name="action" value="custom_action_hook">
-        <div>
-            <strong> Ruumi broneerimiseks palun täitke alljärgnev vorm:</strong>
-            <p style="color:red;">* Tärniga tähistatud alad on kohustuslikud.</p>
-        </div>
 
         <div id="smartwizard" style="display: none;">
             <ul>
-                <li><a href="#step-1">Samm 1<br/>
-                        <small>Ruum ja kuupäev</small>
-                    </a></li>
-                <li><a href="#step-2">Samm 2<br/>
-                        <small>Aeg</small>
-                    </a></li>
-                <li><a href="#step-3">Samm 3<br/>
-                        <small>Vahendid,osalejad,eesmärk,lisainfo</small>
-                    </a></li>
-                <li><a href="#step-4">Samm 4<br/>
-                        <small>Eesmärk,lisainfo, vastutav isik</small>
-                    </a></li>
-                <li><a href="#step-5">Samm 5<br/>
-                        <small>Summa ja kinnitamine</small>
-                    </a></li>
+                <li>
+                    <a href="#step-1">
+                        Ruum ja kuupäev
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-2">
+                        Aeg ja Vahe
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-3">
+                        Broneerimise eesmärk
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-4">
+                        Vastutaja
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-5">
+                        Kinnitamine
+                    </a>
+                </li>
             </ul>
 
             <div>
                 <div id="step-1" class="">
-                    <div class="form-group">
+                    <div class="form-group col-4">
+                        <label for="select-date">Kuupäev*</label>
+                        <input type="text" class="datepicker-here form-control" data-position="right top" name="date"
+                               id="date">
+                    </div>
+                    <div class="form-group col-12">
                         <label for="select-room">Ruum*</label>
-                        <select class="form-control" id="select-room" name="room" id="room" required="required">
-                            <option disabled selected value hidden> -- Valige ruumi --</option>
+                        <div class="row">
+
                             {% for room in rooms %}
-                                <option value="{{ room.ID }}">{{ room.post_title }}</option>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <img class="card-img-top"
+                                             src="{{ function('get_the_post_thumbnail_url', room.ID, 'post-thumbnail') }}"
+                                             alt="">
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                {{ room.post_title }}
+                                            </h5>
+                                            <div class="price">
+                                                <strong>Hind :</strong> 10 EUR / t
+                                            </div>
+
+                                            <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                                                <label class="btn btn-secondary btn-sm ">
+                                                    <input type="radio" name="room" id="option{{ room.ID }}"
+                                                           autocomplete="off" value="{{ room.ID }}"> Valin
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                             {% endfor %}
-                        </select>
+
+
+                        </div>
+
                     </div>
 
-                    <div class="form-group">
-                        <label for="select-date">Kuupäev*</label>
-                        <input type="text" class="datepicker-here" data-position="right top" name="date" id="date">
-                    </div>
+
                 </div>
 
                 <div id="step-2" class="">
-                    <div class="form-group">
-                        <div class="timepicker">
-                            <label for="select-time-from">Aeg alates*</label>
-                            <input type="text" class="form-control" id="select-time-from" name="time_from"
-                                   id="time_from">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-time"></span>
+
+                    <div class=""></div>
+
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <div class="timepicker">
+                                <label for="select-time-from">Aeg alates*</label>
+                                <input type="text" class="form-control time" id="select-time-from" name="time_from"
+                                       id="time_from">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-3">
+                            <div class="timepicker">
+                                <label for="select-time-until">Aeg kuni*</label>
+                                <input type="text" class="form-control time" id="select-time-until" name="time_until"
+                                       id="time_until">
+                                <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                            </span>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <div class="timepicker">
-                            <label for="select-time-until">Aeg kuni*</label>
-                            <input type="text" class="form-control" id="select-time-until" name="time_until"
-                                   id="time_until">
-                            <span class="input-group-addon">
-        <span class="glyphicon glyphicon-time"></span>
-    </span>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="timetable "></div>
                         </div>
                     </div>
+
                 </div>
 
                 <div id="step-3" class="">
@@ -152,10 +199,11 @@
                         </div>
                         <ul>
                             <li>Rummi kasutaja vastutab materiaalselt ruumi heakorra ja sisustuse säilitamise eest.</li>
-                            <li>Ruumi üle andes palume vaadata, et kõik oleks korras (aknad kinni, tahvel puhas jne.).</li>
+                            <li>Ruumi üle andes palume vaadata, et kõik oleks korras (aknad kinni, tahvel puhas jne.).
+                            </li>
                         </ul>
                         <div>
-                            <span >
+                            <span>
                                 <strong>KEELATUD:</strong>
                             </span>
                         </div>
@@ -173,17 +221,17 @@
                             4. Keelatud tekitama ebamugavusi teiste kasutajate töö teostamiseks.
                         </div>
                         <br>Reeglite rikkumise korral Teie kaotate õiguse edaspidi NNK ruumi kasutada.
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
-                            <label class="form-check-label" for="rules_checkbox">
-                                Olen lugenud reegleid ja nõustun neid järgima.
-                            </label>
-                        </div>
-
                     </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
+                        <label class="form-check-label" for="rules_checkbox">
+                            Olen lugenud reegleid ja nõustun neid järgima.
+                        </label>
+                    </div>
+
                 </div>
             </div>
+        </div>
     </form>
 </div>
