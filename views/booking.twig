@@ -54,7 +54,7 @@
                                                 {{ room.post_title }}
                                             </h5>
                                             <div class="price">
-                                                <strong>Hind :</strong> 10 EUR / t
+                                                <strong>Hind :</strong> {{ room.price }} EUR / tund
                                             </div>
 
                                             <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
@@ -86,8 +86,8 @@
                     <div class="row">
                         <div class="form-group col-3">
                             <div class="timepicker">
-                                <label for="select-time-from">Aeg alates*</label>
-                                <input type="text" class="form-control time" id="select-time-from" name="time_from"
+                                <label for="time_from">Aeg alates*</label>
+                                <input type="text" class="form-control time" name="time_from"
                                        id="time_from">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-time"></span>
@@ -97,8 +97,8 @@
 
                         <div class="form-group col-3">
                             <div class="timepicker">
-                                <label for="select-time-until">Aeg kuni*</label>
-                                <input type="text" class="form-control time" id="select-time-until" name="time_until"
+                                <label for="time_until">Aeg kuni*</label>
+                                <input type="text" class="form-control time" name="time_until"
                                        id="time_until">
                                 <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
@@ -116,7 +116,7 @@
 
                 <div id="step-3" class="">
                     <div class="form-group">
-                        <label for="select-resources">Vajalikud vahendid</label>
+                        <label for="check-resources">Vajalikud vahendid</label>
                         {% for key, item in equipment %}
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="check-resources{{ key }}"
@@ -124,7 +124,6 @@
                                        value="{{ item.ID }}">
                                 <label class="form-check-label" for="check-resources{{ key }}">
                                     {{ item.post_title }}
-
                                     {{ item.hind }}€ / tund
 
 
@@ -134,8 +133,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="select-participants-num">Osalejate arv*</label>
-                        <input type="number" class="form-control" id="select-participants-num" name="participants_num"
+                        <label for="participants_num">Osalejate arv*</label>
+                        <input type="number" class="form-control" name="participants_num"
                                id="participants_num"
                                placeholder="Maksimum 30 inimest"
                                onfocus="placeholder = ''" onblur="placeholder = 'Maksimum 30 inimest'">

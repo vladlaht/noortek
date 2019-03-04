@@ -25,21 +25,34 @@ $(document).ready(function () {
         }
     });
 
-
-    $('.time').mask('HA:MA', {
+    $('.time').mask('AB:CD', {
         translation: {
-            'H': {
+            'A': {
                 pattern: /[0-2]/, optional: true
             },
-            'A': {
+            'B': {
                 pattern: /[0-9]/, optional: true
             },
-            'M': {
+            'C': {
                 pattern: /[0-5]/, optional: true
+            },
+            'D': {
+                pattern: /[0-9]/, optional: true
             }
+        },
+        onKeyPress: function(a, b, c, d) {
+            let m = a.match(/(\d{1})/g);
+            if (parseInt(m[0]) === 2) {
+                d.translation.B.pattern = /[0-3]/;
+            } else {
+                d.translation.B.pattern = /[0-9]/;
+            }
+            let temp_value = c.val();
+            c.val('');
+            c.unmask().mask('AB:CD', d);
+            c.val(temp_value);
         }
     });
-
 
 
     var form = $('#nnk-booking-form');
@@ -54,21 +67,21 @@ $(document).ready(function () {
 
         if (stepDirection !== "backward") {
             var result = form.valid();
-            if (result && stepNumber === 1){
-              var allItems = JSON.parse(localStorage.getItem("times"));
-              var timeFrom = $('input[name=time_from]').val();
-              var timeTo = $('input[name=time_until]').val();
-              timeFrom = moment($('input#date').val() + " " + timeFrom, "DD.MM.YYYY HH:ii");
-              timeTo = moment($('input#date').val() + " " + timeTo, "DD.MM.YYYY HH:ii");
-              $.each(allItems, function(index, item){
-                  if(moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
-                  || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)){
-                      alert("Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega");
-                      result = false;
-                      return false;
-                  }
+            if (result && stepNumber === 1) {
+                var allItems = JSON.parse(localStorage.getItem("times"));
+                var timeFrom = $('input[name=time_from]').val();
+                var timeTo = $('input[name=time_until]').val();
+                timeFrom = moment($('input#date').val() + " " + timeFrom, "DD.MM.YYYY HH:ii");
+                timeTo = moment($('input#date').val() + " " + timeTo, "DD.MM.YYYY HH:ii");
+                $.each(allItems, function (index, item) {
+                    if (moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
+                        || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)) {
+                        alert("Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega");
+                        result = false;
+                        return false;
+                    }
 
-              })
+                })
             }
             return result;
         }
@@ -77,19 +90,19 @@ $(document).ready(function () {
     });
     wizard.on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
 
-        if (stepNumber === 1 ) {
+        if (stepNumber === 1) {
             var timetable = $('.timetable');
 
             timetable.fullCalendar({
                 header: {
-                    left:   'title',
+                    left: 'title',
                     center: '',
-                    right:  ''
+                    right: ''
                 },
                 timeFormat: 'HH:mm',
                 height: 150,
                 schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-                defaultDate:  moment($('input#date').val(), "DD.MM.YYYY"),
+                defaultDate: moment($('input#date').val(), "DD.MM.YYYY"),
                 defaultView: 'timelineDay',
                 minTime: "10:00",
                 maxTime: "19:00"
@@ -113,10 +126,10 @@ $(document).ready(function () {
                         end: moment(value.to.date)
                     });
                     items.push({
-                        title:value.title,
+                        title: value.title,
                         start: moment(value.from.date),
                         end: moment(value.to.date)
-                    }) ;
+                    });
 
                 });
                 localStorage.setItem("times", JSON.stringify(items));
