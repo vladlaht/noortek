@@ -55,7 +55,7 @@ $(document).ready(function () {
         if (stepDirection !== "backward") {
             var result = form.valid();
             if (result && stepNumber === 1){
-              var allItems = JSON.decode(localStorage.getItem("times"));
+              var allItems = JSON.parse(localStorage.getItem("times"));
               var timeFrom = $('input[name=time_from]').val();
               var timeTo = $('input[name=time_until]').val();
               timeFrom = moment($('input#date').val() + " " + timeFrom, "DD.MM.YYYY HH:ii");
@@ -119,7 +119,7 @@ $(document).ready(function () {
                     }) ;
 
                 });
-                localStorage.setItem("times", JSON.encode(items));
+                localStorage.setItem("times", JSON.stringify(items));
 
 
             }).fail(function (response) {
