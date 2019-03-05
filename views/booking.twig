@@ -26,6 +26,11 @@
                 </li>
                 <li>
                     <a href="#step-5">
+                        Reeglid ja eeskirjad
+                    </a>
+                </li>
+                <li>
+                    <a href="#step-6">
                         Kinnitamine
                     </a>
                 </li>
@@ -34,7 +39,7 @@
             <div>
                 <div id="step-1" class="">
                     <div class="form-group col-4">
-                        <label for="select-date">Kuupäev*</label>
+                        <label for="date">Kuupäev*</label>
                         <input type="text" class="datepicker-here form-control" data-position="right top" name="date"
                                id="date">
                     </div>
@@ -80,15 +85,12 @@
                 </div>
 
                 <div id="step-2" class="">
-
-                    <div class=""></div>
-
                     <div class="row">
                         <div class="form-group col-3">
                             <div class="timepicker">
-                                <label for="time_from">Aeg alates*</label>
+                                <label for="timeFrom">Aeg alates*</label>
                                 <input type="text" class="form-control time" name="time_from"
-                                       id="time_from">
+                                       id="timeFrom">
                                 <div class="input-group-addon">
                                     <span class="glyphicon glyphicon-time"></span>
                                 </div>
@@ -97,9 +99,9 @@
 
                         <div class="form-group col-3">
                             <div class="timepicker">
-                                <label for="time_until">Aeg kuni*</label>
+                                <label for="timeUntil">Aeg kuni*</label>
                                 <input type="text" class="form-control time" name="time_until"
-                                       id="time_until">
+                                       id="timeUntil">
                                 <span class="input-group-addon">
                             <span class="glyphicon glyphicon-time"></span>
                             </span>
@@ -116,13 +118,13 @@
 
                 <div id="step-3" class="">
                     <div class="form-group">
-                        <label for="check-resources">Vajalikud vahendid</label>
+                        <label for="resources">Vajalikud vahendid</label>
                         {% for key, item in equipment %}
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="check-resources{{ key }}"
+                                <input type="checkbox" class="form-check-input" id="resources{{ key }}"
                                        name="resources[]"
                                        value="{{ item.ID }}">
-                                <label class="form-check-label" for="check-resources{{ key }}">
+                                <label class="form-check-label" for="resources{{ key }}">
                                     {{ item.post_title }}
                                     {{ item.hind }}€ / tund
 
@@ -133,24 +135,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="participants_num">Osalejate arv*</label>
+                        <label for="participants">Osalejate arv*</label>
                         <input type="number" class="form-control" name="participants_num"
-                               id="participants_num"
+                               id="participants"
                                placeholder="Maksimum 30 inimest"
                                onfocus="placeholder = ''" onblur="placeholder = 'Maksimum 30 inimest'">
                     </div>
 
                     <div class="form-group">
-                        <label for="select-purpose">Eesmärk*</label>
-                        <input type="text" class="form-control" id="select-purpose" name="purpose"
+                        <label for="purpose">Eesmärk*</label>
+                        <input type="text" class="form-control" id="purpose" name="purpose"
                                placeholder="Kirjelda lühidalt ruumi kasutamise eesmärk"
                                onfocus="placeholder = ''"
                                onblur="placeholder = 'Kirjelda lühidalt ruumi kasutamise eesmärk'">
                     </div>
 
                     <div class="form-group">
-                        <label for="select-info">Lisainfo</label>
-                        <textarea rows='2' class="form-control" id="select-info" name="info" rows="3"
+                        <label for="info">Lisainfo</label>
+                        <textarea rows='2' class="form-control" id="info" name="info" rows="3"
                                   placeholder="Kui Teil on soov midagi lisada, siis kirjutage siia"
                                   onfocus="placeholder = ''"
                                   onblur="placeholder = 'Kui Teil on soov midagi lisada, siis kirjutage siia'"
@@ -163,29 +165,29 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <label for="select-lastname">Eesnimi*</label>
-                            <input type="text" class="form-control" id="select-firstname" name="firstname">
+                            <label for="firstname">Eesnimi*</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname">
                         </div>
                         <div class="form-group col-6">
-                            <label for="select-lastname">Perekonnanimi*</label>
-                            <input type="text" class="form-control" id="select-lastname" name="lastname">
+                            <label for="lastname">Perekonnanimi*</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <label for="select-phone">Telefoninumber*</label>
-                            <input type="number" class="form-control" id="select-phone" name="phone">
+                            <label for="phone">Telefoninumber*</label>
+                            <input type="number" class="form-control" id="phone" name="phone">
                         </div>
                         <div class="form-group col-6">
-                            <label for="select-email">Email aadress*</label>
-                            <input type="email" class="form-control" id="select-email" name="email">
+                            <label for="email">Email aadress*</label>
+                            <input type="email" class="form-control" id="email" name="email">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="select-address">Aadress*</label>
-                        <input type="text" class="form-control" id="select-address" name="address"
+                        <label for="address">Aadress*</label>
+                        <input type="text" class="form-control" id="address" name="address"
                                placeholder="Linn, tänav, maja number"
                                onfocus="placeholder = ''" onblur="placeholder = 'Linn, tänav, maja number'">
                     </div>
@@ -228,7 +230,14 @@
                             Olen lugenud reegleid ja nõustun neid järgima.
                         </label>
                     </div>
+                </div>
 
+                <div id="step-6" class="">
+                    <div class="form-group">
+                        <div>
+                            Palun kontrollige, et teie sisestatud andmed on õiged.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

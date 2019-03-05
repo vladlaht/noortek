@@ -40,7 +40,7 @@ $(document).ready(function () {
                 pattern: /[0-9]/, optional: true
             }
         },
-        onKeyPress: function(a, b, c, d) {
+        onKeyPress: function (a, b, c, d) {
             let m = a.match(/(\d{1})/g);
             if (parseInt(m[0]) === 2) {
                 d.translation.B.pattern = /[0-3]/;
@@ -92,7 +92,6 @@ $(document).ready(function () {
 
         if (stepNumber === 1) {
             var timetable = $('.timetable');
-
             timetable.fullCalendar({
                 header: {
                     left: 'title',
@@ -130,7 +129,6 @@ $(document).ready(function () {
                         start: moment(value.from.date),
                         end: moment(value.to.date)
                     });
-
                 });
                 localStorage.setItem("times", JSON.stringify(items));
 
@@ -138,8 +136,46 @@ $(document).ready(function () {
             }).fail(function (response) {
                 alert('error');
             });
-        }
+        } else if (stepNumber === 5) {
+            var checkboxes = document.getElementsByName('resources[]');
+            var vals = [];
+            for (var i = 0, n = checkboxes.length; i < n; i++) {
+                if (checkboxes[i].checked) {
+                    vals.push(checkboxes[i].value);
+                }
+            }
 
+
+            var dataForm = {
+                date: $('input#date').val(),
+                room: $('input[name=room]:checked').val(),
+                timeFrom: $('input#timeFrom').val(),
+                timeUntil: $('input#timeUntil').val(),
+                resources: vals,
+                participants: $('input#participants').val(),
+                purpose: $('input#purpose').val(),
+                info: $('input#info').val(),
+                firstName: $('input#firstname').val(),
+                lastName: $('input#lastname').val(),
+                phone: $('input#phone').val(),
+                email: $('input#email').val(),
+                address: $('input#address').val(),
+            }
+            $.ajax({
+                url: ajaxurl,
+                data: {
+                    action: 'filled_form',
+                    form: dataForm
+                },
+                method: 'POST'
+            }).done(function (response) {
+                console.log('success');
+                console.log(response);
+            }).fail(function (response) {
+                console.log('error');
+                console.log(response);
+            });
+        }
     });
 
     form.validate({

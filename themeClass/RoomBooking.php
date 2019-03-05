@@ -20,8 +20,11 @@ class RoomBooking {
     }
 
     private function register_ajax_action(){
+
         add_action('wp_ajax_room_booking_time', [$this, 'get_available_times']);
         add_action('wp_ajax_nopriv_room_booking_time', [$this, 'get_available_times']);
+        add_action('wp_ajax_filled_form', [$this, 'get_filled_user_form']);
+        add_action('wp_ajax_nopriv_filled_form', [$this, 'get_filled_user_form']);
     }
 
     public function register_booking_short_code() {
@@ -44,13 +47,11 @@ class RoomBooking {
                 [
                     'key' => 'date',
                     'value' => $date->format('d.m.Y'),
-
                 ]
             ]
         ];
 
         $query = get_posts($args);
-
         $result = [];
 
         foreach ($query as $post){
@@ -69,6 +70,12 @@ class RoomBooking {
         wp_send_json_success(['result' => $result]);
 
     }
+
+    public function get_filled_user_form(){
+            $form = $_POST;
+    }
+
+
 
 
 }
