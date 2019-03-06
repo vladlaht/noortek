@@ -111,14 +111,15 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="timetable "></div>
+                            <br>
                         </div>
                     </div>
 
-                </div>
-
-                <div id="step-3" class="">
-                    <div class="form-group">
-                        <label for="resources">Vajalikud vahendid</label>
+                        <div>
+                            <strong>Vajalikud vahendid:</strong>
+                        </div>
+                        <label for="resources"></label>
+                        <div class="form-group">
                         {% for key, item in equipment %}
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="resources{{ key }}"
@@ -133,6 +134,11 @@
                             </div>
                         {% endfor %}
                     </div>
+
+                </div>
+
+                <div id="step-3" class="">
+
 
                     <div class="form-group">
                         <label for="participants">Osalejate arv*</label>
