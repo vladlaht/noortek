@@ -2,20 +2,46 @@
 
 class BookingDTO
 {
+    const KEY_PRICE = 'price';
+    const KEY_HIND = 'hind';
 
-    private $date;
-    private $room;
-    private $timeFrom;
-    private $timeUntil;
-    private $resources;
-    private $participants;
-    private $purpose;
-    private $info;
-    private $firstName;
-    private $lastName;
-    private $phone;
-    private $email;
-    private $address;
+    public $date;
+    public $room;
+    public $timeFrom;
+    public $timeUntil;
+    public $resources;
+    public $participants;
+    public $purpose;
+    public $info;
+    public $firstName;
+    public $lastName;
+    public $phone;
+    public $email;
+    public $address;
+    public $invoiceRows;
+    public $totalAmount;
+
+    public function __construct()
+    {
+        $this->invoiceRows = [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
+    }
+
+    /**
+     * @param mixed $totalAmount
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        $this->totalAmount = $totalAmount;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -28,9 +54,10 @@ class BookingDTO
     /**
      * @param mixed $date
      */
-    public function setDate($date): void
+    public function setDate($date)
     {
         $this->date = $date;
+        return $this;
     }
 
     /**
@@ -42,11 +69,12 @@ class BookingDTO
     }
 
     /**
-     * @param mixed $room
+     * @param int $roomId
      */
-    public function setRoom($room): void
+    public function setRoom($roomId)
     {
-        $this->room = $room;
+        $this->room = get_post($roomId);
+        return $this;
     }
 
     /**
@@ -60,9 +88,10 @@ class BookingDTO
     /**
      * @param mixed $timeFrom
      */
-    public function setTimeFrom($timeFrom): void
+    public function setTimeFrom($timeFrom)
     {
         $this->timeFrom = $timeFrom;
+        return $this;
     }
 
     /**
@@ -76,9 +105,10 @@ class BookingDTO
     /**
      * @param mixed $timeUntil
      */
-    public function setTimeUntil($timeUntil): void
+    public function setTimeUntil($timeUntil)
     {
         $this->timeUntil = $timeUntil;
+        return $this;
     }
 
     /**
@@ -92,9 +122,10 @@ class BookingDTO
     /**
      * @param mixed $resources
      */
-    public function setResources($resources): void
+    public function setResources($resources)
     {
         $this->resources = $resources;
+        return $this;
     }
 
     /**
@@ -108,9 +139,10 @@ class BookingDTO
     /**
      * @param mixed $participants
      */
-    public function setParticipants($participants): void
+    public function setParticipants($participants)
     {
         $this->participants = $participants;
+        return $this;
     }
 
     /**
@@ -124,9 +156,10 @@ class BookingDTO
     /**
      * @param mixed $purpose
      */
-    public function setPurpose($purpose): void
+    public function setPurpose($purpose)
     {
         $this->purpose = $purpose;
+        return $this;
     }
 
     /**
@@ -140,9 +173,10 @@ class BookingDTO
     /**
      * @param mixed $info
      */
-    public function setInfo($info): void
+    public function setInfo($info)
     {
         $this->info = $info;
+        return $this;
     }
 
     /**
@@ -156,9 +190,10 @@ class BookingDTO
     /**
      * @param mixed $firstName
      */
-    public function setFirstName($firstName): void
+    public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
+        return $this;
     }
 
     /**
@@ -172,9 +207,10 @@ class BookingDTO
     /**
      * @param mixed $lastName
      */
-    public function setLastName($lastName): void
+    public function setLastName($lastName)
     {
         $this->lastName = $lastName;
+        return $this;
     }
 
     /**
@@ -188,9 +224,10 @@ class BookingDTO
     /**
      * @param mixed $phone
      */
-    public function setPhone($phone): void
+    public function setPhone($phone)
     {
         $this->phone = $phone;
+        return $this;
     }
 
     /**
@@ -204,9 +241,10 @@ class BookingDTO
     /**
      * @param mixed $email
      */
-    public function setEmail($email): void
+    public function setEmail($email)
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -220,47 +258,80 @@ class BookingDTO
     /**
      * @param mixed $address
      */
-    public function setAddress($address): void
+    public function setAddress($address)
     {
         $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceRows()
+    {
+        return $this->invoiceRows;
+    }
+
+    /**
+     * @param mixed $invoiceRows
+     */
+    public function setInvoiceRows($invoiceRows): void
+    {
+        $this->invoiceRows = $invoiceRows;
     }
 
     public function calculateAmount()
     {
-        $this->getRoomTime();
+        $roomTotalPrice = $this->getItemTotalPrice($this->getRoomPrice(), $this->getRoundedBookingTime());
+        $this->addInvoiceItemRow($this->room->post_title, $this->getRoomPrice(), $this->getRoundedBookingTime(), $roomTotalPrice);
+        $this->setTotalAmount(bcadd($roomTotalPrice, $this->getEquipmentsPrice(), 2));
     }
 
     private function getRoomPrice()
     {
-        $this->room;
-        return $get_room_price = get_post_meta($this->room, 'price', true);
-
+        return get_post_meta($this->room->ID, self::KEY_PRICE, true);
     }
 
-    private function getRoomTime()
+    private function getRoundedBookingTime()
     {
-
         $from = new DateTime($this->timeFrom);
         $until = $from->diff(new DateTime($this->timeUntil));
-        $minutes = $until->h *60;
-        $minutes += $until->i;
-        return $minutes;
-
-
+        $hours = $until->h;
+        $minutes = $until->i;
+        if ($minutes > 0) {
+            $hours++;
+        }
+        return $hours;
     }
 
-    private function getRoundedTime()
+    private function getItemTotalPrice($itemPrice, $amount)
     {
-
+        return bcmul($itemPrice, $amount, 2);
     }
 
-    private function getEquipments()
+    private function getEquipmentsPrice()
     {
-
+        $summa = 0;
+        foreach ($this->resources as $resourceId) {
+            $price = get_post_meta($resourceId, self::KEY_HIND, true);
+            $item = get_post($resourceId);
+            $itemSumma = $this->getItemTotalPrice($price, $this->getRoundedBookingTime());
+            $this->addInvoiceItemRow($item->post_title, $price, $this->getRoundedBookingTime(), $itemSumma);
+            $summa = (int)bcadd($summa, $itemSumma, 2);
+        }
+        return $summa;
     }
 
-    private function getBill()
+    private function addInvoiceItemRow($name, $price, $amount, $total)
     {
+        $itemRow =
+            [
+                'name' => $name,
+                'price' => (int)$price,
+                'amount' => $amount,
+                'total' => (float)$total
+            ];
+        $this->invoiceRows[] = $itemRow;
 
     }
 

@@ -8,7 +8,6 @@ class RoomBooking
     {
         $this->add_post_types();
         $this->register_short_codes();
-        $this->register_short_codes();
         $this->register_ajax_action();
     }
 
@@ -83,22 +82,23 @@ class RoomBooking
     {
         try {
             $bookingForm = new BookingDTO();
-            $bookingForm->setDate($_POST['form']['date']);
-            $bookingForm->setRoom($_POST['form']['room']);
-            $bookingForm->setTimeFrom($_POST['form']['timeFrom']);
-            $bookingForm->setTimeUntil($_POST['form']['timeUntil']);
-            $bookingForm->setResources($_POST['form']['resources']);
-            $bookingForm->setParticipants($_POST['form']['participants']);
-            $bookingForm->setPurpose($_POST['form']['purpose']);
-            $bookingForm->setInfo($_POST['form']['info']);
-            $bookingForm->setFirstName(($_POST['form']['firstName']));
-            $bookingForm->setLastName($_POST['form']['lastName']);
-            $bookingForm->setPhone($_POST['form']['phone']);
-            $bookingForm->setEmail($_POST['form']['email']);
-            $bookingForm->setAddress($_POST['form']['address']);
+            $bookingForm->setDate(sanitize_text_field($_POST['form']['date']))
+                ->setRoom($_POST['form']['room'])
+                ->setTimeFrom($_POST['form']['timeFrom'])
+                ->setTimeUntil($_POST['form']['timeUntil'])
+                ->setResources($_POST['form']['resources'])
+                ->setParticipants($_POST['form']['participants'])
+                ->setPurpose(sanitize_text_field($_POST['form']['purpose']))
+                ->setInfo(sanitize_text_field($_POST['form']['info']))
+                ->setFirstName(sanitize_text_field($_POST['form']['firstName']))
+                ->setLastName($_POST['form']['lastName'])
+                ->setPhone($_POST['form']['phone'])
+                ->setEmail(sanitize_email($_POST['form']['email']))
+                ->setAddress($_POST['form']['address']);
+
             $bookingForm->calculateAmount();
 
-            wp_send_json_success(['result' => $bookingForm]);
+            wp_send_json_success($bookingForm);
 
         } catch (Exception $exception) {
             log($exception->getMessage());

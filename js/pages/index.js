@@ -144,8 +144,6 @@ $(document).ready(function () {
                     vals.push(checkboxes[i].value);
                 }
             }
-
-
             var dataForm = {
                 date: $('input#date').val(),
                 room: $('input[name=room]:checked').val(),
@@ -154,13 +152,13 @@ $(document).ready(function () {
                 resources: vals,
                 participants: $('input#participants').val(),
                 purpose: $('input#purpose').val(),
-                info: $('input#info').val(),
+                info: $('textarea#info').val(),
                 firstName: $('input#firstname').val(),
                 lastName: $('input#lastname').val(),
                 phone: $('input#phone').val(),
                 email: $('input#email').val(),
                 address: $('input#address').val(),
-            }
+            };
             $.ajax({
                 url: ajaxurl,
                 data: {
