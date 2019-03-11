@@ -1,0 +1,22 @@
+<div class="bookerContainer row">
+    <div class="col-1">
+        Broneeria:
+    </div>
+    <div class="booker col-11">
+        <div>{{ bookingForm.firstName }} {{ bookingForm.lastName }}</div>
+        <div>{{ bookingForm.phone }}</div>
+        <div>{{ bookingForm.email }}</div>
+        <div>{{ bookingForm.address }}</div>
+    </div>
+</div>
+<div>Eesmärk: {{ bookingForm.purpose }}</div>
+<div>Osalejate arv: {{ bookingForm.participants }}</div>
+<div>Lisainfo: {{ bookingForm.info }} info</div>
+<div>
+    {% for item in bookingForm.invoiceRows %}
+    {{ item.name }}
+    {% endfor %}
+</div>
+
+
+

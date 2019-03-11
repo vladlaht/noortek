@@ -74,7 +74,7 @@ class RoomBooking
             $result[] = $booking;
         }
 
-        wp_send_json_success(['result' => $result]);
+        wp_send_json_success($result);
 
     }
 
@@ -91,23 +91,21 @@ class RoomBooking
                 ->setPurpose(sanitize_text_field($_POST['form']['purpose']))
                 ->setInfo(sanitize_text_field($_POST['form']['info']))
                 ->setFirstName(sanitize_text_field($_POST['form']['firstName']))
-                ->setLastName($_POST['form']['lastName'])
+                ->setLastName(sanitize_text_field($_POST['form']['lastName']))
                 ->setPhone($_POST['form']['phone'])
                 ->setEmail(sanitize_email($_POST['form']['email']))
-                ->setAddress($_POST['form']['address']);
-
+                ->setAddress(sanitize_text_field($_POST['form']['address']));
             $bookingForm->calculateAmount();
 
-            wp_send_json_success($bookingForm);
+            wp_send_json_success(['confirmationHTML' => Timber::compile('/views/bookingConfirmation.twig', [
+                    'bookingForm' => $bookingForm
+                ]
+            )]);
 
         } catch (Exception $exception) {
             log($exception->getMessage());
         }
     }
-
-
-
-
 
 
 }

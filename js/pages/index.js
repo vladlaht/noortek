@@ -167,8 +167,12 @@ $(document).ready(function () {
                 },
                 method: 'POST'
             }).done(function (response) {
+                var container = $("#totalSumma");
+                container.html(response.data.confirmationHTML);
+
                 console.log('success');
                 console.log(response);
+
             }).fail(function (response) {
                 console.log('error');
                 console.log(response);
