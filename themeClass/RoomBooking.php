@@ -98,7 +98,7 @@ class RoomBooking
             $bookingForm->calculateAmount();
 
             wp_send_json_success(['confirmationHTML' => Timber::compile('/views/bookingConfirmation.twig', [
-                    'bookingForm' => $bookingForm
+                    'bookingForm' => $bookingForm,
                 ]
             )]);
 

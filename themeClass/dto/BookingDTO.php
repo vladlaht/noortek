@@ -4,6 +4,8 @@ class BookingDTO
 {
     const KEY_PRICE = 'price';
     const KEY_HIND = 'hind';
+    const TYPE_ROOM = 'room';
+    const TYPE_EQUIPMENT = 'equipment';
 
     public $date;
     public $room;
@@ -283,7 +285,7 @@ class BookingDTO
     public function calculateAmount()
     {
         $roomTotalPrice = $this->getItemTotalPrice($this->getRoomPrice(), $this->getRoundedBookingTime());
-        $this->addInvoiceItemRow($this->room->post_title, $this->getRoomPrice(), $this->getRoundedBookingTime(), $roomTotalPrice);
+        $this->addInvoiceItemRow($this->room->post_title, self::TYPE_ROOM, $this->getRoomPrice(), $this->getRoundedBookingTime(), $roomTotalPrice);
         $this->setTotalAmount(bcadd($roomTotalPrice, $this->getEquipmentsPrice(), 2));
     }
 
@@ -316,17 +318,18 @@ class BookingDTO
             $price = get_post_meta($resourceId, self::KEY_HIND, true);
             $item = get_post($resourceId);
             $itemSumma = $this->getItemTotalPrice($price, $this->getRoundedBookingTime());
-            $this->addInvoiceItemRow($item->post_title, $price, $this->getRoundedBookingTime(), $itemSumma);
+            $this->addInvoiceItemRow($item->post_title,self::TYPE_EQUIPMENT, $price, $this->getRoundedBookingTime(), $itemSumma);
             $summa = (int)bcadd($summa, $itemSumma, 2);
         }
         return $summa;
     }
 
-    private function addInvoiceItemRow($name, $price, $amount, $total)
+    private function addInvoiceItemRow($name, $type, $price, $amount, $total)
     {
         $itemRow =
             [
                 'name' => $name,
+                'type' => $type,
                 'price' => (int)$price,
                 'amount' => $amount,
                 'total' => (float)$total

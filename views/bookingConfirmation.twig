@@ -1,21 +1,74 @@
-<div class="bookerContainer row">
-    <div class="col-1">
-        Broneeria:
+<div class="bookerContainer">
+    <p><h4><strong>Broneering</strong></h4></p>
+    <div class="alert alert-warning" role="alert">
+        Palun kontrollige, et teie sisestatud andmed on õiged.
     </div>
-    <div class="booker col-11">
-        <div>{{ bookingForm.firstName }} {{ bookingForm.lastName }}</div>
-        <div>{{ bookingForm.phone }}</div>
-        <div>{{ bookingForm.email }}</div>
-        <div>{{ bookingForm.address }}</div>
+    <div class="row">
+        <div class="col-1">
+            <strong>Broneerija:</strong>
+        </div>
+        <div class="booker col-11">
+            <div>{{ bookingForm.firstName }} {{ bookingForm.lastName }}</div>
+            <div>+372 {{ bookingForm.phone }}</div>
+            <div>{{ bookingForm.email }}</div>
+            <div>{{ bookingForm.address }}</div>
+            <br>
+        </div>
     </div>
 </div>
-<div>Eesmärk: {{ bookingForm.purpose }}</div>
-<div>Osalejate arv: {{ bookingForm.participants }}</div>
-<div>Lisainfo: {{ bookingForm.info }} info</div>
 <div>
-    {% for item in bookingForm.invoiceRows %}
-    {{ item.name }}
-    {% endfor %}
+    <p><strong>Eesmärk: </strong>{{ bookingForm.purpose }}</p>
+</div>
+<div>
+    <p><strong>Osalejate arv: </strong>{{ bookingForm.participants }} inimest</p>
+</div>
+<div>
+    <p><strong>Lisainfo: </strong>
+        <br>
+        {{ bookingForm.info }}
+    </p>
+
+</div>
+<div>
+    <table class="bookingInfo">
+        <tr>
+            <th>Nimetus</th>
+            <th>Kestvus</th>
+            <th>Hind/t</th>
+            <th>Summa</th>
+        </tr>
+        {% for item in bookingForm.invoiceRows %}
+            <tr>
+                {% if item.type == constant('BookingDTO::TYPE_ROOM') %}
+                    <td>
+                        <img class="bookedRoomCard"
+                             src="{{ function('get_the_post_thumbnail_url', bookingForm.room.ID, 'post-thumbnail') }}"
+                             alt=""> {{ bookingForm.invoiceRows[0].name }}
+                    </td>
+                {% else %}
+                    <td>
+                        {{ item.name }}
+                    </td>
+                {% endif %}
+                <td>
+                    {{ bookingForm.timeFrom }}-{{ bookingForm.timeUntil }} ({{ item.amount }} tundi)
+                </td>
+                <td>
+                    {{ item.price }} EUR
+                </td>
+                <td>
+                    {{ item.total }} EUR
+                </td>
+            </tr>
+
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Kokku: {{ bookingForm.totalAmount }} EUR</td>
+        </tr>
+    </table>
 </div>
 
 
