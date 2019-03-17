@@ -63,15 +63,16 @@ class BookingDTO
     }
 
     /**
-     * @return mixed
+     * @return WP_Post mixed
      */
-    public function getRoom()
+    public function getRoom() : WP_Post
     {
         return $this->room;
     }
 
     /**
      * @param int $roomId
+     * @return BookingDTO
      */
     public function setRoom($roomId)
     {
@@ -280,6 +281,10 @@ class BookingDTO
     public function setInvoiceRows($invoiceRows): void
     {
         $this->invoiceRows = $invoiceRows;
+    }
+
+    public function getBookingNumber(){
+        return ""; // 20190313230145  new DateTime()
     }
 
     public function calculateAmount()

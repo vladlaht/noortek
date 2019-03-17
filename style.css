@@ -942,7 +942,8 @@ input[type=number] {
     margin-top: 20px;
 }
 
-table.bookingInfo th, td {
+table.bookingInfo th,
+table.bookingInfo td {
     border-top: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
     text-align: left;
@@ -953,4 +954,53 @@ table.bookingInfo th, td {
 .bookedRoomCard {
     width: 100px;
     border-radius: 2px;
+}
+
+img.bookingPreloader {
+    background: #000;
+}
+
+.preloader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffffd4;
+    z-index: 750;
+}
+
+.preloader-container {
+    min-height: 175px;
+}
+
+.loader {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 35px;
+    background: orange;
+}
+
+.loader img {
+    width: 30px;
+    height: 30px;
+}
+
+
+.preloader-with-text {
+    text-align: center;
+}
+
+p.preloader-text {
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+button.bookingFormSubmitButton {
+    display: none;
 }

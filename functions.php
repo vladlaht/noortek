@@ -39,7 +39,6 @@ class NoortekWPTheme {
         wp_enqueue_style('fullcalendar', get_theme_file_uri() . '/css/fullcalendar.min.css');
         wp_enqueue_style('fullcalendarscheduler', get_theme_file_uri() . '/css/scheduler.min.css');
         wp_enqueue_style('style', get_theme_file_uri() . '/style.css');
-
     }
 
     function register_scripts()
@@ -148,8 +147,8 @@ class NoortekWPTheme {
             $equipment = $_POST['resources'];
             $field = get_field_object('resources', $post_Id);
             if (!empty($equipment)){
-            add_post_meta($post_Id, 'resources', count($equipment));
-            add_post_meta($post_Id, '_resources', $field['key']);
+                add_post_meta($post_Id, 'resources', count($equipment));
+                add_post_meta($post_Id, '_resources', $field['key']);
                 foreach ($equipment as $key=> $equipmentId){
                     $metaKey = 'resources_'.$key.'_vahend';
                     add_post_meta($post_Id, $metaKey , $equipmentId) ;

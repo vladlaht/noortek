@@ -9,10 +9,15 @@ $(document).ready(function () {
         format: "dd.mm.yy",
         maxViewMode: 2,
         clearBtn: true,
-        autoclose: true,
+        autoClose: true,
         orientation: "top auto",
         todayHighlight: true,
         minDate: moment().add(7, 'days').toDate(),
+        onSelect: function (formattedDate, date, inst) {
+            if (status === 'overViewExist') {
+                status = 'dataChanged';
+            }
+        },
         onRenderCell: function (date, cellType) {
             if (cellType == 'day') {
                 var day = date.getDay(),
@@ -57,37 +62,54 @@ $(document).ready(function () {
 
     var form = $('#nnk-booking-form');
     var wizard = $('#smartwizard');
+    var preloader = $('.preloader');
+    var container = $("#totalSumma");
+    var status = 'init';
+
+
+    $("form :input").change(function () {
+        if (status === 'overViewExist') {
+            status = 'dataChanged';
+        }
+
+    });
+
     wizard.smartWizard({
         useURLhash: false,
         showStepURLhash: false
 
     });
+
+    var buttonNext = $('.sw-btn-next');
+    var buttonSubmit = $('.bookingFormSubmitButton');
     wizard.show();
+    preloader.hide();
     wizard.on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
 
-        if (stepDirection !== "backward") {
-            var result = form.valid();
-            if (result && stepNumber === 1) {
-                var allItems = JSON.parse(localStorage.getItem("times"));
-                var timeFrom = $('input[name=time_from]').val();
-                var timeTo = $('input[name=time_until]').val();
-                timeFrom = moment($('input#date').val() + " " + timeFrom, "DD.MM.YYYY HH:ii");
-                timeTo = moment($('input#date').val() + " " + timeTo, "DD.MM.YYYY HH:ii");
-                $.each(allItems, function (index, item) {
-                    if (moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
-                        || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)) {
-                        alert("Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega");
-                        result = false;
-                        return false;
-                    }
 
-                })
-            }
-            return result;
+        var result = form.valid();
+        if (result && stepNumber === 1) {
+            var allItems = JSON.parse(localStorage.getItem("times"));
+            var timeFrom = $('input[name=time_from]').val();
+            var timeTo = $('input[name=time_until]').val();
+            timeFrom = moment($('input#date').val() + " " + timeFrom, "DD.MM.YYYY HH:ii");
+            timeTo = moment($('input#date').val() + " " + timeTo, "DD.MM.YYYY HH:ii");
+            $.each(allItems, function (index, item) {
+                if (moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
+                    || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)) {
+                    alert("Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega");
+                    result = false;
+                    return false;
+                }
+
+            })
+        } else if (stepNumber === 5){
+            buttonNext.show();
         }
-
+            return result;
 
     });
+
     wizard.on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
 
         if (stepNumber === 1) {
@@ -137,47 +159,96 @@ $(document).ready(function () {
                 alert('error');
             });
         } else if (stepNumber === 5) {
-            var checkboxes = document.getElementsByName('resources[]');
-            var vals = [];
-            for (var i = 0, n = checkboxes.length; i < n; i++) {
-                if (checkboxes[i].checked) {
-                    vals.push(checkboxes[i].value);
+            buttonNext.hide();
+            if (status === 'init' || status === 'dataChanged') {
+                preloader.show();
+                var checkboxes = document.getElementsByName('resources[]');
+                var vals = [];
+                for (var i = 0, n = checkboxes.length; i < n; i++) {
+                    if (checkboxes[i].checked) {
+                        vals.push(checkboxes[i].value);
+                    }
                 }
+                var dataForm = {
+                    date: $('input#date').val(),
+                    room: $('input[name=room]:checked').val(),
+                    timeFrom: $('input#timeFrom').val(),
+                    timeUntil: $('input#timeUntil').val(),
+                    resources: vals,
+                    participants: $('input#participants').val(),
+                    purpose: $('input#purpose').val(),
+                    info: $('textarea#info').val(),
+                    firstName: $('input#firstname').val(),
+                    lastName: $('input#lastname').val(),
+                    phone: $('input#phone').val(),
+                    email: $('input#email').val(),
+                    address: $('input#address').val(),
+                };
+
+                $.ajax({
+                    url: ajaxurl,
+                    data: {
+                        action: 'filled_form',
+                        form: dataForm
+                    },
+                    method: 'POST'
+                }).done(function (response) {
+                    status = 'overViewExist';
+                    container.html(response.data.confirmationHTML);
+                    preloader.hide();
+                    buttonSubmit.show();
+                    console.log('success');
+                    console.log(response);
+
+
+                }).fail(function (response) {
+                    console.log('error');
+                    console.log(response);
+                });
             }
-            var dataForm = {
-                date: $('input#date').val(),
-                room: $('input[name=room]:checked').val(),
-                timeFrom: $('input#timeFrom').val(),
-                timeUntil: $('input#timeUntil').val(),
-                resources: vals,
-                participants: $('input#participants').val(),
-                purpose: $('input#purpose').val(),
-                info: $('textarea#info').val(),
-                firstName: $('input#firstname').val(),
-                lastName: $('input#lastname').val(),
-                phone: $('input#phone').val(),
-                email: $('input#email').val(),
-                address: $('input#address').val(),
-            };
-            $.ajax({
-                url: ajaxurl,
-                data: {
-                    action: 'filled_form',
-                    form: dataForm
-                },
-                method: 'POST'
-            }).done(function (response) {
-                var container = $("#totalSumma");
-                container.html(response.data.confirmationHTML);
-
-                console.log('success');
-                console.log(response);
-
-            }).fail(function (response) {
-                console.log('error');
-                console.log(response);
-            });
         }
+    });
+
+    buttonSubmit.on('click', function(){
+        // Broneeringu esitamine
+        var checkboxes = document.getElementsByName('resources[]');
+        var vals = [];
+        for (var i = 0, n = checkboxes.length; i < n; i++) {
+            if (checkboxes[i].checked) {
+                vals.push(checkboxes[i].value);
+            }
+        }
+        var dataForm = {
+            date: $('input#date').val(),
+            room: $('input[name=room]:checked').val(),
+            timeFrom: $('input#timeFrom').val(),
+            timeUntil: $('input#timeUntil').val(),
+            resources: vals,
+            participants: $('input#participants').val(),
+            purpose: $('input#purpose').val(),
+            info: $('textarea#info').val(),
+            firstName: $('input#firstname').val(),
+            lastName: $('input#lastname').val(),
+            phone: $('input#phone').val(),
+            email: $('input#email').val(),
+            address: $('input#address').val(),
+        };
+
+        $.ajax({
+            url: ajaxurl,
+            data: {
+                action: 'booking_submit',
+                form: dataForm
+            },
+            method: 'POST'
+        }).done(function (response) {
+           $('.booking-form').html(response.html);
+
+        }).fail(function (response) {
+            //show error to client user friendly
+            console.log('error');
+            console.log(response);
+        });
     });
 
     form.validate({

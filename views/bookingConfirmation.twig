@@ -1,13 +1,13 @@
 <div class="bookerContainer">
-    <p><h4><strong>Broneering</strong></h4></p>
+    <p><h4><strong>Ülevaade</strong></h4></p>
     <div class="alert alert-warning" role="alert">
         Palun kontrollige, et teie sisestatud andmed on õiged.
     </div>
     <div class="row">
-        <div class="col-1">
+        <div class="col-xl-1  col-md-3 col-sm-4">
             <strong>Broneerija:</strong>
         </div>
-        <div class="booker col-11">
+        <div class="booker col-xl-11 col-md-9 col-sm-8">
             <div>{{ bookingForm.firstName }} {{ bookingForm.lastName }}</div>
             <div>+372 {{ bookingForm.phone }}</div>
             <div>{{ bookingForm.email }}</div>
@@ -66,7 +66,12 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>Kokku: {{ bookingForm.totalAmount }} EUR</td>
+            <td>
+                <div class="alert alert-dark" role="alert">
+                    Kokku: {{ bookingForm.totalAmount }} EUR
+                </div>
+
+            </td>
         </tr>
     </table>
 </div>
