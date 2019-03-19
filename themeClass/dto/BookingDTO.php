@@ -22,27 +22,11 @@ class BookingDTO
     public $address;
     public $invoiceRows;
     public $totalAmount;
+    public $bookingDate;
 
     public function __construct()
     {
         $this->invoiceRows = [];
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTotalAmount()
-    {
-        return $this->totalAmount;
-    }
-
-    /**
-     * @param mixed $totalAmount
-     */
-    public function setTotalAmount($totalAmount)
-    {
-        $this->totalAmount = $totalAmount;
-        return $this;
     }
 
     /**
@@ -65,7 +49,7 @@ class BookingDTO
     /**
      * @return WP_Post mixed
      */
-    public function getRoom() : WP_Post
+    public function getRoom(): WP_Post
     {
         return $this->room;
     }
@@ -283,9 +267,46 @@ class BookingDTO
         $this->invoiceRows = $invoiceRows;
     }
 
-    public function getBookingNumber(){
-        return ""; // 20190313230145  new DateTime()
+    /**
+     * @return mixed
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
     }
+
+    /**
+     * @param mixed $totalAmount
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        $this->totalAmount = $totalAmount;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBookingDate()
+    {
+        return $this->bookingDate;
+    }
+
+    /**
+     * @param mixed $bookingDate
+     */
+    public function setBookingDate($bookingDate): void
+    {
+        $this->bookingDate = $bookingDate;
+    }
+
+
+    public function generateBookingNumber()
+    {
+        $currentDate = current_time('YmdHis', 0);
+        $this->bookingDate = $currentDate; // 2019031817  new DateTime()
+    }
+
 
     public function calculateAmount()
     {
@@ -323,7 +344,7 @@ class BookingDTO
             $price = get_post_meta($resourceId, self::KEY_HIND, true);
             $item = get_post($resourceId);
             $itemSumma = $this->getItemTotalPrice($price, $this->getRoundedBookingTime());
-            $this->addInvoiceItemRow($item->post_title,self::TYPE_EQUIPMENT, $price, $this->getRoundedBookingTime(), $itemSumma);
+            $this->addInvoiceItemRow($item->post_title, self::TYPE_EQUIPMENT, $price, $this->getRoundedBookingTime(), $itemSumma);
             $summa = (int)bcadd($summa, $itemSumma, 2);
         }
         return $summa;

@@ -1,0 +1,70 @@
+<div class="booking-container">
+    <p><h4><strong>Broneeringu nr: {{ bookingLetter.bookingDate }}</strong></h4></p>
+    <div class="row">
+        <div class="col-xl-1  col-md-3 col-sm-4">
+            <strong>Broneerija:</strong>
+        </div>
+        <div class="booker col-xl-11 col-md-9 col-sm-8">
+            <div>Nimi: {{ bookingLetter.firstName }} {{ bookingLetter.lastName }}</div>
+            <div>Tel: +372 {{ bookingLetter.phone }}</div>
+            <div>Email: {{ bookingLetter.email }}</div>
+            <div>Aadress: {{ bookingLetter.address }}</div>
+            <br>
+        </div>
+    </div>
+</div>
+<div>
+    <p><strong>Eesmärk: </strong>{{ bookingLetter.purpose }}</p>
+</div>
+<div>
+    <p><strong>Osalejate arv: </strong>{{ bookingLetter.participants }} inimest</p>
+</div>
+
+<div>
+    <p><strong>Lisainfo: </strong>
+        <br>
+        {{ bookingLetter.info }}
+    </p>
+</div>
+
+<div>
+    <table class="booking-info-letter">
+        <tr>
+            <th>Nimetus</th>
+            <th>Kestvus</th>
+            <th>Hind/t</th>
+            <th>Summa</th>
+        </tr>
+        {% for item in bookingLetter.invoiceRows %}
+            <tr>
+                <td>
+                    {{ item.name }}
+                </td>
+                <td>
+                    {{ bookingLetter.timeFrom }}-{{ bookingLetter.timeUntil }} ({{ item.amount }} tundi)
+                </td>
+                <td>
+                    {{ item.price }} EUR
+                </td>
+                <td>
+                    {{ item.total }} EUR
+                </td>
+            </tr>
+
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <div class="alert alert-dark" role="alert">
+                    Kokku: {{ bookingLetter.totalAmount }} EUR
+                </div>
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+

@@ -89,12 +89,9 @@ class RoomBooking
             $bookingForm->calculateAmount();
 
             $view = Timber::compile('/views/bookingConfirmation.twig', [
-                    'bookingForm' => $bookingForm,
+                    'bookingForm' => $bookingForm
                 ]
             );
-
-            wp_mail('vlad.laht@mail.ru', "TEST EMAIL", $view, array('Content-Type: text/html; charset=UTF-8'));
-
             wp_send_json_success(['confirmationHTML' => $view]);
 
         } catch (Exception $exception) {
@@ -102,24 +99,62 @@ class RoomBooking
         }
     }
 
-    public function save_booking(){
-        //
-        $bookingForm = $this->mapBookingDTO();
-        $bookingForm->calculateAmount();
-        $post_Id = wp_insert_post([
-            'post_title' => "Broneering " . $bookingForm->getBookingNumber(),
-            'post_type' => 'booking',
-            'post_status' => 'publish'
-        ]);
+    public function save_booking()
+    {
+        try {
+            $bookingForm = $this->mapBookingDTO();
+            $bookingForm->calculateAmount();
+            $bookingForm->generateBookingNumber();
+            $post_Id = wp_insert_post([
+                'post_title' => "Broneering",
+                'post_type' => 'booking',
+                'post_status' => 'publish'
+            ]);
 
-        add_post_meta($post_Id, 'room', $bookingForm->getRoom()->ID);
-        // add other fileds
+            add_post_meta($post_Id, 'room', $bookingForm->getRoom()->ID);
+            $selected_date = $bookingForm->getDate();
+            $new_date = date('Ymd', strtotime($selected_date));
+            add_post_meta($post_Id, 'date', $new_date);
+            $field_date = get_field_object('date', $post_Id);
+            add_post_meta($post_Id, '_date', $field_date['key']);
+            add_post_meta($post_Id, 'time_from', $bookingForm->getTimeFrom());
+            add_post_meta($post_Id, 'time_until', $bookingForm->getTimeUntil());
+            add_post_meta($post_Id, 'participants_num', $bookingForm->getParticipants());
+            add_post_meta($post_Id, 'purpose', $bookingForm->getPurpose());
+            $equipment = $bookingForm->getResources();
+            $field = get_field_object('resources', $post_Id);
+            if (!empty($equipment)) {
+                add_post_meta($post_Id, 'resources', count($equipment));
+                add_post_meta($post_Id, '_resources', $field['key']);
+                foreach ($equipment as $key => $equipmentId) {
+                    $metaKey = 'resources_' . $key . '_vahend';
+                    add_post_meta($post_Id, $metaKey, $equipmentId);
+                    add_post_meta($post_Id, "_" . $metaKey, 'field_5c7591d790f76');
+                }
+            }
+            add_post_meta($post_Id, 'info', $bookingForm->getInfo());
+            add_post_meta($post_Id, 'firstname', $bookingForm->getFirstName());
+            add_post_meta($post_Id, 'lastname', $bookingForm->getLastName());
+            add_post_meta($post_Id, 'address', $bookingForm->getAddress());
+            add_post_meta($post_Id, 'phone', $bookingForm->getPhone());
+            add_post_meta($post_Id, 'email', $bookingForm->getEmail());
+            add_post_meta($post_Id, 'summa', $bookingForm->getTotalAmount());
 
-        // SEND EMAIL TO CUSTOMER
+            $successView = Timber::compile('/views/bookingSubmitSuccess.twig', [
+                    'bookingSubmit' => $bookingForm
+                ]
+            );
 
+            $customerLetter = Timber::compile('/views/bookingCustomerLetter.twig', [
+                    'bookingLetter' => $bookingForm
+                ]
+            );
+            wp_mail($bookingForm->getEmail(), "Broneeringu andmed", $customerLetter, array('Content-Type: text/html; charset=UTF-8'));
+            wp_send_json_success(['submitSucces' => $successView]);
 
-        // SEND RESPONSE TO AJAX
-        wp_send_json_success(['html' => '']);
+        } catch (Exception $exception) {
+            log($exception->getMessage());
+        }
     }
 
     /**
@@ -129,16 +164,16 @@ class RoomBooking
     {
         $bookingForm = new BookingDTO();
         $bookingForm->setDate(sanitize_text_field($_POST['form']['date']))
-            ->setRoom($_POST['form']['room'])
-            ->setTimeFrom($_POST['form']['timeFrom'])
-            ->setTimeUntil($_POST['form']['timeUntil'])
-            ->setResources($_POST['form']['resources'])
-            ->setParticipants($_POST['form']['participants'])
+            ->setRoom(sanitize_key($_POST['form']['room']))
+            ->setTimeFrom((int)($_POST['form']['timeFrom']))
+            ->setTimeUntil((int)($_POST['form']['timeUntil']))
+            ->setResources(sanitize_key($_POST['form']['resources']))
+            ->setParticipants((int)($_POST['form']['participants']))
             ->setPurpose(sanitize_text_field($_POST['form']['purpose']))
             ->setInfo(sanitize_text_field($_POST['form']['info']))
             ->setFirstName(sanitize_text_field($_POST['form']['firstName']))
             ->setLastName(sanitize_text_field($_POST['form']['lastName']))
-            ->setPhone($_POST['form']['phone'])
+            ->setPhone((int)($_POST['form']['phone']))
             ->setEmail(sanitize_email($_POST['form']['email']))
             ->setAddress(sanitize_text_field($_POST['form']['address']));
         return $bookingForm;

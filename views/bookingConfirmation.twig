@@ -1,4 +1,4 @@
-<div class="bookerContainer">
+<div class="booking-container">
     <p><h4><strong>Ülevaade</strong></h4></p>
     <div class="alert alert-warning" role="alert">
         Palun kontrollige, et teie sisestatud andmed on õiged.
@@ -30,7 +30,7 @@
 
 </div>
 <div>
-    <table class="bookingInfo">
+    <table class="booking-info">
         <tr>
             <th>Nimetus</th>
             <th>Kestvus</th>
@@ -41,7 +41,7 @@
             <tr>
                 {% if item.type == constant('BookingDTO::TYPE_ROOM') %}
                     <td>
-                        <img class="bookedRoomCard"
+                        <img class="booked-room-card"
                              src="{{ function('get_the_post_thumbnail_url', bookingForm.room.ID, 'post-thumbnail') }}"
                              alt=""> {{ bookingForm.invoiceRows[0].name }}
                     </td>

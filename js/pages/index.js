@@ -82,6 +82,7 @@ $(document).ready(function () {
 
     var buttonNext = $('.sw-btn-next');
     var buttonSubmit = $('.bookingFormSubmitButton');
+    var checkboxSubmit = $('.checkbox-submit')
     wizard.show();
     preloader.hide();
     wizard.on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
@@ -103,10 +104,10 @@ $(document).ready(function () {
                 }
 
             })
-        } else if (stepNumber === 5){
+        } else if (stepNumber === 5) {
             buttonNext.show();
         }
-            return result;
+        return result;
 
     });
 
@@ -197,9 +198,9 @@ $(document).ready(function () {
                     container.html(response.data.confirmationHTML);
                     preloader.hide();
                     buttonSubmit.show();
+                    checkboxSubmit.show();
                     console.log('success');
                     console.log(response);
-
 
                 }).fail(function (response) {
                     console.log('error');
@@ -209,8 +210,7 @@ $(document).ready(function () {
         }
     });
 
-    buttonSubmit.on('click', function(){
-        // Broneeringu esitamine
+    buttonSubmit.on('click', function () {
         var checkboxes = document.getElementsByName('resources[]');
         var vals = [];
         for (var i = 0, n = checkboxes.length; i < n; i++) {
@@ -242,7 +242,7 @@ $(document).ready(function () {
             },
             method: 'POST'
         }).done(function (response) {
-           $('.booking-form').html(response.html);
+            $('.booking-form').html(response.data.submitSucces);
 
         }).fail(function (response) {
             //show error to client user friendly
@@ -302,6 +302,9 @@ $(document).ready(function () {
             },
             rules: {
                 required: true
+            },
+            submit_checkbox: {
+                required: true
             }
         },
         messages: {
@@ -353,6 +356,9 @@ $(document).ready(function () {
             },
             rules: {
                 required: 'Peate kinnitama, et olete lugenud meie reegleid ja olete nendega nõus'
+            },
+            submit_checkbox: {
+                required: 'Peate kinnitama, et vorm on õige'
             }
         }
     });

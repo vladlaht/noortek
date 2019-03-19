@@ -935,23 +935,21 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-.bookingInfo {
-
+.booking-info {
     border-collapse: collapse;
     width: 100%;
     margin-top: 20px;
 }
 
-table.bookingInfo th,
-table.bookingInfo td {
+table.booking-info th,
+table.booking-info td {
     border-top: 1px solid #dddddd;
     border-bottom: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-
 }
 
-.bookedRoomCard {
+.booked-room-card {
     width: 100px;
     border-radius: 2px;
 }
@@ -1003,4 +1001,21 @@ p.preloader-text {
 
 button.bookingFormSubmitButton {
     display: none;
+    position: absolute;
+    left: 83%;
+    top: 113%
 }
+
+.checkbox-submit {
+    display: none;
+}
+
+.booking-success-submit {
+    text-align: center;
+}
+
+p.success-text {
+    margin: 5px 0;
+    font-weight: 500;
+}
+
