@@ -162,12 +162,14 @@ class RoomBooking
      */
     public function mapBookingDTO(): BookingDTO
     {
+        $resourceItem = isset( $_POST['form']['resources'] ) ? (array) $_POST['form']['resources'] : array();
+
         $bookingForm = new BookingDTO();
         $bookingForm->setDate(sanitize_text_field($_POST['form']['date']))
-            ->setRoom(sanitize_key($_POST['form']['room']))
-            ->setTimeFrom((int)($_POST['form']['timeFrom']))
-            ->setTimeUntil((int)($_POST['form']['timeUntil']))
-            ->setResources(sanitize_key($_POST['form']['resources']))
+            ->setRoom((int)($_POST['form']['room']))
+            ->setTimeFrom(sanitize_text_field($_POST['form']['timeFrom']))
+            ->setTimeUntil(sanitize_text_field($_POST['form']['timeUntil']))
+            ->setResources(array_map( 'sanitize_text_field', $resourceItem ))
             ->setParticipants((int)($_POST['form']['participants']))
             ->setPurpose(sanitize_text_field($_POST['form']['purpose']))
             ->setInfo(sanitize_text_field($_POST['form']['info']))
