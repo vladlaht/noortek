@@ -302,9 +302,6 @@ $(document).ready(function () {
             },
             rules: {
                 required: true
-            },
-            submit_checkbox: {
-                required: true
             }
         },
         messages: {
@@ -356,9 +353,6 @@ $(document).ready(function () {
             },
             rules: {
                 required: 'Peate kinnitama, et olete lugenud meie reegleid ja olete nendega nõus'
-            },
-            submit_checkbox: {
-                required: 'Peate kinnitama, et vorm on õige'
             }
         }
     });

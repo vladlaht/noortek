@@ -3,7 +3,6 @@ include 'dto/BookingDTO.php';
 
 class RoomBooking
 {
-
     public function __construct()
     {
         $this->add_post_types();
@@ -146,7 +145,8 @@ class RoomBooking
             );
 
             $customerLetter = Timber::compile('/views/bookingCustomerLetter.twig', [
-                    'bookingLetter' => $bookingForm
+                    'bookingLetter' => $bookingForm,
+                    'noortekLogo' => get_template_directory_uri() . '/images/logos/nnk-logo.png'
                 ]
             );
             wp_mail($bookingForm->getEmail(), "Broneeringu andmed", $customerLetter, array('Content-Type: text/html; charset=UTF-8'));
@@ -162,14 +162,14 @@ class RoomBooking
      */
     public function mapBookingDTO(): BookingDTO
     {
-        $resourceItem = isset( $_POST['form']['resources'] ) ? (array) $_POST['form']['resources'] : array();
+        $resourceItem = isset($_POST['form']['resources']) ? (array)$_POST['form']['resources'] : array();
 
         $bookingForm = new BookingDTO();
         $bookingForm->setDate(sanitize_text_field($_POST['form']['date']))
             ->setRoom((int)($_POST['form']['room']))
             ->setTimeFrom(sanitize_text_field($_POST['form']['timeFrom']))
             ->setTimeUntil(sanitize_text_field($_POST['form']['timeUntil']))
-            ->setResources(array_map( 'sanitize_text_field', $resourceItem ))
+            ->setResources(array_map('sanitize_text_field', $resourceItem))
             ->setParticipants((int)($_POST['form']['participants']))
             ->setPurpose(sanitize_text_field($_POST['form']['purpose']))
             ->setInfo(sanitize_text_field($_POST['form']['info']))
