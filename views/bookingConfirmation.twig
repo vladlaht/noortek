@@ -17,7 +17,7 @@
     </div>
 </div>
 <div>
-    <p><strong>Kuupäev: </strong>{{ bookingForm.date}}</p>
+    <p><strong>Kuupäev: </strong>{{ bookingForm.date }}</p>
 </div>
 <div>
     <p><strong>Eesmärk: </strong>{{ bookingForm.purpose }}</p>
@@ -72,10 +72,17 @@
                 <div class="alert alert-dark" role="alert">
                     Kokku: {{ bookingForm.totalAmount }} EUR
                 </div>
-
             </td>
         </tr>
     </table>
+    <div class="row submit-button-container">
+        <div class="submit-button">
+            <button type="button" class="bookingFormSubmitButton btn btn-primary">
+                Esita broneering
+            </button>
+        </div>
+    </div>
+
 </div>
 
 

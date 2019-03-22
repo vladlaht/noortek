@@ -944,7 +944,6 @@ input[type=number] {
 table.booking-info th,
 table.booking-info td {
     border-top: 1px solid #dddddd;
-    border-bottom: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
 }
@@ -989,7 +988,6 @@ img.bookingPreloader {
     height: 30px;
 }
 
-
 .preloader-with-text {
     text-align: center;
 }
@@ -997,17 +995,6 @@ img.bookingPreloader {
 p.preloader-text {
     margin: 5px 0;
     font-weight: 500;
-}
-
-button.bookingFormSubmitButton {
-    display: none;
-    position: absolute;
-    left: 83%;
-    top: 113%
-}
-
-.checkbox-submit {
-    display: none;
 }
 
 .booking-success-submit {
@@ -1018,4 +1005,14 @@ p.success-text {
     margin: 5px 0;
     font-weight: 500;
 }
+
+.submit-button-container {
+    justify-content: end;
+}
+
+.submit-button {
+    margin-right: 25px;
+}
+
+
 

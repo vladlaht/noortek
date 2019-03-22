@@ -81,8 +81,6 @@ $(document).ready(function () {
     });
 
     var buttonNext = $('.sw-btn-next');
-    var buttonSubmit = $('.bookingFormSubmitButton');
-    var checkboxSubmit = $('.checkbox-submit')
     wizard.show();
     preloader.hide();
     wizard.on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
@@ -197,11 +195,51 @@ $(document).ready(function () {
                     status = 'overViewExist';
                     container.html(response.data.confirmationHTML);
                     preloader.hide();
-                    buttonSubmit.show();
-                    checkboxSubmit.show();
+
+                    $('.bookingFormSubmitButton').on('click', function () {
+                        var checkboxes = document.getElementsByName('resources[]');
+                        var vals = [];
+                        for (var i = 0, n = checkboxes.length; i < n; i++) {
+                            if (checkboxes[i].checked) {
+                                vals.push(checkboxes[i].value);
+                            }
+                        }
+                        var dataForm = {
+                            date: $('input#date').val(),
+                            room: $('input[name=room]:checked').val(),
+                            timeFrom: $('input#timeFrom').val(),
+                            timeUntil: $('input#timeUntil').val(),
+                            resources: vals,
+                            participants: $('input#participants').val(),
+                            purpose: $('input#purpose').val(),
+                            info: $('textarea#info').val(),
+                            firstName: $('input#firstname').val(),
+                            lastName: $('input#lastname').val(),
+                            phone: $('input#phone').val(),
+                            email: $('input#email').val(),
+                            address: $('input#address').val(),
+                        };
+
+                        $.ajax({
+                            url: ajaxurl,
+                            data: {
+                                action: 'booking_submit',
+                                form: dataForm
+                            },
+                            method: 'POST'
+                        }).done(function (response) {
+                            $('.booking-form').html(response.data.submitSucces);
+
+                        }).fail(function (response) {
+                            //show error to client user friendly
+                            console.log('error');
+                            console.log(response);
+                        });
+                    });
+
+
                     console.log('success');
                     console.log(response);
-
                 }).fail(function (response) {
                     console.log('error');
                     console.log(response);
@@ -210,46 +248,6 @@ $(document).ready(function () {
         }
     });
 
-    buttonSubmit.on('click', function () {
-        var checkboxes = document.getElementsByName('resources[]');
-        var vals = [];
-        for (var i = 0, n = checkboxes.length; i < n; i++) {
-            if (checkboxes[i].checked) {
-                vals.push(checkboxes[i].value);
-            }
-        }
-        var dataForm = {
-            date: $('input#date').val(),
-            room: $('input[name=room]:checked').val(),
-            timeFrom: $('input#timeFrom').val(),
-            timeUntil: $('input#timeUntil').val(),
-            resources: vals,
-            participants: $('input#participants').val(),
-            purpose: $('input#purpose').val(),
-            info: $('textarea#info').val(),
-            firstName: $('input#firstname').val(),
-            lastName: $('input#lastname').val(),
-            phone: $('input#phone').val(),
-            email: $('input#email').val(),
-            address: $('input#address').val(),
-        };
-
-        $.ajax({
-            url: ajaxurl,
-            data: {
-                action: 'booking_submit',
-                form: dataForm
-            },
-            method: 'POST'
-        }).done(function (response) {
-            $('.booking-form').html(response.data.submitSucces);
-
-        }).fail(function (response) {
-            //show error to client user friendly
-            console.log('error');
-            console.log(response);
-        });
-    });
 
     form.validate({
         errorContainer: "#messageBox1",
