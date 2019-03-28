@@ -304,7 +304,7 @@ class BookingDTO
     public function generateBookingNumber()
     {
         $currentDate = current_time('YmdHis', 0);
-        $this->bookingDate = $currentDate; // 2019031817  new DateTime()
+        $this->bookingDate = $currentDate;
     }
 
 

@@ -8,6 +8,8 @@ class RoomBooking
         $this->add_post_types();
         $this->register_short_codes();
         $this->register_ajax_action();
+        $this->add_meta_boxes();
+
     }
 
     private function add_post_types()
@@ -24,13 +26,71 @@ class RoomBooking
 
     private function register_ajax_action()
     {
-
         add_action('wp_ajax_room_booking_time', [$this, 'get_available_times']);
         add_action('wp_ajax_nopriv_room_booking_time', [$this, 'get_available_times']);
         add_action('wp_ajax_filled_form', [$this, 'get_filled_user_form']);
         add_action('wp_ajax_nopriv_filled_form', [$this, 'get_filled_user_form']);
         add_action('wp_ajax_booking_submit', [$this, 'save_booking']);
         add_action('wp_ajax_nopriv_booking_submit', [$this, 'save_booking']);
+    }
+
+    private function add_meta_boxes()
+    {
+        add_action('add_meta_boxes', [$this, 'add_booking_meta_box']);
+    }
+
+
+
+    function add_booking_meta_box()
+    {
+        add_meta_box('booking_metabox', 'Booking metabox', [$this, 'booking_callback'],
+            'booking', 'normal', 'high');
+    }
+
+
+    function booking_callback($post)
+    {
+        wp_nonce_field('save_booking_data', 'booking_meta_box_nonce');
+
+        $room = get_post(get_post_meta($post->ID, 'room', true));
+        $rooms = get_posts(['post_type' => 'booking-room']);
+        $date = get_post_meta($post->ID, 'date', true);
+        $time_from = get_post_meta($post->ID, 'time_from', true);
+        $time_until = get_post_meta($post->ID, 'time_until', true);
+        $participants_num = get_post_meta($post->ID, 'participants_num', true);
+        $purpose = get_post_meta($post->ID, 'purpose', true);
+        $resource = get_post_meta($post->ID, 'resources', false);
+        $resources = get_posts(['post_type' => 'booking-equipment']);
+        $info = get_post_meta($post->ID, 'info', true);
+        $firstname = get_post_meta($post->ID, 'firstname', true);
+        $lastname = get_post_meta($post->ID, 'lastname', true);
+        $address = get_post_meta($post->ID, 'address', true);
+        $phone = get_post_meta($post->ID, 'phone', true);
+        $email = get_post_meta($post->ID, 'email', true);
+        $summa = get_post_meta($post->ID, 'summa', true);
+
+        Timber::render('/views/customFields/bookingEditForm.twig', [
+            'room' => $room,
+            'rooms' => $rooms,
+            'date' => $date,
+            'time_from' => $time_from,
+            'time_until' => $time_until,
+            'participants_num' => $participants_num,
+            'purpose' => $purpose,
+            'resource' => $resource,
+            'resources' => $resources,
+            'info' => $info,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'address' => $address,
+            'phone' => $phone,
+            'email' => $email,
+            'summa' => $summa
+        ]);
+    }
+
+    function save_booking_data() {
+
     }
 
     public function register_booking_short_code()
@@ -47,7 +107,6 @@ class RoomBooking
 
     public function get_available_times()
     {
-        $room = (int)sanitize_text_field($_POST['room']);
         $date = DateTime::createFromFormat('d.m.Y', sanitize_text_field($_POST['date']));
 
         $args = [
@@ -73,7 +132,6 @@ class RoomBooking
             $booking->title = "Broneeritud";
             $booking->from = DateTime::createFromFormat('d.m.Y H:i', "{$date} {$timeFrom}");
             $booking->to = DateTime::createFromFormat('d.m.Y H:i', "{$date} {$timeTo}");
-
             $result[] = $booking;
         }
 
@@ -86,7 +144,6 @@ class RoomBooking
         try {
             $bookingForm = $this->mapBookingDTO();
             $bookingForm->calculateAmount();
-
             $view = Timber::compile('/views/bookingConfirmation.twig', [
                     'bookingForm' => $bookingForm
                 ]
@@ -111,24 +168,23 @@ class RoomBooking
             ]);
 
             add_post_meta($post_Id, 'room', $bookingForm->getRoom()->ID);
-            $selected_date = $bookingForm->getDate();
-            $new_date = date('Ymd', strtotime($selected_date));
-            add_post_meta($post_Id, 'date', $new_date);
-            $field_date = get_field_object('date', $post_Id);
-            add_post_meta($post_Id, '_date', $field_date['key']);
+            add_post_meta($post_Id, 'date', $bookingForm->getDate());
             add_post_meta($post_Id, 'time_from', $bookingForm->getTimeFrom());
             add_post_meta($post_Id, 'time_until', $bookingForm->getTimeUntil());
             add_post_meta($post_Id, 'participants_num', $bookingForm->getParticipants());
             add_post_meta($post_Id, 'purpose', $bookingForm->getPurpose());
+
             $equipment = $bookingForm->getResources();
-            $field = get_field_object('resources', $post_Id);
-            if (!empty($equipment)) {
+            /*if (!empty($equipment)) {
                 add_post_meta($post_Id, 'resources', count($equipment));
-                add_post_meta($post_Id, '_resources', $field['key']);
                 foreach ($equipment as $key => $equipmentId) {
                     $metaKey = 'resources_' . $key . '_vahend';
                     add_post_meta($post_Id, $metaKey, $equipmentId);
-                    add_post_meta($post_Id, "_" . $metaKey, 'field_5c7591d790f76');
+                }
+            }*/
+            if (!empty($equipment)) {
+                foreach ($equipment as $equipmentId) {
+                    add_post_meta($post_Id, 'resources', $equipmentId);
                 }
             }
             add_post_meta($post_Id, 'info', $bookingForm->getInfo());
@@ -163,8 +219,8 @@ class RoomBooking
     public function mapBookingDTO(): BookingDTO
     {
         $resourceItem = isset($_POST['form']['resources']) ? (array)$_POST['form']['resources'] : array();
-
         $bookingForm = new BookingDTO();
+
         $bookingForm->setDate(sanitize_text_field($_POST['form']['date']))
             ->setRoom((int)($_POST['form']['room']))
             ->setTimeFrom(sanitize_text_field($_POST['form']['timeFrom']))
