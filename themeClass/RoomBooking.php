@@ -9,7 +9,8 @@ class RoomBooking
         $this->register_short_codes();
         $this->register_ajax_action();
         $this->add_meta_boxes();
-
+        $this->add_posts_columns();
+        $this->save_post();
     }
 
     private function add_post_types()
@@ -34,11 +35,21 @@ class RoomBooking
         add_action('wp_ajax_nopriv_booking_submit', [$this, 'save_booking']);
     }
 
+    private function save_post()
+    {
+        add_action('save_post', [$this, 'save_booking_data']);
+    }
+
     private function add_meta_boxes()
     {
         add_action('add_meta_boxes', [$this, 'add_booking_meta_box']);
     }
 
+    private function add_posts_columns()
+    {
+        add_filter('manage_booking_posts_columns', [$this, 'set_custom_edit_booking_columns']);
+        add_action('manage_booking_posts_custom_column', [$this, 'custom_booking_column'], 10, 2);
+    }
 
 
     function add_booking_meta_box()
@@ -47,6 +58,33 @@ class RoomBooking
             'booking', 'normal', 'high');
     }
 
+    function set_custom_edit_booking_columns($columns)
+    {
+        unset($columns['date']);
+        $columns['title'] = 'Nimetus';
+        $columns['room'] = 'Ruum';
+        $columns['status'] = 'Staatus';
+        $columns['date'] = 'Kuupäev';
+
+        return $columns;
+    }
+
+    function custom_booking_column($column, $post_id)
+    {
+        switch ($column) {
+            case 'room':
+                echo get_the_title(get_post_meta($post_id, 'room', true));
+                break;
+
+                //doesnt work
+            case 'status':
+                echo $status = get_post_meta($post_id, 'status', true);
+                break;
+            case 'date':
+                echo get_post_meta($post_id, 'date', true);
+                break;;
+        }
+    }
 
     function booking_callback($post)
     {
@@ -68,6 +106,7 @@ class RoomBooking
         $phone = get_post_meta($post->ID, 'phone', true);
         $email = get_post_meta($post->ID, 'email', true);
         $summa = get_post_meta($post->ID, 'summa', true);
+        $status = get_post_meta($post->ID, 'status', true);
 
         Timber::render('/views/customFields/bookingEditForm.twig', [
             'room' => $room,
@@ -85,12 +124,66 @@ class RoomBooking
             'address' => $address,
             'phone' => $phone,
             'email' => $email,
-            'summa' => $summa
+            'summa' => $summa,
+            'status' =>$status
         ]);
     }
 
-    function save_booking_data() {
+    function save_booking_data($post_id)
+    {
+        if (!isset($_POST['booking_meta_box_nonce'])) {
+            return $post_id;
+        }
+        if (!wp_verify_nonce($_POST['booking_meta_box_nonce'], 'save_booking_data')) {
+            return $post_id;
+        }
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return $post_id;
+        }
+        if (!current_user_can('edit_post', $post_id)) {
+            return $post_id;
+        }
+/*        if (!isset($_POST['email'])) {
+            return $post_id;
+        }*/
 
+        //room saving doesnt work
+        $room = ( $_POST['room'] );
+        $date = sanitize_text_field( $_POST['date'] );
+        $time_from = sanitize_text_field( $_POST['time_from'] );
+        $time_until = sanitize_text_field( $_POST['time_until'] );
+        $participants_num = (int)( $_POST['participants_num'] );
+        $purpose = sanitize_text_field( $_POST['purpose'] );
+
+        // resorce saving doesnt work
+        $resourceItem = isset($_POST['resources']) ? (array)$_POST['resources'] : array();
+        $resource = (array_map('sanitize_text_field', $resourceItem));
+        $info = sanitize_text_field( $_POST['info'] );
+        $firstname = sanitize_text_field( $_POST['firstname'] );
+        $lastname = sanitize_text_field( $_POST['lastname'] );
+        $address = sanitize_text_field( $_POST['address'] );
+        $phone = (int)( $_POST['phone'] );
+        $email = sanitize_email( $_POST['email'] );
+        $summa = (int)( $_POST['summa'] );
+
+        //status saving doesnt work
+        $status = ( $_POST['status'] );
+
+        update_post_meta($post_id, 'room', $room);
+        update_post_meta($post_id, 'date', $date);
+        update_post_meta($post_id, 'time_from', $time_from);
+        update_post_meta($post_id, 'time_until', $time_until);
+        update_post_meta($post_id, 'participants_num', $participants_num);
+        update_post_meta($post_id, 'purpose', $purpose);
+        update_post_meta($post_id, 'resources', $resource);
+        update_post_meta($post_id, 'info', $info);
+        update_post_meta($post_id, 'firstname', $firstname);
+        update_post_meta($post_id, 'lastname', $lastname);
+        update_post_meta($post_id, 'address', $address);
+        update_post_meta($post_id, 'phone', $phone);
+        update_post_meta($post_id, 'email', $email);
+        update_post_meta($post_id, 'summa', $summa);
+        update_post_meta($post_id, 'status', $status);
     }
 
     public function register_booking_short_code()
@@ -175,13 +268,6 @@ class RoomBooking
             add_post_meta($post_Id, 'purpose', $bookingForm->getPurpose());
 
             $equipment = $bookingForm->getResources();
-            /*if (!empty($equipment)) {
-                add_post_meta($post_Id, 'resources', count($equipment));
-                foreach ($equipment as $key => $equipmentId) {
-                    $metaKey = 'resources_' . $key . '_vahend';
-                    add_post_meta($post_Id, $metaKey, $equipmentId);
-                }
-            }*/
             if (!empty($equipment)) {
                 foreach ($equipment as $equipmentId) {
                     add_post_meta($post_Id, 'resources', $equipmentId);

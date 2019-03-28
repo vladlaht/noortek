@@ -1,8 +1,8 @@
 <div>
     <label for="status" name="status">Status</label>
     <select id="status">
-        <option value="Taotletud" selected>Taotletud</option>
-        <option value="Kinnitatud">Kinnitatud</option>
+        <option {{ (status == "Taotletud") ? 'selected' : '' }} value="Taotletud" selected>Taotletud</option>
+        <option {{ (status == "Kinnitatud") ? 'selected' : '' }} value="Kinnitatud">Kinnitatud</option>
     </select>
 </div>
 
