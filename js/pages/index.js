@@ -59,7 +59,6 @@ $(document).ready(function () {
         }
     });
 
-
     var form = $('#nnk-booking-form');
     var wizard = $('#smartwizard');
     var preloader = $('.preloader');
@@ -84,8 +83,6 @@ $(document).ready(function () {
     wizard.show();
     preloader.hide();
     wizard.on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
-
-
         var result = form.valid();
         if (result && stepNumber === 1) {
             var allItems = JSON.parse(localStorage.getItem("times"));
@@ -113,6 +110,7 @@ $(document).ready(function () {
 
         if (stepNumber === 1) {
             var timetable = $('.timetable');
+            timetable.fullCalendar('destroy');
             timetable.fullCalendar({
                 header: {
                     left: 'title',
@@ -138,7 +136,7 @@ $(document).ready(function () {
                 method: 'POST'
             }).done(function (response) {
                 var items = [];
-                $.each(response.data.result, function (index, value) {
+                $.each(response.data, function (index, value) {
                     timetable.fullCalendar('renderEvent', {
                         id: index,
                         title: value.title,
@@ -183,7 +181,6 @@ $(document).ready(function () {
                     email: $('input#email').val(),
                     address: $('input#address').val(),
                 };
-
                 $.ajax({
                     url: ajaxurl,
                     data: {
@@ -219,7 +216,6 @@ $(document).ready(function () {
                             email: $('input#email').val(),
                             address: $('input#address').val(),
                         };
-
                         $.ajax({
                             url: ajaxurl,
                             data: {
@@ -236,8 +232,6 @@ $(document).ready(function () {
                             console.log(response);
                         });
                     });
-
-
                     console.log('success');
                     console.log(response);
                 }).fail(function (response) {
@@ -291,7 +285,7 @@ $(document).ready(function () {
             },
             phone: {
                 required: true,
-                maxlength: 12
+                maxlength: 15
             },
             email: {
                 required: true,
@@ -335,14 +329,14 @@ $(document).ready(function () {
                 required: 'See väli on kohustuslik',
                 minlength: 'Perekonnanime pikkus ei tohi olla alla 2 sümbolit',
                 maxlength: 'Nimi ei tohi olla pikkem kui 20 sübmolit'
-            },
+        },
             address: {
                 required: 'See väli on kohustuslik',
                 maxlength: 'Aadress ei tohi olla pikkem kui 100 sübmolit'
             },
             phone: {
                 required: 'See väli on kohustuslik',
-                max: 'Telefoninumber ei tohi olla pikkem kui 12 sümbolit'
+                max: 'Telefoninumber ei tohi olla pikkem kui 15 sümbolit'
             },
             email: {
                 required: 'See väli on kohustuslik',

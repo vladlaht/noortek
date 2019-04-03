@@ -6,6 +6,8 @@ class BookingDTO
     const KEY_HIND = 'hind';
     const TYPE_ROOM = 'room';
     const TYPE_EQUIPMENT = 'equipment';
+    const  STATUS_REQUESTED = 'Taotletud';
+    const STATUS_CONFIRMED = "Kinnitatud";
 
     public $date;
     public $room;
@@ -22,7 +24,8 @@ class BookingDTO
     public $address;
     public $invoiceRows;
     public $totalAmount;
-    public $bookingDate;
+    public $bookingNumber;
+    public $status;
 
     public function __construct()
     {
@@ -287,24 +290,51 @@ class BookingDTO
     /**
      * @return mixed
      */
-    public function getBookingDate()
+    public function getBookingNumber()
     {
-        return $this->bookingDate;
+        return $this->bookingNumber;
     }
 
     /**
-     * @param mixed $bookingDate
+     * @param mixed $bookingNumber
      */
-    public function setBookingDate($bookingDate): void
+    public function setBookingNumber($bookingNumber): void
     {
-        $this->bookingDate = $bookingDate;
+        $this->bookingNumber = $bookingNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status): void
+    {
+        $this->status = $status;
+    }
+
+    public static function getStatuses()
+    {
+        return [self::STATUS_REQUESTED, self::STATUS_CONFIRMED];
+    }
+
+    public function generateBookingStatus()
+    {
+        $currentStatus = self::STATUS_REQUESTED;
+        $this->status = $currentStatus;
     }
 
 
     public function generateBookingNumber()
     {
         $currentDate = current_time('YmdHis', 0);
-        $this->bookingDate = $currentDate;
+        $this->bookingNumber = $currentDate;
     }
 
 
@@ -361,7 +391,6 @@ class BookingDTO
                 'total' => (float)$total
             ];
         $this->invoiceRows[] = $itemRow;
-
     }
 
 

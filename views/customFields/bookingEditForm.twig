@@ -1,16 +1,16 @@
 <div>
-    <label for="status" name="status">Status</label>
-    <select id="status">
-        <option {{ (status == "Taotletud") ? 'selected' : '' }} value="Taotletud" selected>Taotletud</option>
-        <option {{ (status == "Kinnitatud") ? 'selected' : '' }} value="Kinnitatud">Kinnitatud</option>
+    <label for="status">Status</label>
+    <select id="status" name="status">
+        {% for item in statuses %}
+            <option {{ (status == item) ? 'selected' : '' }} value="{{ item }}">{{ item }}</option>
+        {% endfor %}
     </select>
 </div>
-
 <div>
     <label for="room">Ruum</label>
-    <select id="room">
+    <select id="room" name="room">
         {% for item in rooms %}
-            <option value="{{ item.ID }}" {{ item.ID == room.ID ? 'selected' : '' }}>{{ item.post_title }}</option>
+            <option {{ item.ID == room.ID ? 'selected' : '' }} value="{{ item.ID }}">{{ item.post_title }}</option>
         {% endfor %}
     </select>
 </div>

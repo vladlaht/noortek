@@ -24,7 +24,7 @@
                             </tr>
                             <tr>
                                 <td style="font-size:17pt" ;>
-                                    nr.{{ bookingLetter.bookingDate }}
+                                    nr.{{ bookingLetter.bookingNumber }}
                                 </td>
                             </tr>
                         </table>
@@ -35,7 +35,6 @@
                                 <td width="200">
                                     <img src="{{ noortekLogo }}"
                                          alt="pilt" width="100%"/>
-
                                 </td>
                             </tr>
                         </table>
@@ -44,12 +43,9 @@
             </table>
         </td>
         <td bgcolor="white" width="60px"></td>
-
-
     </tr>
     <tr>
         <td colspan="3" bgcolor="white" style="border-bottom: 10px solid #ff6900;">
-
         </td>
     </tr>
     <tr>
@@ -57,12 +53,44 @@
         <td bgcolor="white">
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                    <td colspan="2" bgcolor="white"
-                        style="padding: 70px 0 40px 0; font-size:15pt; line-height: 130%">
+                    <td colspan="2" style="padding: 70px 0 30px 0; font-size:15pt; line-height: 130%">
                         Olete esitanud Narva noortekeskuse ruumi broneeringu. Antud broneering hetlek "ootel" staatuses.
                         Kinnitamisel teile saabub teave.
                     </td>
                 </tr>
+                <tr>
+                    <td style="font-size:15pt; line-height: 150%">
+                        Broneerija:
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size:15pt; line-height: 150%">
+                        Nimi: <strong>{{ bookingLetter.firstname }} {{ bookingLetter.lastname }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size:15pt; line-height: 150%">
+                        Tel: <strong>{{ bookingLetter.phone }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size:15pt; line-height: 150%">
+                        Email: <strong>{{ bookingLetter.email }}</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-bottom:40px; font-size:15pt; line-height: 150%">
+                        Aadress: <strong>{{ bookingLetter.address }}</strong>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td bgcolor="white" width="60px"></td>
+    </tr>
+    <tr>
+        <td bgcolor="white" width="60px"></td>
+        <td bgcolor="white">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td colspan="2" style="font-size:15pt; line-height: 150%">
                         Broneeritav ruum: <strong>{{ bookingLetter.room.post_title }}</strong>
@@ -73,7 +101,8 @@
                         Kuupäev: <strong>{{ bookingLetter.date }}</strong>
                     </td>
                     <td style="font-size: 15pt; width: 65% ">
-                        alates <strong>{{ bookingLetter.timeFrom }}</strong> kuni <strong>{{ bookingLetter.timeUntil }}</strong>
+                        alates <strong>{{ bookingLetter.timeFrom }}</strong> kuni
+                        <strong>{{ bookingLetter.timeUntil }}</strong>
                     </td>
                 </tr>
             </table>
@@ -129,20 +158,20 @@
                     </td>
                 </tr>
                 {% for item in bookingLetter.invoiceRows %}
-                <tr>
-                    <td style="padding: 12px 0 12px 20px; border-top: 1px solid #dbdbdb; width: 50%">
-                        {{ item.name }}
-                    </td>
-                    <td align="right" style="border-top: 1px solid #dbdbdb;">
-                        {{ item.amount }} t
-                    </td>
-                    <td align="right" style="border-top: 1px solid #dbdbdb;">
-                        {{ item.price }}
-                    </td>
-                    <td align="right" style="border-top: 1px solid #dbdbdb; padding-right: 20px">
-                        {{ item.total }}
-                    </td>
-                </tr>
+                    <tr>
+                        <td style="padding: 12px 0 12px 20px; border-top: 1px solid #dbdbdb; width: 50%">
+                            {{ item.name }}
+                        </td>
+                        <td align="right" style="border-top: 1px solid #dbdbdb;">
+                            {{ item.amount }} t
+                        </td>
+                        <td align="right" style="border-top: 1px solid #dbdbdb;">
+                            {{ item.price }}
+                        </td>
+                        <td align="right" style="border-top: 1px solid #dbdbdb; padding-right: 20px">
+                            {{ item.total }}
+                        </td>
+                    </tr>
                 {% endfor %}
                 <tr>
                     <td colspan="4" style="text-align: right; border-top: 1px solid #ff6900; padding: 15px 20px 20px 0">
