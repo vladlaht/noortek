@@ -1,0 +1,94 @@
+<div class="booking-container">
+    <p><h4><strong>{{ function('pll_e', 'wizardTabConfirmationLabelReview') }}</strong></h4></p>
+    <div class="alert alert-warning" role="alert">
+        {{ function('pll_e', 'wizardTabConfirmationLabelMessage') }}
+    </div>
+    <div class="row">
+        <div class="col-xl-2  col-md-3 col-sm-4">
+            <strong>
+                {{ function('pll_e', 'wizardTabConfirmationLabelBooker') }}:</strong>
+        </div>
+        <div class="booker col-xl-10 col-md-9 col-sm-8">
+            <div>{{ bookingForm.firstName }} {{ bookingForm.lastName }}</div>
+            <div>+372 {{ bookingForm.phone }}</div>
+            <div>{{ bookingForm.email }}</div>
+            <div>{{ bookingForm.address }}</div>
+            <br>
+        </div>
+    </div>
+</div>
+<div>
+    <p><strong>{{ function('pll_e', 'wizardTabConfirmationLabelDate') }}: </strong>{{ bookingForm.date }}</p>
+</div>
+<div>
+    <p><strong>{{ function('pll_e', 'wizardTabConfirmationLabelGoal') }}: </strong>{{ bookingForm.purpose }}</p>
+</div>
+<div>
+    <p><strong>{{ function('pll_e', 'wizardTabConfirmationLabelParticipants') }}
+            : </strong>{{ bookingForm.participants }} inimest</p>
+</div>
+<div>
+    <p><strong>{{ function('pll_e', 'wizardTabConfirmationLabelInfo') }}: </strong>
+        <br>
+        {{ bookingForm.info }}
+    </p>
+
+</div>
+<div>
+    <table class="booking-info">
+        <tr>
+            <th>{{ function('pll_e', 'wizardTabConfirmationLabelRoomName') }}</th>
+            <th>{{ function('pll_e', 'wizardTabConfirmationLabelTime') }}</th>
+            <th>{{ function('pll_e', 'wizardTabConfirmationLabelHourPrice') }}</th>
+            <th>{{ function('pll_e', 'wizardTabConfirmationLabelItemSumma') }}</th>
+        </tr>
+        {% for item in bookingForm.invoiceRows %}
+        <tr>
+            {% if item.type == constant('BookingDTO::TYPE_ROOM') %}
+                <td>
+                    <img class="booked-room-card"
+                         src="{{ function('get_the_post_thumbnail_url', bookingForm.room.ID, 'post-thumbnail') }}"
+                         alt=""> {{ bookingForm.invoiceRows[0].name }}
+                </td>
+            {% else %}
+                <td>
+                    {{ item.name }}
+                </td>
+            {% endif %}
+            <td>
+                {{ bookingForm.timeFrom }}-{{ bookingForm.timeUntil }}
+                {% if item.amount == 1 %}
+                ({{ item.amount }} {{ function('pll_e', 'wizardTabConfirmationLabelTimeUnit') }})
+                {% elseif item.amount == 0 or item.amount >= 5 %}
+                ({{ item.amount }} {{ function('pll_e', 'wizardTabConfirmationLabelTimeUnitsSecond') }})
+                {% else %}
+                ({{item.amount}} {{ function('pll_e', 'wizardTabConfirmationLabelTimeUnitsFirst') }})
+                {% endif %}
+            </td>
+            <td>
+                {{ item.price }} EUR
+            </td>
+            <td>
+                {{ item.total }} EUR
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <div class="alert alert-dark" role="alert">
+                    {{ function('pll_e', 'wizardTabConfirmationLabelTotalAmount') }}: {{ bookingForm.totalAmount }} EUR
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div class="row submit-button-container">
+        <div class="submit-button">
+            <button type="button" class="bookingFormSubmitButton btn btn-primary">
+                {{ function('pll_e', 'wizardTabConfirmationLabelSubmitButton') }}
+            </button>
+        </div>
+    </div>
+</div>

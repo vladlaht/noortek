@@ -2,6 +2,7 @@
 
 require_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
 include 'themeClass/RoomBooking.php';
+include 'translations/NnkTranslations.php';
 
 $theme = new NoortekWPTheme();
 
@@ -19,6 +20,7 @@ class NoortekWPTheme {
         add_action('admin_ajax_custom_action_hook', [$this, 'the_action_hook_callback']);
         add_action('admin_ajax_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
         $this->enableFeatures();
+        NnkTranslations::register_strings();
     }
 
     function add_support()

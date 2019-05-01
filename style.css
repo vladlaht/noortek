@@ -953,10 +953,6 @@ table.booking-info td {
     border-radius: 2px;
 }
 
-img.bookingPreloader {
-    background: #000;
-}
-
 .preloader {
     position: absolute;
     left: 0;
@@ -1013,6 +1009,56 @@ p.success-text {
 .submit-button {
     margin-right: 25px;
 }
+
+.card {
+    opacity: 0.7;
+    transition: opacity 0.5s;
+    min-height: 345px;
+}
+
+.card img {
+    -webkit-filter: grayscale(90%);
+    filter: grayscale(90%);
+}
+
+.card.selected img,
+.card:hover img {
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+}
+
+.card.selected,
+.card:hover {
+    opacity: 1;
+}
+
+.card.selected::before {
+    content: '\2713';
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    bottom: 2vw;
+    right: 2vw;
+    background: #1e7e34;
+    z-index: 5;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+}
+
+.card.selected .btn {
+    display: none;
+}
+
+.employeeTable {
+    background: red;
+}
+
+
+
 
 
 

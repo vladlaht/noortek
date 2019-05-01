@@ -6,8 +6,9 @@ class BookingDTO
     const KEY_HIND = 'hind';
     const TYPE_ROOM = 'room';
     const TYPE_EQUIPMENT = 'equipment';
-    const  STATUS_REQUESTED = 'Taotletud';
-    const STATUS_CONFIRMED = "Kinnitatud";
+    const STATUS_REQUESTED = 'Taotletud';
+    const STATUS_CONFIRMED = 'Kinnitatud';
+    const STATUS_CANCELED = 'Tühistatud';
 
     public $date;
     public $room;
@@ -319,9 +320,32 @@ class BookingDTO
         $this->status = $status;
     }
 
-    public static function getStatuses()
+    public static function getAllStatuses()
     {
-        return [self::STATUS_REQUESTED, self::STATUS_CONFIRMED];
+        return [self::STATUS_REQUESTED, self::STATUS_CONFIRMED, self::STATUS_CANCELED];
+    }
+
+    public static function getStatuses($currentStatus)
+    {
+        switch ($currentStatus) {
+            default:
+            case self::STATUS_REQUESTED:
+                return self::getAllStatuses();
+            case self::STATUS_CONFIRMED:
+                return [self::STATUS_CONFIRMED, self::STATUS_CANCELED];
+            case self::STATUS_CANCELED:
+                return [self::STATUS_CANCELED];
+        }
+    }
+
+    public static function isValidStatus($status)
+    {
+        return in_array($status, self::getAllStatuses());
+    }
+
+    public static function canSetStatus($currentStatus, $nextStatus)
+    {
+        return in_array($nextStatus, self::getStatuses($currentStatus));
     }
 
     public function generateBookingStatus()

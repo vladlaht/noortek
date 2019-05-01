@@ -4,13 +4,13 @@ $(document).ready(function () {
         itemSelector: '.post-item'
     });
 
-    var disabledDays = [0, 1];
+    let disabledDays = [0, 1];
     $('.datepicker-here').datepicker({
-        format: "dd.mm.yy",
+        format: 'dd.mm.yy',
         maxViewMode: 2,
         clearBtn: true,
         autoClose: true,
-        orientation: "top auto",
+        orientation: 'top auto',
         todayHighlight: true,
         minDate: moment().add(7, 'days').toDate(),
         onSelect: function (formattedDate, date, inst) {
@@ -20,7 +20,7 @@ $(document).ready(function () {
         },
         onRenderCell: function (date, cellType) {
             if (cellType == 'day') {
-                var day = date.getDay(),
+                let day = date.getDay(),
                     isDisabled = disabledDays.indexOf(day) != -1;
 
                 return {
@@ -59,57 +59,63 @@ $(document).ready(function () {
         }
     });
 
-    var form = $('#nnk-booking-form');
-    var wizard = $('#smartwizard');
-    var preloader = $('.preloader');
-    var container = $("#totalSumma");
-    var status = 'init';
+    let form = $('#nnk-booking-form');
+    let wizard = $('#smartwizard');
+    let preloader = $('.preloader');
+    let container = $('#totalSumma');
+    let status = 'init';
 
-
-    $("form :input").change(function () {
+    $('form :input').change(function () {
         if (status === 'overViewExist') {
             status = 'dataChanged';
         }
-
     });
 
     wizard.smartWizard({
         useURLhash: false,
         showStepURLhash: false
-
     });
 
-    var buttonNext = $('.sw-btn-next');
+    let buttonNext = $('.sw-btn-next');
     wizard.show();
     preloader.hide();
-    wizard.on("leaveStep", function (e, anchorObject, stepNumber, stepDirection) {
-        var result = form.valid();
+
+    $('.room_selected').change(function () {
+        $('.card').removeClass('selected');
+        $('.card-button').removeClass('selected-button');
+        if ($(this).is(':checked')) {
+            let selectedCard = this.closest('.card');
+            let selectedCardButton = this.closest('.card-button');
+            $(selectedCard).addClass('selected');
+            $(selectedCardButton).addClass('selected-button');
+        }
+    });
+
+    wizard.on('leaveStep', function (e, anchorObject, stepNumber, stepDirection) {
+        let result = form.valid();
         if (result && stepNumber === 1) {
-            var allItems = JSON.parse(localStorage.getItem("times"));
-            var timeFrom = $('input[name=time_from]').val();
-            var timeTo = $('input[name=time_until]').val();
-            timeFrom = moment($('input#date').val() + " " + timeFrom, "DD.MM.YYYY HH:ii");
-            timeTo = moment($('input#date').val() + " " + timeTo, "DD.MM.YYYY HH:ii");
+            let allItems = JSON.parse(localStorage.getItem('times'));
+            let timeFrom = $('input[name=time_from]').val();
+            let timeTo = $('input[name=time_until]').val();
+            timeFrom = moment($('input#date').val() + ' ' + timeFrom, 'DD.MM.YYYY HH:ii');
+            timeTo = moment($('input#date').val() + ' ' + timeTo, 'DD.MM.YYYY HH:ii');
             $.each(allItems, function (index, item) {
                 if (moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
                     || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)) {
-                    alert("Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega");
+                    alert('Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega');
                     result = false;
                     return false;
                 }
-
             })
         } else if (stepNumber === 5) {
             buttonNext.show();
         }
         return result;
-
     });
 
-    wizard.on("showStep", function (e, anchorObject, stepNumber, stepDirection) {
-
+    wizard.on('showStep', function (e, anchorObject, stepNumber, stepDirection) {
         if (stepNumber === 1) {
-            var timetable = $('.timetable');
+            let timetable = $('.timetable');
             timetable.fullCalendar('destroy');
             timetable.fullCalendar({
                 header: {
@@ -120,10 +126,10 @@ $(document).ready(function () {
                 timeFormat: 'HH:mm',
                 height: 150,
                 schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-                defaultDate: moment($('input#date').val(), "DD.MM.YYYY"),
+                defaultDate: moment($('input#date').val(), 'DD.MM.YYYY'),
                 defaultView: 'timelineDay',
-                minTime: "10:00",
-                maxTime: "19:00"
+                minTime: '10:00',
+                maxTime: '19:00'
             });
 
             $.ajax({
@@ -135,7 +141,7 @@ $(document).ready(function () {
                 },
                 method: 'POST'
             }).done(function (response) {
-                var items = [];
+                let items = [];
                 $.each(response.data, function (index, value) {
                     timetable.fullCalendar('renderEvent', {
                         id: index,
@@ -149,8 +155,7 @@ $(document).ready(function () {
                         end: moment(value.to.date)
                     });
                 });
-                localStorage.setItem("times", JSON.stringify(items));
-
+                localStorage.setItem('times', JSON.stringify(items));
 
             }).fail(function (response) {
                 alert('error');
@@ -159,14 +164,14 @@ $(document).ready(function () {
             buttonNext.hide();
             if (status === 'init' || status === 'dataChanged') {
                 preloader.show();
-                var checkboxes = document.getElementsByName('resources[]');
-                var vals = [];
-                for (var i = 0, n = checkboxes.length; i < n; i++) {
+                let checkboxes = document.getElementsByName('resources[]');
+                let vals = [];
+                for (let i = 0, n = checkboxes.length; i < n; i++) {
                     if (checkboxes[i].checked) {
                         vals.push(checkboxes[i].value);
                     }
                 }
-                var dataForm = {
+                let dataForm = {
                     date: $('input#date').val(),
                     room: $('input[name=room]:checked').val(),
                     timeFrom: $('input#timeFrom').val(),
@@ -194,14 +199,14 @@ $(document).ready(function () {
                     preloader.hide();
 
                     $('.bookingFormSubmitButton').on('click', function () {
-                        var checkboxes = document.getElementsByName('resources[]');
-                        var vals = [];
-                        for (var i = 0, n = checkboxes.length; i < n; i++) {
+                        let checkboxes = document.getElementsByName('resources[]');
+                        let vals = [];
+                        for (let i = 0, n = checkboxes.length; i < n; i++) {
                             if (checkboxes[i].checked) {
                                 vals.push(checkboxes[i].value);
                             }
                         }
-                        var dataForm = {
+                        let dataForm = {
                             date: $('input#date').val(),
                             room: $('input[name=room]:checked').val(),
                             timeFrom: $('input#timeFrom').val(),
@@ -227,7 +232,6 @@ $(document).ready(function () {
                             $('.booking-form').html(response.data.submitSucces);
 
                         }).fail(function (response) {
-                            //show error to client user friendly
                             console.log('error');
                             console.log(response);
                         });
@@ -242,9 +246,29 @@ $(document).ready(function () {
         }
     });
 
+    jQuery.validator.addMethod('isValidTime', function (value, element) {
+        return value.length > 3;
+    }, 'Palun sisestage korrektne aeg');
 
     form.validate({
-        errorContainer: "#messageBox1",
+        errorContainer: '#messageBox1',
+        errorElement: 'div',
+        errorClass: 'is-invalid',
+        validClass: 'is-valid',
+        success: function (label) {
+            let id = label.attr('id');
+            $(id).remove();
+        },
+        errorPlacement: function (errorLabel, inputElement) {
+            let parent = inputElement.closest('.form-group');
+            let errorElement = errorLabel.removeClass('is-invalid').addClass('invalid-feedback');
+            let existedErrorElements = parent.find('.invalid-feedback');
+            if (existedErrorElements.length === 0) {
+                parent.append(errorElement);
+            } else if (existedErrorElements.length === 1 && errorElement.text() !== existedErrorElements.text()) {
+                existedErrorElements.text(errorElement.text());
+            }
+        },
         rules: {
             room: {
                 required: true
@@ -253,10 +277,12 @@ $(document).ready(function () {
                 required: true
             },
             time_from: {
-                required: true
+                required: true,
+                isValidTime: true
             },
             time_until: {
-                required: true
+                required: true,
+                isValidTime: true
             },
             participants_num: {
                 required: true,
@@ -329,7 +355,7 @@ $(document).ready(function () {
                 required: 'See väli on kohustuslik',
                 minlength: 'Perekonnanime pikkus ei tohi olla alla 2 sümbolit',
                 maxlength: 'Nimi ei tohi olla pikkem kui 20 sübmolit'
-        },
+            },
             address: {
                 required: 'See väli on kohustuslik',
                 maxlength: 'Aadress ei tohi olla pikkem kui 100 sübmolit'

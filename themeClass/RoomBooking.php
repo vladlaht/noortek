@@ -8,24 +8,25 @@ class RoomBooking
         $this->add_post_types();
         $this->register_short_codes();
         $this->register_ajax_action();
+        $this->save_post();
         $this->add_meta_boxes();
         $this->add_posts_columns();
-        $this->save_post();
+        $this->add_custom_admin_page();
     }
 
-    private function add_post_types()
+    private function add_post_types() : void
     {
         NoortekWPTheme::register_custom_post_type('booking', 'Broneering', 'Broneeringud');
         NoortekWPTheme::register_custom_post_type('booking-room', 'Ruum', 'Ruumid');
         NoortekWPTheme::register_custom_post_type('booking-equipment', 'Vahend', 'Vahendid');
     }
 
-    private function register_short_codes()
+    private function register_short_codes() : void
     {
         add_shortcode('booking', [$this, 'register_booking_short_code']);
     }
 
-    private function register_ajax_action()
+    private function register_ajax_action() : void
     {
         add_action('wp_ajax_room_booking_time', [$this, 'get_available_times']);
         add_action('wp_ajax_nopriv_room_booking_time', [$this, 'get_available_times']);
@@ -35,55 +36,97 @@ class RoomBooking
         add_action('wp_ajax_nopriv_booking_submit', [$this, 'save_booking']);
     }
 
-    private function save_post()
+    private function save_post() : void
     {
-        add_action('save_post', [$this, 'save_booking_data']);
+        add_action('save_post', [$this, 'save_wp_booking_data']);
     }
 
-    private function add_meta_boxes()
+    private function add_meta_boxes() : void
     {
         add_action('add_meta_boxes', [$this, 'add_booking_meta_box']);
     }
 
-    private function add_posts_columns()
+    private function add_posts_columns() : void
     {
         add_filter('manage_booking_posts_columns', [$this, 'set_custom_booking_columns']);
-        add_action('pre_get_posts', [$this, 'extend_admin_search']);
         add_action('manage_booking_posts_custom_column', [$this, 'custom_booking_column'], 10, 2);
+        add_action('pre_get_posts', [$this, 'extend_admin_search']);
     }
 
-    function add_booking_meta_box()
+    private function add_custom_admin_page() : void
+    {
+        add_action('admin_menu', [$this, 'register_custom_admin_page']);
+    }
+
+    public function register_custom_admin_page() : void
+    {
+        add_submenu_page('edit.php?post_type=booking', 'Broneeringu reeglid', 'Reeglid', 'manage_options', 'booking-rules', [$this, 'booking_rules_admin_view']);
+    }
+
+    public function booking_rules_admin_view() : void
+    {
+        $languages = pll_languages_list();
+       Timber::render('/views/bookingAdmin/bookingRules.twig',[
+           'languages' => $languages
+       ]);
+    }
+
+    public function add_booking_meta_box()  : void
     {
         add_meta_box('booking_metabox', 'Booking metabox', [$this, 'booking_callback'],
             'booking', 'normal', 'high');
     }
 
-    function set_custom_booking_columns($columns)
+    public function register_booking_short_code() : string
+    {
+        $rooms = get_posts(['post_type' => 'booking-room']);
+        $equipments = get_posts(['post_type' => 'booking-equipment']);
+        $svg = get_template_directory_uri() . '/images/spinning-circles.svg';
+        return Timber::compile('/views/booking.twig', [
+            'rooms' => $rooms,
+            'equipment' => $equipments,
+            'svgPreloaderPath' => $svg
+        ]);
+    }
+
+    function set_custom_booking_columns($columns) : array
     {
         unset($columns['date']);
         $columns['title'] = 'Nimetus';
         $columns['booking_number'] = 'Broneeringu nr.';
-        $columns['booker_name'] = 'Broneerija nimi';
-        $columns['room'] = 'Ruum';
-        $columns['status'] = 'Staatus';
+        $columns['booker_firstname'] = 'Eesnimi';
+        $columns['booker_lastname'] = 'Perekonnanimi';
+        $columns['booking_room'] = 'Ruum';
+        $columns['booking_on_date'] = 'Broneerimis kuupäev';
+        $columns['booking_time_period'] = 'Aeg';
+        $columns['booking_status'] = 'Staatus';
         $columns['date'] = 'Kuupäev';
         return $columns;
     }
 
-    function custom_booking_column($column, $post_id)
+    function custom_booking_column($column, $post_id) : void
     {
         switch ($column) {
 
             case 'booking_number':
                 echo get_post_meta($post_id, 'booking_number', true);
                 break;
-            case 'booker_name':
-                echo get_post_meta($post_id, 'firstname', true), ' ', get_post_meta($post_id, 'lastname', true);
+            case 'booker_firstname':
+                echo get_post_meta($post_id, 'firstname', true);
                 break;
-            case 'room':
+            case 'booker_lastname':
+                echo get_post_meta($post_id, 'lastname', true);
+                break;
+            case 'booking_room':
                 echo get_the_title(get_post_meta($post_id, 'room', true));
                 break;
-            case 'status':
+            case 'booking_on_date':
+                echo get_post_meta($post_id, 'date', true);
+                break;
+            case 'booking_time_period':
+                echo get_post_meta($post_id, 'time_from', true), ' - ', get_post_meta($post_id, 'time_until', true);
+                break;
+            case 'booking_status':
                 echo $status = get_post_meta($post_id, 'status', true);
                 break;
             case 'date':
@@ -92,13 +135,17 @@ class RoomBooking
         }
     }
 
-    function extend_admin_search($query)
+    function extend_admin_search($query) : void
     {
         $post_type = 'booking';
         $custom_fields = array(
+            'booking_number',
             'firstname',
             'lastname',
-            'booking_number',
+            'room',
+            'date',
+            'time_from',
+            'status'
         );
 
         if (!is_admin())
@@ -126,10 +173,9 @@ class RoomBooking
         };
     }
 
-    function booking_callback($post)
+    function booking_callback($post) : void
     {
-        wp_nonce_field('save_booking_data', 'booking_meta_box_nonce');
-
+        wp_nonce_field('save_wp_booking_data', 'booking_meta_box_nonce');
         $room = get_post(get_post_meta($post->ID, 'room', true));
         $rooms = get_posts(['post_type' => 'booking-room']);
         $date = get_post_meta($post->ID, 'date', true);
@@ -147,9 +193,9 @@ class RoomBooking
         $email = get_post_meta($post->ID, 'email', true);
         $summa = get_post_meta($post->ID, 'summa', true);
         $status = get_post_meta($post->ID, 'status', true);
-        $statuses = BookingDTO::getStatuses();
+        $statuses = BookingDTO::getStatuses($status);
 
-        Timber::render('/views/customFields/bookingEditForm.twig', [
+        Timber::render('/views/bookingAdmin/bookingEditForm.twig', [
             'room' => $room,
             'rooms' => $rooms,
             'date' => $date,
@@ -171,19 +217,19 @@ class RoomBooking
         ]);
     }
 
-    function save_booking_data($post_id)
+    function save_wp_booking_data($post_id) : void
     {
         if (!isset($_POST['booking_meta_box_nonce'])) {
-            return $post_id;
+            return;
         }
-        if (!wp_verify_nonce($_POST['booking_meta_box_nonce'], 'save_booking_data')) {
-            return $post_id;
+        if (!wp_verify_nonce($_POST['booking_meta_box_nonce'], 'save_wp_booking_data')) {
+            return;
         }
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-            return $post_id;
+            return;
         }
         if (!current_user_can('edit_post', $post_id)) {
-            return $post_id;
+            return;
         }
 
         $room = (int)($_POST['room']);
@@ -201,6 +247,11 @@ class RoomBooking
         $email = sanitize_email($_POST['email']);
         $summa = (int)($_POST['summa']);
         $status = sanitize_text_field($_POST['status']);
+        $current_status = get_post_meta($post_id, 'status', true);
+
+        if (!BookingDTO::isValidStatus($status) || !BookingDTO::canSetStatus($current_status, $status)) {
+            $status = $current_status;
+        }
 
         update_post_meta($post_id, 'room', $room);
         update_post_meta($post_id, 'date', $date);
@@ -223,21 +274,35 @@ class RoomBooking
                 error_log($e->getMessage());
             }
         }
+        $this->sendNotificationLetter($post_id, $status, $email);
     }
 
-    public function register_booking_short_code()
+    /**
+     * @param $post_id
+     * @param string $status
+     * @param string $email
+     */
+    public function sendNotificationLetter($post_id, string $status, string $email): void
     {
-        $rooms = get_posts(['post_type' => 'booking-room']);
-        $equipments = get_posts(['post_type' => 'booking-equipment']);
-        $svg = get_template_directory_uri() . '/images/spinning-circles.svg';
-        return Timber::compile('/views/booking.twig', [
-            'rooms' => $rooms,
-            'equipment' => $equipments,
-            'svgPreloaderPath' => $svg
-        ]);
+        if ($status == BookingDTO::STATUS_CONFIRMED) {
+            $confirmationLetterView = Timber::compile('/views/bookingConfirmationLetter.twig', [
+                    'booking_number' => get_post_meta($post_id, 'booking_number', true),
+                    'noortekLogo' => get_template_directory_uri() . '/images/logos/nnk-logo.png'
+                ]
+            );
+            wp_mail($email, "Broneeringu kinnitamine", $confirmationLetterView, array('Content-Type: text/html; charset=UTF-8'));
+
+        } elseif ($status == BookingDTO::STATUS_CANCELED) {
+            $cancellationLetterView = Timber::compile('/views/bookingCancellationLetter.twig', [
+                    'booking_number' => get_post_meta($post_id, 'booking_number', true),
+                    'noortekLogo' => get_template_directory_uri() . '/images/logos/nnk-logo.png'
+                ]
+            );
+            wp_mail($email, "Broneeringu tühistamine", $cancellationLetterView, array('Content-Type: text/html; charset=UTF-8'));
+        }
     }
 
-    public function get_available_times()
+    public function get_available_times() : void
     {
         $date = DateTime::createFromFormat('d.m.Y', sanitize_text_field($_POST['date']));
         $args = [
@@ -247,11 +312,15 @@ class RoomBooking
                 'relation' => 'AND',
                 [
                     'key' => 'date',
-                    'value' => $date->format('d.m.Y'),
+                    'value' => $date->format('d.m.Y')
                 ],
                 [
                     'key' => 'status',
-                    'value' => BookingDTO::STATUS_CONFIRMED,
+                    'value' => BookingDTO::STATUS_CONFIRMED
+                ],
+                [
+                    'key' => 'room',
+                    'value' => $_POST['room']
                 ]
             ]
         ];
@@ -270,12 +339,12 @@ class RoomBooking
         wp_send_json_success($result);
     }
 
-    public function get_filled_user_form()
+    public function get_filled_user_form() : void
     {
         try {
             $bookingForm = $this->mapBookingDTO();
             $bookingForm->calculateAmount();
-            $view = Timber::compile('/views/bookingConfirmation.twig', [
+            $view = Timber::compile('/views/bookingPreview.twig', [
                     'bookingForm' => $bookingForm
                 ]
             );
@@ -286,7 +355,7 @@ class RoomBooking
         }
     }
 
-    public function save_booking()
+    public function save_booking() : void
     {
         try {
             $bookingForm = $this->mapBookingDTO();
@@ -344,7 +413,6 @@ class RoomBooking
     {
         $resourceItem = isset($_POST['form']['resources']) ? (array)$_POST['form']['resources'] : array();
         $bookingForm = new BookingDTO();
-
         $bookingForm->setDate(sanitize_text_field($_POST['form']['date']))
             ->setRoom((int)($_POST['form']['room']))
             ->setTimeFrom(sanitize_text_field($_POST['form']['timeFrom']))
@@ -360,6 +428,4 @@ class RoomBooking
             ->setAddress(sanitize_text_field($_POST['form']['address']));
         return $bookingForm;
     }
-
-
 }
