@@ -1,18 +1,13 @@
 import React from 'react';
-import './App.css';
-import BookingWizard from "./components/wizard/Wizard";
-import SearchComponent from "./components/wizard/SearchComponent";
-
+import BookingForm from "./components/wizard/BookingForm";
 
 function App() {
     return (
-        <div className="Wizard">
-            <SearchComponent/>
-            {/*<BookingWizard/>*/}
-
+        <div>
+            <BookingForm/>
         </div>
-
     );
+
 }
 
 export default App;
