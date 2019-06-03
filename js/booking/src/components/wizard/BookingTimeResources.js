@@ -1,10 +1,34 @@
 import React from 'react';
-import {Button, Col, Container, Row} from 'reactstrap';
+import {Button, Col, Form, FormGroup, Input, Label, Row} from 'reactstrap';
+import SimpleReactValidator from "simple-react-validator";
+import InputMask from 'react-input-mask';
 
 class BookingTimeResources extends React.Component {
+    constructor(props) {
+        super(props);
+        this.validator = new SimpleReactValidator({
+            validators: {
+                time: {
+                    message: 'Palun sisestage valiidne aeg',
+                    rule: (val, params, validator) => {
+                        return validator.helpers.testRegex(val, /^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$/i)
+                    }
+                }
+            },
+            messages: {
+                required: 'See väli on kohustuslik',
+            }
+        });
+    }
+
     saveAndContinue = (e) => {
         e.preventDefault();
-        this.props.nextStep()
+        if (this.validator.allValid()) {
+            this.props.nextStep()
+        } else {
+            this.validator.showMessages();
+            this.forceUpdate();
+        }
     };
 
     back = (e) => {
@@ -15,54 +39,68 @@ class BookingTimeResources extends React.Component {
     render() {
         const {values} = this.props;
         return (
-            <Container className='booking-container'>
-                <Row>
-                    <Col lg='3'>
-                        <label>Aeg alates*</label>
-                        <input className='form-control' id='timeFrom' name='timeFrom' type='text'
-                               placeholder='Aeg alates'
-                               onChange={this.props.handleChange('timeFrom')}
-                               defaultValue={values.timeFrom}
-                        />
-                    </Col>
-                    <Col lg='3'>
-                        <label>Aeg kuni*</label>
-                        <input className='form-control' id='timeUntil' name='timeUntil' type='text'
-                               placeholder='Aeg kuni'
-                               onChange={this.props.handleChange('timeUntil')}
-                               defaultValue={values.timeUntil}
-                        />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg='12'>
-                        <label>Vajalikud vahendid:</label>
-                        <div className='form-check'>
-                            <input type='checkbox' className='form-check-input' id='resources1'/>
-                            <label className='form-check-label' style={{ marginLeft: 8 }}>Kõlarid 6 EUR / tund </label>
-                        </div>
-                        <div className='form-check'>
-                            <input type='checkbox' className='form-check-input' id='resources2'/>
-                            <label className='form-check-label' style={{ marginLeft: 8 }}>Sülearvuti 7 EUR / tund </label>
-                        </div>
-                        <div className='form-check'>
-                            <input type='checkbox' className='form-check-input' id='resources3'/>
-                            <label className='form-check-label' style={{ marginLeft: 8 }}>Projektor 5 EUR / tund </label>
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg='12'>
-                        <Button className='previous-button' onClick={this.back}>Previous</Button>
-                        <Button className='next-button' onClick={this.saveAndContinue}>Next</Button>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
+            <Form className='booking-container'>
+                <FormGroup>
+                    <Row>
+                        <Col md='3'>
+                            <Label for='timeFrom'>Aeg alates*</Label>
 
-                    </Col>
-                </Row>
-            </Container>
+                            <InputMask className='custom-input-form' mask="99:99" maskChar={null}
+                                       placeholder='12:00' id='timeFrom' name='timeFrom'
+                                       onChange={this.props.handleChange('timeFrom')}
+                                       defaultValue={values.timeFrom}
+                            />
+
+                            <div className='validationMsg'>
+                                {this.validator.message('timeFrom', values.timeFrom, 'required|time')}
+                            </div>
+                        </Col>
+                        <Col md='3'>
+                            <Label for='timeUntil'>Aeg kuni*</Label>
+                            <InputMask className='custom-input-form' mask="99:99" maskChar={null}
+                                       placeholder='13:00' id='timeUntil' name='timeUntil'
+                                       onChange={this.props.handleChange('timeUntil')}
+                                       defaultValue={values.timeUntil}
+                            />
+                            <div className='validationMsg'>
+                                {this.validator.message('timeUntil', values.timeUntil, 'required|time')}
+                            </div>
+                        </Col>
+                    </Row>
+                </FormGroup>
+                <FormGroup>
+                    <Label>Vajalikud lisavahendid:</Label>
+                    <FormGroup check>
+                        <Label check>
+                            <Input type="checkbox" id='resources1' onChange={this.props.handleChange('resources')}
+                                   defaultValue={values.resources}/>{' '}
+                            Kõlarid 6 EUR / tund
+                        </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                        <Label check>
+                            <Input type="checkbox" id='resources2' onChange={this.props.handleChange('resources')}
+                                   defaultValue={values.resources}/>{' '}
+                            Sülearvuti 7 EUR / tund
+                        </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                        <Label check>
+                            <Input type="checkbox" id='resources3' onChange={this.props.handleChange('resources')}
+                                   defaultValue={values.resources}/>{' '}
+                            Projektor 5 EUR / tund
+                        </Label>
+                    </FormGroup>
+                </FormGroup>
+                <FormGroup>
+                    <Row>
+                        <Col md='12'>
+                            <Button className='previous-button' onClick={this.back}>Tagasi</Button>
+                            <Button className='next-button' onClick={this.saveAndContinue}>Edasi</Button>
+                        </Col>
+                    </Row>
+                </FormGroup>
+            </Form>
         )
             ;
     }

@@ -2,14 +2,13 @@ import React from 'react';
 import BookingRoomDate from './BookingRoomDate';
 import BookingTimeResources from './BookingTimeResources';
 import BookingGoal from './BookingGoal';
-
 import BookingResponsible from './BookingResponsible';
 import BookingRules from './BookingRules';
 import BookingConfirmation from './BookingConfirmation';
 
 class BookingForm extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             currentStep: 1,
             date: '',
@@ -43,26 +42,22 @@ class BookingForm extends React.Component {
     };
 
     handleChange = input => event => {
-        this.setState({ [input] : event.target.value })
-    }
+        this.setState({[input]: event.target.value})
+    };
+
+    handleFieldChange = (input, value) => {
+        this.setState({[input]: value})
+    };
 
     render() {
         const {currentStep} = this.state;
-        const {date, room, timeFrom, timeUntil, resources, participants, purpose, info, firstName, lastName, phone, email, address} = this.state;
+        const {
+            date, room, timeFrom, timeUntil, resources, participants, purpose, info, firstName, lastName, phone,
+            email, address
+        } = this.state;
         const values = {
-            date,
-            room,
-            timeFrom,
-            timeUntil,
-            resources,
-            participants,
-            purpose,
-            info,
-            firstName,
-            lastName,
-            phone,
-            email,
-            address
+            date, room, timeFrom, timeUntil, resources, participants, purpose, info, firstName, lastName, phone,
+            email, address
         };
 
         switch (currentStep) {
@@ -70,6 +65,7 @@ class BookingForm extends React.Component {
                 return <BookingRoomDate
                     nextStep={this.nextStep}
                     handleChange={this.handleChange}
+                    handleFieldChange={this.handleFieldChange}
                     values={values}
                 />;
             case 2:
@@ -80,29 +76,36 @@ class BookingForm extends React.Component {
                     values={values}
                 />;
             case 3:
-                 return <BookingGoal
-                     nextStep={this.nextStep}
-                     prevStep={this.prevStep}
-                     handleChange={this.handleChange}
-                     values={values}
-                 />;
-             case 4:
-                 return <BookingResponsible
-                     nextStep={this.nextStep}
-                     prevStep={this.prevStep}
-                     handleChange={this.handleChange}
-                     values={values}
-                 />;
-             case 5:
-                 return <BookingRules
-                     nextStep={this.nextStep}
-                     prevStep={this.prevStep}
-                 />;
-             case 6:
-                 return <BookingConfirmation
-                     prevStep={this.prevStep}
-                     values={values}
-                 />
+                return <BookingGoal
+                    nextStep={this.nextStep}
+                    prevStep={this.prevStep}
+                    handleChange={this.handleChange}
+                    values={values}
+                />;
+            case 4:
+                return <BookingResponsible
+                    nextStep={this.nextStep}
+                    prevStep={this.prevStep}
+                    handleChange={this.handleChange}
+                    values={values}
+                />;
+            case 5:
+                return <BookingRules
+                    nextStep={this.nextStep}
+                    prevStep={this.prevStep}
+                />;
+            case 6:
+                return <BookingConfirmation
+                    prevStep={this.prevStep}
+                    values={values}
+                />;
+            default :
+                return <BookingRoomDate
+                    nextStep={this.nextStep}
+                    handleChange={this.handleChange}
+                    handleFieldChange={this.handleFieldChange}
+                    values={values}
+                />;
         }
     }
 }

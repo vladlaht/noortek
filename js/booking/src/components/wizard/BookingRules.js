@@ -1,7 +1,15 @@
 import React from 'react';
-import {Button, Col, Container, Row} from 'reactstrap';
+import {Button, Col, Form, Input, Label, Row} from 'reactstrap';
+import FormGroup from "reactstrap/es/FormGroup";
 
 class BookingRules extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            nextBtnDisabled: true
+        }
+    }
 
     saveAndContinue = (e) => {
         e.preventDefault();
@@ -13,62 +21,65 @@ class BookingRules extends React.Component {
         this.props.prevStep();
     };
 
+    enableButton = () => {
+        this.setState({nextBtnDisabled: false});
+    };
+
     render() {
         return (
-            <Container>
-                <Row>
-                    <Col>
-                        <div className='form-group'>
-                            <div>
-                                <span>Ruumide kasutaja vastutus: </span>
-                            </div>
-                            <ul>
-                                <li>Rummi kasutaja vastutab materiaalselt ruumi heakorra ja sisustuse säilitamise
-                                    eest.
-                                </li>
-                                <li>Ruumi üle andes palume vaadata, et kõik oleks korras (aknad kinni, tahvel puhas
-                                    jne.).
-                                </li>
-                            </ul>
-                            <div>
-                            <span>
-                                <strong>KEELATUD:</strong>
-                            </span>
-                            </div>
-                            <div>
-                                1. Suitsetada ja tarbida alkohoolseid jooke NNK sees ja NNK territooriumil
-                            </div>
-                            <div>
-                                2. Reostada NNK sees ja territooriumil
-                            </div>
-                            <div></div>
-                            <div>
-                                3. Keelatud ropendada, teise sõimata või halvustada.
-                            </div>
-                            <div>
-                                4. Keelatud tekitama ebamugavusi teiste kasutajate töö teostamiseks.
-                            </div>
-                            Reeglite rikkumise korral Teie kaotate õiguse edaspidi NNK ruumi kasutada.
-                        </div>
+            <Form className='booking-container'>
+                <FormGroup>
+                    <FormGroup>
+                        <div><strong>RUUMINE KASUTAJA VASTUTUS:</strong></div>
+                        <ul>
+                            <li>
+                                Rummi kasutaja vastutab materiaalselt ruumi heakorra ja sisustuse säilitamise
+                                eest.
+                            </li>
+                            <li>
+                                Ruumi üle andes palume vaadata, et kõik oleks korras (aknad kinni, tahvel puhas
+                                jne.).
+                            </li>
+                        </ul>
+                    </FormGroup>
+                    <FormGroup>
+                        <div><strong>KEELATUD:</strong></div>
+                        <ul>
+                            <li>
+                                Suitsetada ja tarbida alkohoolseid jooke NNK sees ja NNK territooriumil
+                            </li>
+                            <li>
+                                Reostada NNK sees ja territooriumil
+                            </li>
+                            <li>
+                                Keelatud ropendada, teise sõimata või halvustada.
+                            </li>
+                            <li>
+                                Keelatud tekitama ebamugavusi teiste kasutajate töö teostamiseks.
+                            </li>
+                        </ul>
 
-                        <div className="form-group form-check">
-                            <input className="form-check-input" type="checkbox" id="rules_checkbox"
-                                   name="rules" required/>
-                            <label className="form-check-label" htmlFor="rules_checkbox">
-                                Olen lugenud reegleid ja nõustun neid järgima.
-                            </label>
-                        </div>
-
+                    </FormGroup>
+                    <FormGroup>
+                        Reeglite rikkumise korral Teie kaotate õiguse edaspidi NNK ruumi kasutada.
+                    </FormGroup>
+                    <FormGroup check>
+                        <Label check>
+                            <Input type="checkbox" name="rules" id='rules' onClick={this.enableButton}/>
+                            Olen lugenud reegleid ja nõustun neid järgima.
+                        </Label>
+                    </FormGroup>
+                    <FormGroup>
                         <Row>
-                            <Col lg='12'>
-                                <Button className='previous-button' onClick={this.back}>Previous</Button>
-                                <Button className='next-button' onClick={this.saveAndContinue}>Next</Button>
-
+                            <Col md='12'>
+                                <Button className='previous-button' onClick={this.back}>Tagasi</Button>
+                                <Button className='next-button' id='rulesButton' onClick={this.saveAndContinue}
+                                    /*disabled={this.state.nextBtnDisabled}*/>Edasi</Button>
                             </Col>
                         </Row>
-                    </Col>
-                </Row>
-            </Container>
+                    </FormGroup>
+                </FormGroup>
+            </Form>
         );
     }
 }
