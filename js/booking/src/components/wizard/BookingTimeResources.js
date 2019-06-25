@@ -1,11 +1,18 @@
 import React from 'react';
-import {Button, Col, Form, FormGroup, Input, Label, Row} from 'reactstrap';
+import {
+    Button, Col, Form, FormGroup, Input, Label, Row
+} from 'reactstrap';
 import SimpleReactValidator from "simple-react-validator";
 import InputMask from 'react-input-mask';
 
 class BookingTimeResources extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            resources: [],
+            selectedResourcesList: []
+        };
+
         this.validator = new SimpleReactValidator({
             validators: {
                 time: {
@@ -19,6 +26,16 @@ class BookingTimeResources extends React.Component {
                 required: 'See väli on kohustuslik',
             }
         });
+        this.handleSelectedResources = this.handleSelectedResources.bind(this);
+    }
+
+    componentDidMount() {
+        let roomURL = 'http://localhost/noortek/wp-json/noortek-booking/v1/resources';
+        fetch(roomURL)
+            .then(response => response.json())
+            .then(response => {
+                this.setState({resources: response});
+            })
     }
 
     saveAndContinue = (e) => {
@@ -26,15 +43,45 @@ class BookingTimeResources extends React.Component {
         if (this.validator.allValid()) {
             this.props.nextStep()
         } else {
-            this.validator.showMessages();
-            this.forceUpdate();
+            this.showErrorMessages();
         }
+    };
+
+    showErrorMessages = () => {
+        this.validator.showMessages();
+        this.forceUpdate();
     };
 
     back = (e) => {
         e.preventDefault();
         this.props.prevStep();
     };
+
+    handleSelectedResources(e) {
+
+        const value = e.target.value;
+        const isChecked = e.target.checked;
+
+        if (isChecked) {
+            let clickedResource = this.state.resources && this.state.resources.filter(resource => resource.id == value);
+            if (clickedResource && clickedResource.length > 0) {
+                clickedResource = clickedResource[0];
+                let list = [...this.state.selectedResourcesList, clickedResource];
+                this.setState({
+                    selectedResourcesList: list
+                });
+                this.props.handleFieldChange('resourceList', list);
+            }
+        } else {
+            let list = this.state.selectedResourcesList && this.state.selectedResourcesList.filter(resource => resource.id != value);
+            this.setState({
+                selectedResourcesList: list
+            });
+            this.props.handleFieldChange('resourceList', list);
+        }
+
+
+    }
 
     render() {
         const {values} = this.props;
@@ -44,53 +91,44 @@ class BookingTimeResources extends React.Component {
                     <Row>
                         <Col md='3'>
                             <Label for='timeFrom'>Aeg alates*</Label>
-
                             <InputMask className='custom-input-form' mask="99:99" maskChar={null}
                                        placeholder='12:00' id='timeFrom' name='timeFrom'
                                        onChange={this.props.handleChange('timeFrom')}
-                                       defaultValue={values.timeFrom}
+                                       value={values.timeFrom}
                             />
-
-                            <div className='validationMsg'>
+                            {/*<div className='validationMsg'>
                                 {this.validator.message('timeFrom', values.timeFrom, 'required|time')}
-                            </div>
+                            </div>*/}
                         </Col>
                         <Col md='3'>
                             <Label for='timeUntil'>Aeg kuni*</Label>
                             <InputMask className='custom-input-form' mask="99:99" maskChar={null}
                                        placeholder='13:00' id='timeUntil' name='timeUntil'
                                        onChange={this.props.handleChange('timeUntil')}
-                                       defaultValue={values.timeUntil}
+                                       value={values.timeUntil}
                             />
-                            <div className='validationMsg'>
+                            {/* <div className='validationMsg'>
                                 {this.validator.message('timeUntil', values.timeUntil, 'required|time')}
-                            </div>
+                            </div>*/}
                         </Col>
                     </Row>
                 </FormGroup>
                 <FormGroup>
                     <Label>Vajalikud lisavahendid:</Label>
-                    <FormGroup check>
-                        <Label check>
-                            <Input type="checkbox" id='resources1' onChange={this.props.handleChange('resources')}
-                                   defaultValue={values.resources}/>{' '}
-                            Kõlarid 6 EUR / tund
-                        </Label>
-                    </FormGroup>
-                    <FormGroup check>
-                        <Label check>
-                            <Input type="checkbox" id='resources2' onChange={this.props.handleChange('resources')}
-                                   defaultValue={values.resources}/>{' '}
-                            Sülearvuti 7 EUR / tund
-                        </Label>
-                    </FormGroup>
-                    <FormGroup check>
-                        <Label check>
-                            <Input type="checkbox" id='resources3' onChange={this.props.handleChange('resources')}
-                                   defaultValue={values.resources}/>{' '}
-                            Projektor 5 EUR / tund
-                        </Label>
-                    </FormGroup>
+                    {this.state.resources && this.state.resources.map((resource, index) => {
+                        return (
+                            <FormGroup key={index} check>
+                                <Label check>
+                                    <Input type="checkbox" id='resources' name='resources'
+                                           onChange={this.handleSelectedResources}
+                                           value={resource.id}/>{' '}
+                                    {resource.equipmentName} {resource.equipmentPrice} EUR / tund
+                                </Label>
+                            </FormGroup>
+                        )
+                    })}
+
+
                 </FormGroup>
                 <FormGroup>
                     <Row>

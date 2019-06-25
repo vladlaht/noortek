@@ -12,9 +12,9 @@ class BookingConfirmation extends React.Component {
     render() {
         const {values} = this.props;
         return (
-            <Form className='booking-container'>
+            <Form className='booking-container' onSubmit={this.props.handleSubmit}>
                 <div className='step-content'>
-                    <Row >
+                    <Row>
                         <Col md='12'>
                             <h3><strong>Ülevaade</strong></h3>
                             <Alert color="warning" fade={false}>
@@ -63,11 +63,22 @@ class BookingConfirmation extends React.Component {
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>{values.room}</td>
+                                    <td>{values.selectedRoom.roomName}</td>
                                     <td>{values.timeFrom} - {values.timeUntil}</td>
-                                    <td>15 EUR</td>
-                                    <td>30 EUR</td>
+                                    <td>{values.selectedRoom.roomPrice} EUR</td>
+                                    <td>{values.selectedRoom.roomPrice} EUR</td>
                                 </tr>
+
+                                {values.resourceList && values.resourceList.map((item, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>{item.equipmentName}</td>
+                                            <td>{values.timeFrom} - {values.timeUntil}</td>
+                                            <td>{item.equipmentPrice} EUR</td>
+                                            <td>{item.equipmentPrice} EUR</td>
+                                        </tr>
+                                    )
+                                })}
                                 </tbody>
                             </Table>
                         </Col>
@@ -76,7 +87,7 @@ class BookingConfirmation extends React.Component {
                     <Row>
                         <Col md='12'>
                             <Button className='previous-button' onClick={this.back}>Tagasi</Button>
-                            <Button className='next-button' >Esita broneering</Button>
+                            <Button className='next-button' type='submit'>Esita broneering</Button>
                         </Col>
                     </Row>
                 </div>

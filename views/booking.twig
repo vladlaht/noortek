@@ -127,7 +127,7 @@
                                        value="{{ item.ID }}">
                                 <label class="form-check-label" for="resources{{ key }}">
                                     {{ item.post_title }}
-                                    {{ item.hind }} EUR / {{ function('pll_e', 'wizardTabTimeAndEquipmentsPriceUnit') }}
+                                    {{ item.price }} EUR / {{ function('pll_e', 'wizardTabTimeAndEquipmentsPriceUnit') }}
                                 </label>
                             </div>
                         {% endfor %}

@@ -74,7 +74,7 @@ class BookingRules extends React.Component {
                             <Col md='12'>
                                 <Button className='previous-button' onClick={this.back}>Tagasi</Button>
                                 <Button className='next-button' id='rulesButton' onClick={this.saveAndContinue}
-                                    /*disabled={this.state.nextBtnDisabled}*/>Edasi</Button>
+                                   /* disabled={this.state.nextBtnDisabled}*/>Edasi</Button>
                             </Col>
                         </Row>
                     </FormGroup>

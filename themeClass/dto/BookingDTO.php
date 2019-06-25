@@ -3,7 +3,6 @@
 class BookingDTO
 {
     const KEY_PRICE = 'price';
-    const KEY_HIND = 'hind';
     const TYPE_ROOM = 'room';
     const TYPE_EQUIPMENT = 'equipment';
     const STATUS_REQUESTED = 'Taotletud';
@@ -395,7 +394,7 @@ class BookingDTO
     {
         $summa = 0;
         foreach ($this->resources as $resourceId) {
-            $price = get_post_meta($resourceId, self::KEY_HIND, true);
+            $price = get_post_meta($resourceId, self::KEY_PRICE, true);
             $item = get_post($resourceId);
             $itemSumma = $this->getItemTotalPrice($price, $this->getRoundedBookingTime());
             $this->addInvoiceItemRow($item->post_title, self::TYPE_EQUIPMENT, $price, $this->getRoundedBookingTime(), $itemSumma);

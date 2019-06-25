@@ -6,13 +6,14 @@ include 'translations/NnkTranslations.php';
 
 $theme = new NoortekWPTheme();
 
-class NoortekWPTheme {
+class NoortekWPTheme
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         add_action('wp_enqueue_scripts', [$this, 'register_styles']);
         add_action('wp_enqueue_scripts', [$this, 'register_scripts']);
         add_action('init', [$this, 'register_menu_spaces']);
-        add_action('init', [$this, 'register_custom_post_types']);
         add_action('after_setup_theme', [$this, 'add_support']);
         add_theme_support("post-thumbnails");
         add_action('admin_post_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
@@ -63,12 +64,9 @@ class NoortekWPTheme {
         }
     }
 
-    function enableFeatures(){
+    function enableFeatures()
+    {
         new RoomBooking();
-    }
-
-    function register_custom_post_types() {
-
     }
 
     function register_menu_spaces()
@@ -123,7 +121,6 @@ class NoortekWPTheme {
     }
 
 
-
     function the_action_hook_callback()
     {
 
@@ -148,13 +145,13 @@ class NoortekWPTheme {
             add_post_meta($post_Id, 'purpose', $_POST['purpose']);
             $equipment = $_POST['resources'];
             $field = get_field_object('resources', $post_Id);
-            if (!empty($equipment)){
+            if (!empty($equipment)) {
                 add_post_meta($post_Id, 'resources', count($equipment));
                 add_post_meta($post_Id, '_resources', $field['key']);
-                foreach ($equipment as $key=> $equipmentId){
-                    $metaKey = 'resources_'.$key.'_vahend';
-                    add_post_meta($post_Id, $metaKey , $equipmentId) ;
-                    add_post_meta($post_Id, "_".$metaKey, 'field_5c7591d790f76' );
+                foreach ($equipment as $key => $equipmentId) {
+                    $metaKey = 'resources_' . $key . '_vahend';
+                    add_post_meta($post_Id, $metaKey, $equipmentId);
+                    add_post_meta($post_Id, "_" . $metaKey, 'field_5c7591d790f76');
                 }
             }
             add_post_meta($post_Id, 'info', $_POST['info']);
@@ -172,9 +169,5 @@ class NoortekWPTheme {
 
 
     }
-
-
-
-
 }
 

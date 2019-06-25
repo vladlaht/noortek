@@ -12,10 +12,10 @@ class BookingForm extends React.Component {
         this.state = {
             currentStep: 1,
             date: '',
-            room: '',
+            selectedRoom: '',
             timeFrom: '',
             timeUntil: '',
-            resources: '',
+            resourceList: '',
             participants: '',
             purpose: '',
             info: '',
@@ -23,8 +23,8 @@ class BookingForm extends React.Component {
             lastName: '',
             phone: '',
             email: '',
-            address: '',
-        }
+            address: ''
+        };
     }
 
     nextStep = () => {
@@ -42,23 +42,19 @@ class BookingForm extends React.Component {
     };
 
     handleChange = input => event => {
-        this.setState({[input]: event.target.value})
+        this.setState({
+            [input]: event.target.value
+        })
     };
 
     handleFieldChange = (input, value) => {
-        this.setState({[input]: value})
+        this.setState({
+            [input]: value
+        })
     };
 
     render() {
         const {currentStep} = this.state;
-        const {
-            date, room, timeFrom, timeUntil, resources, participants, purpose, info, firstName, lastName, phone,
-            email, address
-        } = this.state;
-        const values = {
-            date, room, timeFrom, timeUntil, resources, participants, purpose, info, firstName, lastName, phone,
-            email, address
-        };
 
         switch (currentStep) {
             case 1:
@@ -66,28 +62,29 @@ class BookingForm extends React.Component {
                     nextStep={this.nextStep}
                     handleChange={this.handleChange}
                     handleFieldChange={this.handleFieldChange}
-                    values={values}
+                    values={this.state}
                 />;
             case 2:
                 return <BookingTimeResources
                     nextStep={this.nextStep}
                     prevStep={this.prevStep}
                     handleChange={this.handleChange}
-                    values={values}
+                    handleFieldChange={this.handleFieldChange}
+                    values={this.state}
                 />;
             case 3:
                 return <BookingGoal
                     nextStep={this.nextStep}
                     prevStep={this.prevStep}
                     handleChange={this.handleChange}
-                    values={values}
+                    values={this.state}
                 />;
             case 4:
                 return <BookingResponsible
                     nextStep={this.nextStep}
                     prevStep={this.prevStep}
                     handleChange={this.handleChange}
-                    values={values}
+                    values={this.state}
                 />;
             case 5:
                 return <BookingRules
@@ -97,14 +94,15 @@ class BookingForm extends React.Component {
             case 6:
                 return <BookingConfirmation
                     prevStep={this.prevStep}
-                    values={values}
+                    handleSubmit={this.handleSubmit}
+                    values={this.state}
                 />;
             default :
                 return <BookingRoomDate
                     nextStep={this.nextStep}
                     handleChange={this.handleChange}
                     handleFieldChange={this.handleFieldChange}
-                    values={values}
+                    values={this.state}
                 />;
         }
     }

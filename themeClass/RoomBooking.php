@@ -1,5 +1,8 @@
 <?php
 include 'dto/BookingDTO.php';
+require get_theme_file_path('/themeClass/api/BookingRoomSearch.php');
+require get_theme_file_path('/themeClass/api/BookingResourceSearch.php');
+require get_theme_file_path('/themeClass/api/BookingSaving.php');
 
 class RoomBooking
 {
@@ -12,6 +15,24 @@ class RoomBooking
         $this->add_meta_boxes();
         $this->add_posts_columns();
         $this->add_custom_admin_page();
+        $this->enable_class_booking_room_search();
+        $this->enable_class_booking_resource_search();
+        $this->enable_class_booking_save();
+    }
+
+    function enable_class_booking_room_search()
+    {
+        new BookingRoomSearch();
+    }
+
+    function enable_class_booking_resource_search()
+    {
+        new BookingResourceSearch();
+    }
+
+    function enable_class_booking_save()
+    {
+        new BookingSaving();
     }
 
     private function add_post_types() : void
@@ -88,6 +109,8 @@ class RoomBooking
             'svgPreloaderPath' => $svg
         ]);
     }
+
+
 
     function set_custom_booking_columns($columns) : array
     {

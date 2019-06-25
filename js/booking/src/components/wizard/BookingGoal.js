@@ -27,9 +27,13 @@ class BookingGoal extends React.Component {
         if (this.validator.allValid()) {
             this.props.nextStep()
         } else {
-            this.validator.showMessages();
-            this.forceUpdate();
+            this.showErrorMessages();
         }
+    };
+
+    showErrorMessages = () => {
+        this.validator.showMessages();
+        this.forceUpdate();
     };
 
     back = (e) => {
@@ -50,9 +54,9 @@ class BookingGoal extends React.Component {
                                    onChange={this.props.handleChange('participants')}
                                    defaultValue={values.participants}
                             />
-                            <div className='validationMsg'>
+                            {/*<div className='validationMsg'>
                                 {this.validator.message('participants', values.participants, 'maxParticipants|numeric|required')}
-                            </div>
+                            </div>*/}
                         </Col>
                     </Row>
                 </FormGroup>
@@ -65,9 +69,9 @@ class BookingGoal extends React.Component {
                                    onChange={this.props.handleChange('purpose')}
                                    defaultValue={values.purpose}
                             />
-                            <div className='validationMsg'>
+                            {/* <div className='validationMsg'>
                                 {this.validator.message('purpose', values.purpose, 'required|max:10,string')}
-                            </div>
+                            </div>*/}
                         </Col>
                     </Row>
                 </FormGroup>

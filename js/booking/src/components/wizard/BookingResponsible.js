@@ -23,9 +23,13 @@ class BookingResponsible extends React.Component {
         if (this.validator.allValid()) {
             this.props.nextStep()
         } else {
-            this.validator.showMessages();
-            this.forceUpdate();
+            this.showErrorMessages();
         }
+    };
+
+    showErrorMessages = () => {
+        this.validator.showMessages();
+        this.forceUpdate();
     };
 
     back = (e) => {
@@ -37,13 +41,7 @@ class BookingResponsible extends React.Component {
         const {values} = this.props;
         return (
             <Form className='booking-container'>
-                <FormGroup>
-                    <Row>
-                        <Col md='12'>
-                            <Label>Vastutava isiku andmed</Label>
-                        </Col>
-                    </Row>
-                </FormGroup>
+
                 <FormGroup>
                     <Row>
                         <Col md='6'>
@@ -52,9 +50,9 @@ class BookingResponsible extends React.Component {
                                    onChange={this.props.handleChange('firstName')}
                                    defaultValue={values.firstName}
                             />
-                            <div className='validationMsg'>
+                           {/* <div className='validationMsg'>
                                 {this.validator.message('firstname', values.firstName, 'required|alpha')}
-                            </div>
+                            </div>*/}
                         </Col>
                         <Col md='6'>
                             <Label for='lastname'>Perekonnanimi*</Label>
@@ -62,9 +60,9 @@ class BookingResponsible extends React.Component {
                                    onChange={this.props.handleChange('lastName')}
                                    defaultValue={values.lastName}
                             />
-                            <div className='validationMsg'>
+                           {/* <div className='validationMsg'>
                                 {this.validator.message('lastname', values.lastName, 'required|alpha')}
-                            </div>
+                            </div>*/}
                         </Col>
                     </Row>
                 </FormGroup>
@@ -72,14 +70,14 @@ class BookingResponsible extends React.Component {
                     <Row>
                         <Col md='6'>
                             <Label for='phone'>Telefoninumber*</Label>
-                            <InputMask className='custom-input-form' mask="+3\7\2 99 999 99 99" maskChar={null}
+                            <InputMask className='custom-input-form' mask="+372 99 999 99 99" maskChar={null}
                                        placeholder='+372' id='phone'
                                        onChange={this.props.handleChange('phone')}
                                        defaultValue={values.phone}
                             />
-                            <div className='validationMsg'>
+                           {/* <div className='validationMsg'>
                                 {this.validator.message('phone', values.phone, 'required')}
-                            </div>
+                            </div>*/}
                         </Col>
                         <Col md='6'>
                             <Label for='email'>Email*</Label>
@@ -87,9 +85,9 @@ class BookingResponsible extends React.Component {
                                    onChange={this.props.handleChange('email')}
                                    defaultValue={values.email}
                             />
-                            <div className='validationMsg'>
+                          {/*  <div className='validationMsg'>
                                 {this.validator.message('email', values.email, 'required|email')}
-                            </div>
+                            </div>*/}
                         </Col>
                     </Row>
                 </FormGroup>
@@ -102,9 +100,9 @@ class BookingResponsible extends React.Component {
                                    onChange={this.props.handleChange('address')}
                                    defaultValue={values.address}
                             />
-                            <div className='validationMsg'>
+                          {/*  <div className='validationMsg'>
                                 {this.validator.message('participants', values.participants, 'required|numeric')}
-                            </div>
+                            </div>*/}
                         </Col>
                     </Row>
                 </FormGroup>
