@@ -1,5 +1,5 @@
 <?php
-include 'dto/BookingDTO.php';
+require 'dto/BookingDTO.php';
 require get_theme_file_path('/themeClass/api/BookingRoomSearch.php');
 require get_theme_file_path('/themeClass/api/BookingResourceSearch.php');
 require get_theme_file_path('/themeClass/api/BookingSaving.php');
@@ -122,6 +122,7 @@ class RoomBooking
         $columns['booking_room'] = 'Ruum';
         $columns['booking_on_date'] = 'Broneerimis kuupäev';
         $columns['booking_time_period'] = 'Aeg';
+        $columns['booking_total_amount'] = 'Summa';
         $columns['booking_status'] = 'Staatus';
         $columns['date'] = 'Kuupäev';
         return $columns;
@@ -148,6 +149,9 @@ class RoomBooking
                 break;
             case 'booking_time_period':
                 echo get_post_meta($post_id, 'time_from', true), ' - ', get_post_meta($post_id, 'time_until', true);
+                break;
+            case 'booking_total_amount':
+                echo get_post_meta($post_id, 'summa', true);
                 break;
             case 'booking_status':
                 echo $status = get_post_meta($post_id, 'status', true);

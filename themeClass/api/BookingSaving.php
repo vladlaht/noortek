@@ -1,5 +1,6 @@
 <?php
 
+
 class BookingSaving
 {
     public function __construct()
@@ -15,82 +16,88 @@ class BookingSaving
     public function register_rest_route()
     {
         register_rest_route('noortek-booking/v1', '/save', array(
-            'methods' => WP_REST_Server::CREATABLE,
-            'callback' => [$this, 'save_booking'],
+            array(
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => [$this, 'save_booking'],
+            ),
+            array(
+                'methods' => 'GET',
+                'callback' => [$this, 'get_invoice'],
+            )
         ));
     }
 
-    function save_booking()
+    function save_booking(WP_REST_Request $request): void
     {
+        $body = $request->get_body();
+        $decoded_body = json_decode($body);
+
         try {
+            $bookingForm = $this->mapBookingDTO($decoded_body);
+            $bookingForm->calculateAmount();
+            $bookingForm->generateBookingNumber();
+            $bookingForm->generateBookingStatus();
             $post_Id = wp_insert_post([
                 'post_title' => 'Broneering',
                 'post_type' => 'booking',
                 'post_status' => 'publish'
             ]);
-            add_post_meta($post_Id, 'room', 'bookingRoom');
-            add_post_meta($post_Id, 'date', 'bookingDate');
-            add_post_meta($post_Id, 'time_from', 'bookingTimeFrom');
-            add_post_meta($post_Id, 'time_until', 'bookingTimeUntil');
-            add_post_meta($post_Id, 'participants_num', 'bookingParticipantsNumber');
-            add_post_meta($post_Id, 'purpose', 'bookingPurpose');
-            add_post_meta($post_Id, 'info', 'bookingInfo');
-            add_post_meta($post_Id, 'firstname', 'bookingFirstName');
-            add_post_meta($post_Id, 'lastname', 'bookingLastName');
-            add_post_meta($post_Id, 'address', 'bookingAddress');
-            add_post_meta($post_Id, 'phone', 'bookingEmail');
-            add_post_meta($post_Id, 'email', 'bookingEmail');
-            add_post_meta($post_Id, 'summa', 'bookingSumma');
-            add_post_meta($post_Id, 'status', 'bookkingStatus');
-            add_post_meta($post_Id, 'booking_number', 'bookingNumber');
+            add_post_meta($post_Id, 'room', $bookingForm->getRoom()->ID);
+            add_post_meta($post_Id, 'date', $bookingForm->getDate());
+            add_post_meta($post_Id, 'time_from', $bookingForm->getTimeFrom());
+            add_post_meta($post_Id, 'time_until', $bookingForm->getTimeUntil());
+            add_post_meta($post_Id, 'participants_num', $bookingForm->getParticipants());
+            add_post_meta($post_Id, 'purpose', $bookingForm->getPurpose());
+            $equipment = $bookingForm->getResources();
+            if (!empty($equipment)) {
+                add_post_meta($post_Id, "resources", $equipment);
+            }
+            add_post_meta($post_Id, 'info', $bookingForm->getInfo());
+            add_post_meta($post_Id, 'firstname', $bookingForm->getFirstName());
+            add_post_meta($post_Id, 'lastname', $bookingForm->getLastName());
+            add_post_meta($post_Id, 'address', $bookingForm->getAddress());
+            add_post_meta($post_Id, 'phone', $bookingForm->getPhone());
+            add_post_meta($post_Id, 'email', $bookingForm->getEmail());
+            add_post_meta($post_Id, 'summa', $bookingForm->getTotalAmount());
+            add_post_meta($post_Id, 'status', $bookingForm->getStatus());
+            add_post_meta($post_Id, 'booking_number', $bookingForm->getBookingNumber());
 
+            $summa_data = $bookingForm->getTotalAmount();
+            error_log("Booking total price:" . $summa_data);
 
-            /*
-            $bookingsList = array();
-            $bookings = get_posts(array('post_type' => 'booking',
-            ));
-            foreach ($bookings as $booking) {
-            $room = get_the_title(get_post_meta($booking->ID, 'room', true));
-            $date = get_post_meta($booking->ID, 'date', true);
-            $time_from = get_post_meta($booking->ID, 'time_from', true);
-            $time_until = get_post_meta($booking->ID, 'time_until', true);
-            $participants_num = get_post_meta($booking->ID, 'participants_num', true);
-            $purpose = get_post_meta($booking->ID, 'purpose', true);
-            $resource = get_post_meta($booking->ID, 'resources', true);
-            $info = get_post_meta($booking->ID, 'info', true);
-            $firstname = get_post_meta($booking->ID, 'firstname', true);
-            $lastname = get_post_meta($booking->ID, 'lastname', true);
-            $address = get_post_meta($booking->ID, 'address', true);
-            $phone = get_post_meta($booking->ID, 'phone', true);
-            $email = get_post_meta($booking->ID, 'email', true);
-            $summa = get_post_meta($booking->ID, 'summa', true);
-            $status = get_post_meta($booking->ID, 'status', true);
-
-            array_push($bookingsList, array(
-                'room' => $room,
-                'date' => $date,
-                'time_from' => $time_from,
-                'time_until' => $time_until,
-                'participants_num' => $participants_num,
-                'purpose' => $purpose,
-                'resource' => $resource,
-                'info' => $info,
-                'firstname' => $firstname,
-                'lastname' => $lastname,
-                'address' => $address,
-                'phone' => $phone,
-                'email' => $email,
-                'summa' => $summa,
-                'status' => $status,
-            ));
+        } catch (Exception $exception) {
+            log($exception->getMessage());
         }
-            return $bookingsList;
-          */
-        } catch (Exception $exception)
-{
-log($exception->getMessage());
-}
-}
+    }
+
+    public function mapBookingDTO($body): BookingDTO
+    {
+        $resourceItem = isset($body->resources) ? (array)$body->resources : array();
+        $bookingForm = new BookingDTO();
+        $bookingForm->setDate($body->date)
+            ->setRoom($body->room)
+            ->setTimeFrom($body->timeFrom)
+            ->setTimeUntil($body->timeUntil)
+            ->setResources($resourceItem)
+            ->setParticipants($body->participants)
+            ->setPurpose($body->purpose)
+            ->setInfo($body->info)
+            ->setFirstName($body->firstName)
+            ->setLastName($body->lastName)
+            ->setPhone($body->phone)
+            ->setEmail($body->email)
+            ->setAddress($body->address);
+        return $bookingForm;
+    }
+
+    function get_invoice($request) {
+
+        $body = $request->get_body();
+        $decoded_body = json_decode($body);
+        $bookingForm = $this->mapBookingDTO($decoded_body);
+        $bookingForm->calculateAmount();
+    }
 
 
 }
+

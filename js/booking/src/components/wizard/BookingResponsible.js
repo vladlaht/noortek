@@ -46,8 +46,8 @@ class BookingResponsible extends React.Component {
                     <Row>
                         <Col md='6'>
                             <Label for='firstname'>Eesnimi*</Label>
-                            <Input id='firstname' name='firstname' type='text'
-                                   onChange={this.props.handleChange('firstName')}
+                            <Input id='firstname' name='firstName' type='text'
+                                   onChange={this.props.handleChange}
                                    defaultValue={values.firstName}
                             />
                            {/* <div className='validationMsg'>
@@ -56,8 +56,8 @@ class BookingResponsible extends React.Component {
                         </Col>
                         <Col md='6'>
                             <Label for='lastname'>Perekonnanimi*</Label>
-                            <Input id='lastname' name='lastname' type='text'
-                                   onChange={this.props.handleChange('lastName')}
+                            <Input id='lastname' name='lastName' type='text'
+                                   onChange={this.props.handleChange}
                                    defaultValue={values.lastName}
                             />
                            {/* <div className='validationMsg'>
@@ -71,8 +71,8 @@ class BookingResponsible extends React.Component {
                         <Col md='6'>
                             <Label for='phone'>Telefoninumber*</Label>
                             <InputMask className='custom-input-form' mask="+372 99 999 99 99" maskChar={null}
-                                       placeholder='+372' id='phone'
-                                       onChange={this.props.handleChange('phone')}
+                                       placeholder='+372' id='phone' name='phone'
+                                       onChange={this.props.handleChange}
                                        defaultValue={values.phone}
                             />
                            {/* <div className='validationMsg'>
@@ -82,7 +82,7 @@ class BookingResponsible extends React.Component {
                         <Col md='6'>
                             <Label for='email'>Email*</Label>
                             <Input id='email' name='email' type='email'
-                                   onChange={this.props.handleChange('email')}
+                                   onChange={this.props.handleChange}
                                    defaultValue={values.email}
                             />
                           {/*  <div className='validationMsg'>
@@ -97,7 +97,7 @@ class BookingResponsible extends React.Component {
                             <Label for='address'>Aadress*</Label>
                             <Input id='address' name='address' type='text'
                                    placeholder='Linn,tänav,maja number'
-                                   onChange={this.props.handleChange('address')}
+                                   onChange={this.props.handleChange}
                                    defaultValue={values.address}
                             />
                           {/*  <div className='validationMsg'>

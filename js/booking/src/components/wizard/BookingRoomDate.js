@@ -34,7 +34,7 @@ class BookingRoomDate extends React.Component {
     }
 
     componentDidMount() {
-        let roomURL = 'http://localhost/noortek/wp-json/noortek-booking/v1/rooms';
+        const roomURL = 'http://localhost/noortek/wp-json/noortek-booking/v1/rooms';
         fetch(roomURL)
             .then(response => response.json())
             .then(response => {
@@ -69,8 +69,8 @@ class BookingRoomDate extends React.Component {
 
     render() {
         const {values} = this.props;
-
         return (
+
             <Form className='booking-container'>
                 <FormGroup>
                     <Row>
@@ -122,7 +122,7 @@ class BookingRoomDate extends React.Component {
                         })}
                     </Row>
                     <div>
-                        Selected room: {values.selectedRoom.roomName}
+                        Selected room: {values.selectedRoom.roomName} {values.selectedRoom.id}
                     </div>
                 </FormGroup>
                 <FormGroup className='booking-form-buttons'>

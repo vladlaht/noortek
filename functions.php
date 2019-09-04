@@ -16,10 +16,6 @@ class NoortekWPTheme
         add_action('init', [$this, 'register_menu_spaces']);
         add_action('after_setup_theme', [$this, 'add_support']);
         add_theme_support("post-thumbnails");
-        add_action('admin_post_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
-        add_action('admin_post_custom_action_hook', [$this, 'the_action_hook_callback']);
-        add_action('admin_ajax_custom_action_hook', [$this, 'the_action_hook_callback']);
-        add_action('admin_ajax_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
         $this->enableFeatures();
         NnkTranslations::register_strings();
     }
@@ -118,56 +114,6 @@ class NoortekWPTheme
             'capability_type' => 'page',
         );
         register_post_type($slug, $args);
-    }
-
-
-    function the_action_hook_callback()
-    {
-
-        try {
-            $post_Id = wp_insert_post([
-                'post_title' => "Broneering",
-                'post_type' => 'booking',
-                'post_status' => 'publish'
-            ]);
-
-            add_post_meta($post_Id, 'room', $_POST['room']);
-
-            $selected_date = $_POST['date'];
-            $new_date = date('Ymd', strtotime($selected_date));
-            add_post_meta($post_Id, 'date', $new_date);
-            $field_date = get_field_object('date', $post_Id);
-            add_post_meta($post_Id, '_date', $field_date['key']);
-
-            add_post_meta($post_Id, 'time_from', $_POST['time_from']);
-            add_post_meta($post_Id, 'time_until', $_POST['time_until']);
-            add_post_meta($post_Id, 'participants_num', $_POST['participants_num']);
-            add_post_meta($post_Id, 'purpose', $_POST['purpose']);
-            $equipment = $_POST['resources'];
-            $field = get_field_object('resources', $post_Id);
-            if (!empty($equipment)) {
-                add_post_meta($post_Id, 'resources', count($equipment));
-                add_post_meta($post_Id, '_resources', $field['key']);
-                foreach ($equipment as $key => $equipmentId) {
-                    $metaKey = 'resources_' . $key . '_vahend';
-                    add_post_meta($post_Id, $metaKey, $equipmentId);
-                    add_post_meta($post_Id, "_" . $metaKey, 'field_5c7591d790f76');
-                }
-            }
-            add_post_meta($post_Id, 'info', $_POST['info']);
-            add_post_meta($post_Id, 'firstname', $_POST['firstname']);
-            add_post_meta($post_Id, 'lastname', $_POST['lastname']);
-            add_post_meta($post_Id, 'address', $_POST['address']);
-            add_post_meta($post_Id, 'phone', $_POST['phone']);
-            add_post_meta($post_Id, 'email', $_POST['email']);
-
-            echo "Andmed salvestatud" . $post_Id;
-        } catch (Exception $e) {
-
-            wp_die('', '', 500);
-        }
-
-
     }
 }
 

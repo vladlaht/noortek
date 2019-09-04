@@ -3,13 +3,29 @@ import {Alert, Button, Col, Form, Row} from 'reactstrap';
 import Table from "reactstrap/es/Table";
 
 class BookingConfirmation extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            invoiceRows : []
+        }
+    }
 
     back = (e) => {
         e.preventDefault();
         this.props.prevStep();
     };
 
+    componentDidMount() {
+        const roomURL = 'http://localhost/noortek/wp-json/noortek-booking/v1/save';
+        fetch(roomURL)
+            .then(response => response.json())
+            .then(response => {
+                this.setState({invoiceRows: response});
+            })
+    }
+
     render() {
+        {console.log(this.state.invoiceRows)}
         const {values} = this.props;
         return (
             <Form className='booking-container' onSubmit={this.props.handleSubmit}>
@@ -69,16 +85,17 @@ class BookingConfirmation extends React.Component {
                                     <td>{values.selectedRoom.roomPrice} EUR</td>
                                 </tr>
 
-                                {values.resourceList && values.resourceList.map((item, index) => {
-                                    return (
+                                {(values.resourceList && values.resourceList.length > 0) ? values.resourceList.map((item,index)=>{
+                                    return(
                                         <tr key={index}>
                                             <td>{item.equipmentName}</td>
-                                            <td>{values.timeFrom} - {values.timeUntil}</td>
-                                            <td>{item.equipmentPrice} EUR</td>
-                                            <td>{item.equipmentPrice} EUR</td>
+                                            <td>{values.timeFrom}-{values.timeUntil}</td>
+                                            <td>{item.equipmentPrice}EUR</td>
+                                            <td>{item.equipmentPrice}EUR</td>
                                         </tr>
                                     )
-                                })}
+                                }) : null}
+
                                 </tbody>
                             </Table>
                         </Col>

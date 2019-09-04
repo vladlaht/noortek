@@ -25,6 +25,7 @@ class BookingForm extends React.Component {
             email: '',
             address: ''
         };
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     nextStep = () => {
@@ -41,9 +42,9 @@ class BookingForm extends React.Component {
         })
     };
 
-    handleChange = input => event => {
+    handleChange = (e) => {
         this.setState({
-            [input]: event.target.value
+            [e.target.name] : e.target.value
         })
     };
 
@@ -52,6 +53,37 @@ class BookingForm extends React.Component {
             [input]: value
         })
     };
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const url = 'http://localhost/noortek/wp-json/noortek-booking/v1/save';
+        const debuggerLink = '?XDEBUG_SESSION_START=PHPSTORM';
+        console.log(this.state);
+        fetch(url + debuggerLink, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            date: this.state.date,
+            room: this.state.selectedRoom.id,
+            timeFrom: this.state.timeFrom,
+            timeUntil: this.state.timeUntil,
+            resources: this.state.resourceList.map((resource)=> resource.id),
+            participants: this.state.participants,
+            purpose: this.state.purpose,
+            info: this.state.info,
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            phone: this.state.phone,
+            email: this.state.email,
+            address: this.state.address
+            })
+        }).then(res => res.json())
+            .then(data => console.log('post data:' + data))
+            .catch(err => console.log(err))
+    }
 
     render() {
         const {currentStep} = this.state;

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-    Button, Col, Form, FormGroup, Input, Label, Row
-} from 'reactstrap';
+import {Button, Col, Form, FormGroup, Input, Label, Row} from 'reactstrap';
 import SimpleReactValidator from "simple-react-validator";
 import InputMask from 'react-input-mask';
 
@@ -30,7 +28,7 @@ class BookingTimeResources extends React.Component {
     }
 
     componentDidMount() {
-        let roomURL = 'http://localhost/noortek/wp-json/noortek-booking/v1/resources';
+        const roomURL = 'http://localhost/noortek/wp-json/noortek-booking/v1/resources';
         fetch(roomURL)
             .then(response => response.json())
             .then(response => {
@@ -47,14 +45,14 @@ class BookingTimeResources extends React.Component {
         }
     };
 
-    showErrorMessages = () => {
-        this.validator.showMessages();
-        this.forceUpdate();
-    };
-
     back = (e) => {
         e.preventDefault();
         this.props.prevStep();
+    };
+
+    showErrorMessages = () => {
+        this.validator.showMessages();
+        this.forceUpdate();
     };
 
     handleSelectedResources(e) {
@@ -79,8 +77,6 @@ class BookingTimeResources extends React.Component {
             });
             this.props.handleFieldChange('resourceList', list);
         }
-
-
     }
 
     render() {
@@ -93,7 +89,7 @@ class BookingTimeResources extends React.Component {
                             <Label for='timeFrom'>Aeg alates*</Label>
                             <InputMask className='custom-input-form' mask="99:99" maskChar={null}
                                        placeholder='12:00' id='timeFrom' name='timeFrom'
-                                       onChange={this.props.handleChange('timeFrom')}
+                                       onChange={this.props.handleChange}
                                        value={values.timeFrom}
                             />
                             {/*<div className='validationMsg'>
@@ -104,7 +100,7 @@ class BookingTimeResources extends React.Component {
                             <Label for='timeUntil'>Aeg kuni*</Label>
                             <InputMask className='custom-input-form' mask="99:99" maskChar={null}
                                        placeholder='13:00' id='timeUntil' name='timeUntil'
-                                       onChange={this.props.handleChange('timeUntil')}
+                                       onChange={this.props.handleChange}
                                        value={values.timeUntil}
                             />
                             {/* <div className='validationMsg'>
@@ -128,6 +124,8 @@ class BookingTimeResources extends React.Component {
                         )
                     })}
 
+                    {this.state.selectedResourcesList && this.state.selectedResourcesList.map((resource, index) =>
+                        <div key={index}>{resource.equipmentName} </div>)}
 
                 </FormGroup>
                 <FormGroup>

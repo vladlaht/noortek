@@ -51,7 +51,7 @@ class BookingGoal extends React.Component {
                             <Label for='participants'>Osalejate arv*</Label>
                             <Input id='participants' name='participants' type='text'
                                    placeholder='Maksimum 30 inimest'
-                                   onChange={this.props.handleChange('participants')}
+                                   onChange={this.props.handleChange}
                                    defaultValue={values.participants}
                             />
                             {/*<div className='validationMsg'>
@@ -66,7 +66,7 @@ class BookingGoal extends React.Component {
                             <Label for='purpose'>Eesmärk*</Label>
                             <Input id='purpose' name='purpose' type='text'
                                    placeholder='Kirjutage lühidalt ruumi kasutamise eesmärki'
-                                   onChange={this.props.handleChange('purpose')}
+                                   onChange={this.props.handleChange}
                                    defaultValue={values.purpose}
                             />
                             {/* <div className='validationMsg'>
@@ -81,7 +81,7 @@ class BookingGoal extends React.Component {
                             <Label for='info'>Lisainfo</Label>
                             <Input id='info' name='info' type='textarea'
                                    placeholder='Kui teil on soovi midagi lisada, siis kirjutage siia'
-                                   onChange={this.props.handleChange('info')}
+                                   onChange={this.props.handleChange}
                                    defaultValue={values.info}
                             />
                         </Col>

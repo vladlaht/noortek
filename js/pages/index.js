@@ -199,28 +199,6 @@ $(document).ready(function () {
                     preloader.hide();
 
                     $('.bookingFormSubmitButton').on('click', function () {
-                        let checkboxes = document.getElementsByName('resources[]');
-                        let vals = [];
-                        for (let i = 0, n = checkboxes.length; i < n; i++) {
-                            if (checkboxes[i].checked) {
-                                vals.push(checkboxes[i].value);
-                            }
-                        }
-                        let dataForm = {
-                            date: $('input#date').val(),
-                            room: $('input[name=room]:checked').val(),
-                            timeFrom: $('input#timeFrom').val(),
-                            timeUntil: $('input#timeUntil').val(),
-                            resources: vals,
-                            participants: $('input#participants').val(),
-                            purpose: $('input#purpose').val(),
-                            info: $('textarea#info').val(),
-                            firstName: $('input#firstname').val(),
-                            lastName: $('input#lastname').val(),
-                            phone: $('input#phone').val(),
-                            email: $('input#email').val(),
-                            address: $('input#address').val(),
-                        };
                         $.ajax({
                             url: ajaxurl,
                             data: {
@@ -236,7 +214,6 @@ $(document).ready(function () {
                             console.log(response);
                         });
                     });
-                    console.log('success');
                     console.log(response);
                 }).fail(function (response) {
                     console.log('error');
