@@ -3,93 +3,91 @@
         <input type="hidden" name="action" value="custom_action_hook">
 
         <div id="smartwizard" style="display: none;">
-            <ul>
+            <ul class="smart-wizard__steps">
                 <li>
                     <a href="#step-1">
-                        {{ function('pll_e', 'wizardTabRoomAndDate') }}
+                        {{ function('pll_e', 'bookingTabRoomAndDate') }}
                     </a>
                 </li>
                 <li>
                     <a href="#step-2">
-                        {{ function('pll_e', 'wizardTabTimeAndEquipments') }}
+                        {{ function('pll_e', 'bookingTabTimeAndEquipments') }}
                     </a>
                 </li>
                 <li>
                     <a href="#step-3">
-                        {{ function('pll_e', 'wizardTabGoal') }}
+                        {{ function('pll_e', 'bookingTabGoal') }}
                     </a>
                 </li>
                 <li>
                     <a href="#step-4">
-                        {{ function('pll_e', 'wizardTabResponsible') }}
+                        {{ function('pll_e', 'bookingTabResponsible') }}
                     </a>
                 </li>
                 <li>
                     <a href="#step-5">
-                        {{ function('pll_e', 'wizardTabRules') }}
+                        {{ function('pll_e', 'bookingTabRules') }}
                     </a>
                 </li>
                 <li>
                     <a href="#step-6">
-                        {{ function('pll_e', 'wizardTabConfirmation') }}
+                        {{ function('pll_e', 'bookingTabConfirmation') }}
                     </a>
                 </li>
             </ul>
 
             <div>
                 <div id="step-1" class="">
-                    <div class="form-group col-4">
-                        <label for="date">{{ function('pll_e', 'wizardTabRoomAndDateLabelDate') }}*</label>
-                        <input type="text" class="datepicker-here form-control" data-position="right top" name="date"
-                               id="date">
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label for="date">{{ function('pll_e', 'bookingTabRoomAndDateLabelDate') }}*</label>
+                            <input type="text" class="datepicker-here form-control" data-position="right top"
+                                   name="date"
+                                   id="date">
+                        </div>
                     </div>
-                    <div class="form-group col-12">
-                        <label for="select-room">{{ function('pll_e', 'wizardTabRoomAndDateLabelRoom') }}*</label>
-                        <div class="row">
-                            {% for room in rooms %}
-                                <div class="col-md-4">
-                                    <div class="card ">
-                                        <img class="card-img-top"
-                                             src="{{ function('get_the_post_thumbnail_url', room.ID, 'post-thumbnail') }}"
-                                             alt="">
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                {{ room.post_title }}
-                                            </h5>
-                                            <div class="price">
-                                                <strong>{{ function('pll_e', 'wizardTabRoomAndDateLabelPrice') }}
-                                                    :</strong> {{ room.price }} EUR
-                                                / {{ function('pll_e', 'wizardTabRoomAndDatePriceUnit') }}
-                                            </div>
-                                            <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                                                <label class="btn btn-secondary btn-sm card-button ">
-                                                    <input type="radio" name="room" id="option{{ room.ID }}"
-                                                           class="room_selected"
-                                                           autocomplete="off"
-                                                           value="{{ room.ID }}"> {{ function('pll_e', 'wizardTabRoomAndDateLabelSelect') }}
-                                                </label>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="select-room">{{ function('pll_e', 'bookingTabRoomAndDateLabelRoom') }}*</label>
+                            <div class="row">
+                                {% for room in rooms %}
+                                    <div class="col-md-4">
+                                        <div class="card ">
+                                            <img class="card-img-top"
+                                                 src="{{ function('get_the_post_thumbnail_url', room.ID, 'post-thumbnail') }}"
+                                                 alt="">
+                                            <div class="card-body">
+                                                <span class="card-title">
+                                                    {{ room.post_title }}
+                                                </span>
+                                                <div class="price">
+                                                    <strong>{{ function('pll_e', 'bookingTabRoomAndDateLabelPrice') }}
+                                                        :</strong> {{ room.price }} EUR
+                                                    / {{ function('pll_e', 'bookingTabRoomAndDatePriceUnit') }}
+                                                </div>
+                                                <div class="btn-group btn-group-toggle"
+                                                     data-toggle="buttons">
+                                                    <label class="btn btn-secondary btn-sm card-button ">
+                                                        <input type="radio" name="room" id="option{{ room.ID }}"
+                                                               class="room_selected"
+                                                               autocomplete="off"
+                                                               value="{{ room.ID }}"> {{ function('pll_e', 'bookingTabRoomAndDateLabelSelect') }}
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                </div>
-
-
-                            {% endfor %}
-
-
+                                {% endfor %}
+                            </div>
                         </div>
-
                     </div>
-
-
                 </div>
 
                 <div id="step-2" class="">
                     <div class="row">
                         <div class="form-group col-3">
                             <div class="timepicker">
-                                <label for="timeFrom">{{ function('pll_e', 'wizardTabTimeAndEquipmentsLabelTimeFrom') }}
+                                <label for="timeFrom">{{ function('pll_e', 'bookingTabTimeAndEquipmentsLabelTimeFrom') }}
                                     *</label>
                                 <input type="text" class="form-control time" name="time_from"
                                        id="timeFrom">
@@ -101,7 +99,7 @@
 
                         <div class="form-group col-3">
                             <div class="timepicker">
-                                <label for="timeUntil">{{ function('pll_e', 'wizardTabTimeAndEquipmentsLabelTimeUntil') }}
+                                <label for="timeUntil">{{ function('pll_e', 'bookingTabTimeAndEquipmentsLabelTimeUntil') }}
                                     *</label>
                                 <input type="text" class="form-control time" name="time_until"
                                        id="timeUntil">
@@ -117,7 +115,7 @@
                             <br>
                         </div>
                     </div>
-                    <label for="resources"><strong>{{ function('pll_e', 'wizardTabTimeAndEquipmentsLabelResources') }}
+                    <label for="resources"><strong>{{ function('pll_e', 'bookingTabTimeAndEquipmentsLabelResources') }}
                             :</strong></label>
                     <div class="form-group">
                         {% for key, item in equipment %}
@@ -127,7 +125,8 @@
                                        value="{{ item.ID }}">
                                 <label class="form-check-label" for="resources{{ key }}">
                                     {{ item.post_title }}
-                                    {{ item.price }} EUR / {{ function('pll_e', 'wizardTabTimeAndEquipmentsPriceUnit') }}
+                                    {{ item.price }} EUR
+                                    / {{ item.unit }}
                                 </label>
                             </div>
                         {% endfor %}
@@ -139,63 +138,63 @@
 
 
                     <div class="form-group">
-                        <label for="participants">{{ function('pll_e', 'wizardTabGoalLabelParticipants') }}*</label>
+                        <label for="participants">{{ function('pll_e', 'bookingTabGoalLabelParticipants') }}*</label>
                         <input type="number" class="form-control" id="participants" name="participants_num"
-                               placeholder="{{ function('pll_e', 'wizardTabGoalLabelParticipantsPlaceholder') }}"
+                               placeholder="{{ function('pll_e', 'bookingTabGoalLabelParticipantsPlaceholder') }}"
                                onfocus="placeholder = ''"
-                               onblur="placeholder = '{{ function('pll_e', 'wizardTabGoalLabelParticipantsPlaceholder') }}'">
+                               onblur="placeholder = '{{ function('pll_e', 'bookingTabGoalLabelParticipantsPlaceholder') }}'">
                     </div>
 
                     <div class="form-group">
-                        <label for="purpose">{{ function('pll_e', 'wizardTabGoalLabelGoal') }}*</label>
+                        <label for="purpose">{{ function('pll_e', 'bookingTabGoalLabelGoal') }}*</label>
                         <input type="text" class="form-control" id="purpose" name="purpose"
-                               placeholder="{{ function('pll_e', 'wizardTabGoalLabelGoalPlaceholder') }}"
+                               placeholder="{{ function('pll_e', 'bookingTabGoalLabelGoalPlaceholder') }}"
                                onfocus="placeholder = ''"
-                               onblur="placeholder = '{{ function('pll_e', 'wizardTabGoalLabelGoalPlaceholder') }}'">
+                               onblur="placeholder = '{{ function('pll_e', 'bookingTabGoalLabelGoalPlaceholder') }}'">
                     </div>
 
                     <div class="form-group">
-                        <label for="info">{{ function('pll_e', 'wizardTabGoalLabelInfo') }}</label>
+                        <label for="info">{{ function('pll_e', 'bookingTabGoalLabelInfo') }}</label>
                         <textarea class="form-control" id="info" name="info" rows="3"
-                                  placeholder="{{ function('pll_e', 'wizardTabGoalLabelInfoPlaceholder') }}"
+                                  placeholder="{{ function('pll_e', 'bookingTabGoalLabelInfoPlaceholder') }}"
                                   onfocus="placeholder = ''"
-                                  onblur="placeholder = '{{ function('pll_e', 'wizardTabGoalLabelInfoPlaceholder') }}'"
+                                  onblur="placeholder = '{{ function('pll_e', 'bookingTabGoalLabelInfoPlaceholder') }}'"
                         ></textarea>
                     </div>
                 </div>
                 <div id="step-4" class="">
                     <div>
-                        <strong> {{ function('pll_e', 'wizardTabResponsibleLabelText') }}:</strong>
+                        <strong> {{ function('pll_e', 'bookingTabResponsibleLabelText') }}:</strong>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <label for="firstname">{{ function('pll_e', 'wizardTabResponsibleLabelFirstName') }}
+                            <label for="firstname">{{ function('pll_e', 'bookingTabResponsibleLabelFirstName') }}
                                 *</label>
                             <input type="text" class="form-control" id="firstname" name="firstname">
                         </div>
                         <div class="form-group col-6">
-                            <label for="lastname">{{ function('pll_e', 'wizardTabResponsibleLabelLastName') }}*</label>
+                            <label for="lastname">{{ function('pll_e', 'bookingTabResponsibleLabelLastName') }}*</label>
                             <input type="text" class="form-control" id="lastname" name="lastname">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-6">
-                            <label for="phone">{{ function('pll_e', 'wizardTabResponsibleLabelPhone') }}*</label>
+                            <label for="phone">{{ function('pll_e', 'bookingTabResponsibleLabelPhone') }}*</label>
                             <input type="number" class="form-control" id="phone" name="phone">
                         </div>
                         <div class="form-group col-6">
-                            <label for="email">{{ function('pll_e', 'wizardTabResponsibleLabelEmail') }}*</label>
+                            <label for="email">{{ function('pll_e', 'bookingTabResponsibleLabelEmail') }}*</label>
                             <input type="email" class="form-control" id="email" name="email">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="address">{{ function('pll_e', 'wizardTabResponsibleLabelAddress') }}*</label>
+                        <label for="address">{{ function('pll_e', 'bookingTabResponsibleLabelAddress') }}*</label>
                         <input type="text" class="form-control" id="address" name="address"
-                               placeholder="{{ function('pll_e', 'wizardTabResponsibleLabelAddressPlaceholder') }}"
+                               placeholder="{{ function('pll_e', 'bookingTabResponsibleLabelAddressPlaceholder') }}"
                                onfocus="placeholder = ''"
-                               onblur="placeholder = '{{ function('pll_e', 'wizardTabResponsibleLabelAddressPlaceholder') }}'">
+                               onblur="placeholder = '{{ function('pll_e', 'bookingTabResponsibleLabelAddressPlaceholder') }}'">
                     </div>
                 </div>
 
@@ -233,7 +232,7 @@
                     <div class="form-group form-check">
                         <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
                         <label class="form-check-label" for="rules_checkbox">
-                            {{ function('pll_e', 'wizardTabRulesLabelConfirm') }}
+                            {{ function('pll_e', 'bookingTabRulesLabelConfirm') }}.
                         </label>
                     </div>
                 </div>

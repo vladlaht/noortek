@@ -3,6 +3,7 @@
 class BookingDTO
 {
     const KEY_PRICE = 'price';
+    const KEY_UNIT = 'unitType';
     const TYPE_ROOM = 'room';
     const TYPE_EQUIPMENT = 'equipment';
     const STATUS_REQUESTED = 'Taotletud';
@@ -360,12 +361,17 @@ class BookingDTO
         $this->bookingNumber = $currentDate;
     }
 
-
-    public function calculateAmount()
+    private function getRoundedBookingTime()
     {
-        $roomTotalPrice = $this->getItemTotalPrice($this->getRoomPrice(), $this->getRoundedBookingTime());
-        $this->addInvoiceItemRow($this->room->post_title, self::TYPE_ROOM, $this->getRoomPrice(), $this->getRoundedBookingTime(), $roomTotalPrice);
-        $this->setTotalAmount(bcadd($roomTotalPrice, $this->getEquipmentsPrice(), 2));
+        $from = new DateTime($this->timeFrom);
+        $until = new DateTime($this->timeUntil);
+        $diff = $from->diff($until);
+        $hours = $diff->h;
+        $minutes = $diff->i;
+        if ($minutes > 0) {
+            $hours++;
+        }
+        return $hours;
     }
 
     private function getRoomPrice()
@@ -373,21 +379,19 @@ class BookingDTO
         return get_post_meta($this->room->ID, self::KEY_PRICE, true);
     }
 
-    private function getRoundedBookingTime()
+    private function getItemTotalPrice($itemPrice, $unit, $amount)
     {
-        $from = new DateTime($this->timeFrom);
-        $until = $from->diff(new DateTime($this->timeUntil));
-        $hours = $until->h;
-        $minutes = $until->i;
-        if ($minutes > 0) {
-            $hours++;
+        if ($unit == "day") {
+            $amount = 1;
         }
-        return $hours;
+        return bcmul($itemPrice, $amount, 2);
     }
 
-    private function getItemTotalPrice($itemPrice, $amount)
+    public function calculateAmount()
     {
-        return bcmul($itemPrice, $amount, 2);
+        $roomTotalPrice = $this->getItemTotalPrice($this->getRoomPrice(), "hour", $this->getRoundedBookingTime());
+        $this->addInvoiceItemRow($this->room->post_title, self::TYPE_ROOM, $this->getRoomPrice(), $this->getRoundedBookingTime(), $roomTotalPrice);
+        $this->setTotalAmount(bcadd($roomTotalPrice, $this->getEquipmentsPrice(), 2));
     }
 
     private function getEquipmentsPrice()
@@ -395,8 +399,9 @@ class BookingDTO
         $summa = 0;
         foreach ($this->resources as $resourceId) {
             $price = get_post_meta($resourceId, self::KEY_PRICE, true);
+            $unit = get_post_meta($resourceId, self::KEY_UNIT, true);
             $item = get_post($resourceId);
-            $itemSumma = $this->getItemTotalPrice($price, $this->getRoundedBookingTime());
+            $itemSumma = $this->getItemTotalPrice($price, $unit, $this->getRoundedBookingTime());
             $this->addInvoiceItemRow($item->post_title, self::TYPE_EQUIPMENT, $price, $this->getRoundedBookingTime(), $itemSumma);
             $summa = (int)bcadd($summa, $itemSumma, 2);
         }

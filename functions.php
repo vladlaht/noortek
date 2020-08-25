@@ -37,7 +37,7 @@ class NoortekWPTheme
         wp_enqueue_style('font-awesome', get_theme_file_uri() . '/css/fontawesome/css/all.min.css');
         wp_enqueue_style('fullcalendar', get_theme_file_uri() . '/css/fullcalendar.min.css');
         wp_enqueue_style('fullcalendarscheduler', get_theme_file_uri() . '/css/scheduler.min.css');
-        wp_enqueue_style('style', get_theme_file_uri() . '/style.css');
+        wp_enqueue_style('style', get_theme_file_uri() . '../style.css');
     }
 
     function register_scripts()
@@ -101,7 +101,7 @@ class NoortekWPTheme
             'supports' => array('title', 'thumbnail', 'custom-fields'),
             'taxonomies' => array('genres'),
             'hierarchical' => false,
-            'public' => false,
+            'public' => true,
             'show_ui' => true,
             'show_in_menu' => true,
             'show_in_nav_menus' => false,
