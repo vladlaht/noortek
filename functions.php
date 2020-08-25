@@ -56,7 +56,7 @@ class NoortekWPTheme
         wp_enqueue_script('mask', get_theme_file_uri() . '/js/jquery.mask.min.js', false, 1, true);
 
         if (true) {
-            wp_enqueue_script('index-page', get_theme_file_uri() . '/js/pages/index.js', false, 1, true);
+            wp_enqueue_script('index-page', get_theme_file_uri() . './js/pages/index.js', false, 1, true);
         }
     }
 

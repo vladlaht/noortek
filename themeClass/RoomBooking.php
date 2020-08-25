@@ -334,16 +334,12 @@ class RoomBooking
         $date = DateTime::createFromFormat('d.m.Y', sanitize_text_field($_POST['date']));
         $args = [
             'post_type' => 'booking',
-            'post_status' => 'publish',
+
             'meta_query' => [
                 'relation' => 'AND',
                 [
                     'key' => 'date',
                     'value' => $date->format('d.m.Y')
-                ],
-                [
-                    'key' => 'status',
-                    'value' => BookingDTO::STATUS_CONFIRMED
                 ],
                 [
                     'key' => 'room',

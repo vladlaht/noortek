@@ -6,26 +6,30 @@
 <body>
 <?php get_header(); ?>
 <div class="container content">
-    <h2><?php _e("Viimased uudised", "noortek") ?></h2>
-    <?php $the_query = new WP_Query( ['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 8] ); ?>
-    <?php if ($the_query->have_posts()) : ?>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row">
-                    <?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
-                        <div class="card col-4" style="width: 18rem;">
-                            <img src="<?php echo get_the_post_thumbnail_url($ID) ?>" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><?php the_title(); ?></h5>
-                                <p class="card-text"><?php the_content(null, true) ?></p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                        </div>
-                    <?php endwhile; ?>
-                </div>
-            </div>
-        </div>
-    <?php endif; ?>
+
+    <h2>Narva Noortekeskuse ruumide kasutamise reeglid.</h2>
+    <ul>
+        <li>Avaldus tuleb esitada 7 päeva enne soovitud päeva.</li>
+        <li>Avalduse saatmisega Teie kinnitate , et olete tutvunud kasutamise reeglitega.</li>
+        <li>NNK ruume on võimalik kasutada teisipäevast reedeni ajavahemikus 10:00-18:45</li>
+        <li>NNK ruume saavad kasutada noored, noorteorganisatsioonid ja muud organisatsioonid,
+            kelle tegevus on seotud noortega.
+        </li>
+    </ul>
+
+    <span>Avaldusse tuleb märkida</span>
+    <ul>
+        <li>Kuupäev</li>
+        <li>Aeg</li>
+        <li>Vastutava isiku kontaktandmed</li>
+        <li>Eesmärk</li>
+        <li>Osalevate inimeste arv</li>
+        <li>Vajalik tehnika</li>
+    </ul>
+
+    <div>
+        Kui olete märganud enne ruumi kasutamist rikkumisi,andke kohe sellest teada NNK töötajatele.
+    </div>
 </div>
 
 <?php get_footer(); ?>

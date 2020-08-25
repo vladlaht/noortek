@@ -4,7 +4,7 @@ $(document).ready(function () {
         itemSelector: '.post-item'
     });
 
-    let disabledDays = [0, 1];
+    let disabledDays = [0, 1, 6];
     $('.datepicker-here').datepicker({
         format: 'dd.mm.yy',
         maxViewMode: 2,
@@ -13,16 +13,15 @@ $(document).ready(function () {
         orientation: 'top auto',
         todayHighlight: true,
         minDate: moment().add(7, 'days').toDate(),
-        onSelect: function (formattedDate, date, inst) {
+        onSelect: function () {
             if (status === 'overViewExist') {
                 status = 'dataChanged';
             }
         },
         onRenderCell: function (date, cellType) {
-            if (cellType == 'day') {
+            if (cellType === 'day') {
                 let day = date.getDay(),
-                    isDisabled = disabledDays.indexOf(day) != -1;
-
+                    isDisabled = disabledDays.indexOf(day) !== -1;
                 return {
                     disabled: isDisabled
                 }
@@ -33,10 +32,10 @@ $(document).ready(function () {
     $('.time').mask('AB:CD', {
         translation: {
             'A': {
-                pattern: /[0-2]/, optional: true
+                pattern: /[1]/, optional: false
             },
             'B': {
-                pattern: /[0-9]/, optional: true
+                pattern: /[0-8]/, optional: true
             },
             'C': {
                 pattern: /[0-5]/, optional: true
@@ -47,11 +46,9 @@ $(document).ready(function () {
         },
         onKeyPress: function (a, b, c, d) {
             let m = a.match(/(\d{1})/g);
-            if (parseInt(m[0]) === 2) {
-                d.translation.B.pattern = /[0-3]/;
-            } else {
-                d.translation.B.pattern = /[0-9]/;
-            }
+            parseInt(m[1]) === 8 ? d.translation.C.pattern = /[0-4]/ : d.translation.C.pattern = /[0-5]/;
+            parseInt(m[2]) === 4 ? d.translation.D.pattern = /[0-5]/ : d.translation.D.pattern = /[0-9]/
+
             let temp_value = c.val();
             c.val('');
             c.unmask().mask('AB:CD', d);
@@ -113,7 +110,7 @@ $(document).ready(function () {
         return result;
     });
 
-    wizard.on('showStep', function (e, anchorObject, stepNumber, stepDirection) {
+    wizard.on('showStep', function (e, anchorObject, stepNumber) {
         if (stepNumber === 1) {
             let timetable = $('.timetable');
             timetable.fullCalendar('destroy');

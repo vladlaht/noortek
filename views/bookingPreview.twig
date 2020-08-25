@@ -39,8 +39,8 @@
         <tr>
             <th>{{ function('pll_e', 'bookingTabConfirmationLabelRoomName') }}</th>
             <th>{{ function('pll_e', 'bookingTabConfirmationLabelTime') }}</th>
-            <th>{{ function('pll_e', 'bookingTabConfirmationLabelHourPrice') }}</th>
-            <th>{{ function('pll_e', 'bookingTabConfirmationLabelItemSumma') }}</th>
+            <th>{{ function('pll_e', 'bookingTabConfirmationLabelItemPrice') }}</th>
+            <th>{{ function('pll_e', 'bookingTabConfirmationLabelItemTotalPrice') }}</th>
         </tr>
         {% for item in bookingForm.invoiceRows %}
             <tr>

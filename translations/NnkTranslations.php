@@ -64,8 +64,8 @@ class NnkTranslations
         pll_register_string(self::NAME, 'bookingTabConfirmationLabelInfo', $tabConfirmationGroup);
         pll_register_string(self::NAME, 'bookingTabConfirmationLabelRoomName', $tabConfirmationGroup);
         pll_register_string(self::NAME, 'bookingTabConfirmationLabelTime', $tabConfirmationGroup);
-        pll_register_string(self::NAME, 'bookingTabConfirmationLabelHourPrice', $tabConfirmationGroup);
-        pll_register_string(self::NAME, 'bookingTabConfirmationLabelItemSumma', $tabConfirmationGroup);
+        pll_register_string(self::NAME, 'bookingTabConfirmationLabelItemPrice', $tabConfirmationGroup);
+        pll_register_string(self::NAME, 'bookingTabConfirmationLabelItemTotalPrice', $tabConfirmationGroup);
         pll_register_string(self::NAME, 'bookingTabConfirmationLabelTimeUnit', $tabConfirmationGroup);
         pll_register_string(self::NAME, 'bookingTabConfirmationLabelTimeUnitsFirst', $tabConfirmationGroup);
         pll_register_string(self::NAME, 'bookingTabConfirmationLabelTimeUnitsSecond', $tabConfirmationGroup);
