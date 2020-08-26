@@ -19,16 +19,20 @@
                 </div>
 
                 <div class="social-links">
-                    <a class="social-links__item" href="https://www.facebook.com/NOORTEKESKUS/?fref=ts" target="_blank">
+                    <a class="social-links__item" href="https://www.facebook.com/NOORTEKESKUS/?fref=ts" target="_blank"
+                       rel="noreferrer">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a class="social-links__item" href="https://vk.com/narvanoortekeskus" target="_blank">
+                    <a class="social-links__item" href="https://vk.com/narvanoortekeskus" target="_blank"
+                       rel="noreferrer">
                         <i class="fab fa-vk"></i>
                     </a>
-                    <a class="social-links__item" href="https://www.instagram.com/narva_noortekeskus/" target="_blank">
+                    <a class="social-links__item" href="https://www.instagram.com/narva_noortekeskus/" target="_blank"
+                       rel="noreferrer">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a class="social-links__item" href="https://www.youtube.com/user/NoortekTV" target="_blank">
+                    <a class="social-links__item" href="https://www.youtube.com/user/NoortekTV" target="_blank"
+                       rel="noreferrer">
                         <i class="fab fa-youtube"></i>
                     </a>
                 </div>
@@ -37,12 +41,6 @@
     </div>
     <nav class="navbar navbar-expand-md navbar-light bg-light main-menu" role="navigation">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-controls="bs-example-navbar-collapse-1"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="/noortek/"><i class="fa fa-home"></i></a>
             <?php
             wp_nav_menu(array(
                 'theme_location' => 'main-menu',

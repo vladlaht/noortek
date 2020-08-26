@@ -35,13 +35,13 @@ $(document).ready(function () {
                 pattern: /[1]/, optional: false
             },
             'B': {
-                pattern: /[0-8]/, optional: true
+                pattern: /[0-8]/, optional: false
             },
             'C': {
-                pattern: /[0-5]/, optional: true
+                pattern: /[0-5]/, optional: false
             },
             'D': {
-                pattern: /[0-9]/, optional: true
+                pattern: /[0-9]/, optional: false
             }
         },
         onKeyPress: function (a, b, c, d) {
@@ -88,12 +88,19 @@ $(document).ready(function () {
         }
     });
 
-    wizard.on('leaveStep', function (e, anchorObject, stepNumber, stepDirection) {
+    wizard.on('leaveStep', function (e, anchorObject, stepNumber) {
         let result = form.valid();
         if (result && stepNumber === 1) {
             let allItems = JSON.parse(localStorage.getItem('times'));
             let timeFrom = $('input[name=time_from]').val();
             let timeTo = $('input[name=time_until]').val();
+
+            if(timeFrom > timeTo) {
+                alert('Algus ei saa olla hilisem kui lõpuaeg');
+                result = false;
+                return false;
+            }
+
             timeFrom = moment($('input#date').val() + ' ' + timeFrom, 'DD.MM.YYYY HH:ii');
             timeTo = moment($('input#date').val() + ' ' + timeTo, 'DD.MM.YYYY HH:ii');
             $.each(allItems, function (index, item) {
@@ -104,6 +111,7 @@ $(document).ready(function () {
                     return false;
                 }
             })
+
         } else if (stepNumber === 5) {
             buttonNext.show();
         }

@@ -7,24 +7,21 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, right-sidebar, flexible-width, custom-header, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, translation-ready
 */
 
+/*  Fonts  */
+
+/* roboto-300 - latin */
 /* roboto-300 - latin_cyrillic */
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
     src: url('/fonts/roboto-v20-latin_cyrillic-300.eot'); /* IE9 Compat Modes */
-    src: local('Roboto Light'), local('Roboto-Light'),
-    url('/fonts/roboto-v20-latin_cyrillic-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/roboto-v20-latin_cyrillic-300.woff2') format('woff2'), /* Super Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-300.woff') format('woff'), /* Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-300.ttf') format('truetype'), /* Safari, Android, iOS */ url('/fonts/roboto-v20-latin_cyrillic-300.svg#Roboto') format('svg'); /* Legacy iOS */
-}
-
-/* roboto-300italic - latin_cyrillic */
-@font-face {
-    font-family: 'Roboto';
-    font-style: italic;
-    font-weight: 300;
-    src: url('/fonts/roboto-v20-latin_cyrillic-300italic.eot'); /* IE9 Compat Modes */
-    src: local('Roboto Light Italic'), local('Roboto-LightItalic'),
-    url('/fonts/roboto-v20-latin_cyrillic-300italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/roboto-v20-latin_cyrillic-300italic.woff2') format('woff2'), /* Super Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-300italic.woff') format('woff'), /* Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-300italic.ttf') format('truetype'), /* Safari, Android, iOS */ url('/fonts/roboto-v20-latin_cyrillic-300italic.svg#Roboto') format('svg'); /* Legacy iOS */
+    src: local('Roboto Light'); local('Roboto-Light');
+url('/fonts/roboto-v20-latin_cyrillic-300.eot?#iefix') format('embedded-opentype'); /* IE6-IE8 */
+url('/fonts/roboto-v20-latin_cyrillic-300.woff2') format('woff2'); /* Super Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-300.woff') format('woff'); /* Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-300.ttf') format('truetype'); /* Safari; Android; iOS */
+url('/fonts/roboto-v20-latin_cyrillic-300.svg#Roboto') format('svg'); /* Legacy iOS */
 }
 
 /* roboto-regular - latin_cyrillic */
@@ -33,8 +30,12 @@ Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, 
     font-style: normal;
     font-weight: 400;
     src: url('/fonts/roboto-v20-latin_cyrillic-regular.eot'); /* IE9 Compat Modes */
-    src: local('Roboto'), local('Roboto-Regular'),
-    url('/fonts/roboto-v20-latin_cyrillic-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/roboto-v20-latin_cyrillic-regular.woff2') format('woff2'), /* Super Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-regular.woff') format('woff'), /* Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-regular.ttf') format('truetype'), /* Safari, Android, iOS */ url('/fonts/roboto-v20-latin_cyrillic-regular.svg#Roboto') format('svg'); /* Legacy iOS */
+    src: local('Roboto'); local('Roboto-Regular');
+url('/fonts/roboto-v20-latin_cyrillic-regular.eot?#iefix') format('embedded-opentype'); /* IE6-IE8 */
+url('/fonts/roboto-v20-latin_cyrillic-regular.woff2') format('woff2'); /* Super Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-regular.woff') format('woff'); /* Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-regular.ttf') format('truetype'); /* Safari; Android; iOS */
+url('/fonts/roboto-v20-latin_cyrillic-regular.svg#Roboto') format('svg'); /* Legacy iOS */
 }
 
 /* roboto-500 - latin_cyrillic */
@@ -43,18 +44,12 @@ Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, 
     font-style: normal;
     font-weight: 500;
     src: url('/fonts/roboto-v20-latin_cyrillic-500.eot'); /* IE9 Compat Modes */
-    src: local('Roboto Medium'), local('Roboto-Medium'),
-    url('/fonts/roboto-v20-latin_cyrillic-500.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/roboto-v20-latin_cyrillic-500.woff2') format('woff2'), /* Super Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-500.woff') format('woff'), /* Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-500.ttf') format('truetype'), /* Safari, Android, iOS */ url('/fonts/roboto-v20-latin_cyrillic-500.svg#Roboto') format('svg'); /* Legacy iOS */
-}
-
-/* roboto-500italic - latin_cyrillic */
-@font-face {
-    font-family: 'Roboto';
-    font-style: italic;
-    font-weight: 500;
-    src: url('/fonts/roboto-v20-latin_cyrillic-500italic.eot'); /* IE9 Compat Modes */
-    src: local('Roboto Medium Italic'), local('Roboto-MediumItalic'),
-    url('/fonts/roboto-v20-latin_cyrillic-500italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/roboto-v20-latin_cyrillic-500italic.woff2') format('woff2'), /* Super Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-500italic.woff') format('woff'), /* Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-500italic.ttf') format('truetype'), /* Safari, Android, iOS */ url('/fonts/roboto-v20-latin_cyrillic-500italic.svg#Roboto') format('svg'); /* Legacy iOS */
+    src: local('Roboto Medium'); local('Roboto-Medium');
+url('/fonts/roboto-v20-latin_cyrillic-500.eot?#iefix') format('embedded-opentype'); /* IE6-IE8 */
+url('/fonts/roboto-v20-latin_cyrillic-500.woff2') format('woff2'); /* Super Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-500.woff') format('woff'); /* Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-500.ttf') format('truetype'); /* Safari; Android; iOS */
+url('/fonts/roboto-v20-latin_cyrillic-500.svg#Roboto') format('svg'); /* Legacy iOS */
 }
 
 /* roboto-700 - latin_cyrillic */
@@ -63,18 +58,12 @@ Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, 
     font-style: normal;
     font-weight: 700;
     src: url('/fonts/roboto-v20-latin_cyrillic-700.eot'); /* IE9 Compat Modes */
-    src: local('Roboto Bold'), local('Roboto-Bold'),
-    url('/fonts/roboto-v20-latin_cyrillic-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/roboto-v20-latin_cyrillic-700.woff2') format('woff2'), /* Super Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-700.woff') format('woff'), /* Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-700.ttf') format('truetype'), /* Safari, Android, iOS */ url('/fonts/roboto-v20-latin_cyrillic-700.svg#Roboto') format('svg'); /* Legacy iOS */
-}
-
-/* roboto-700italic - latin_cyrillic */
-@font-face {
-    font-family: 'Roboto';
-    font-style: italic;
-    font-weight: 700;
-    src: url('/fonts/roboto-v20-latin_cyrillic-700italic.eot'); /* IE9 Compat Modes */
-    src: local('Roboto Bold Italic'), local('Roboto-BoldItalic'),
-    url('/fonts/roboto-v20-latin_cyrillic-700italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('/fonts/roboto-v20-latin_cyrillic-700italic.woff2') format('woff2'), /* Super Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-700italic.woff') format('woff'), /* Modern Browsers */ url('/fonts/roboto-v20-latin_cyrillic-700italic.ttf') format('truetype'), /* Safari, Android, iOS */ url('/fonts/roboto-v20-latin_cyrillic-700italic.svg#Roboto') format('svg'); /* Legacy iOS */
+    src: local('Roboto Bold'); local('Roboto-Bold');
+url('/fonts/roboto-v20-latin_cyrillic-700.eot?#iefix') format('embedded-opentype'); /* IE6-IE8 */
+url('/fonts/roboto-v20-latin_cyrillic-700.woff2') format('woff2'); /* Super Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-700.woff') format('woff'); /* Modern Browsers */
+url('/fonts/roboto-v20-latin_cyrillic-700.ttf') format('truetype'); /* Safari; Android; iOS */
+url('/fonts/roboto-v20-latin_cyrillic-700.svg#Roboto') format('svg'); /* Legacy iOS */
 }
 
 body {
@@ -84,10 +73,20 @@ body {
     font-size: 14px;
 }
 
+body .btn,
+body .btn-secondary {
+    border: none;
+}
+
 body > header {
     background-image: radial-gradient(ellipse at left bottom, #ff6f2d, #ffd300);
     min-height: 150px;
     margin-bottom: 20px;
+}
+
+header .container {
+    padding-right: 0;
+    padding-left: 0;
 }
 
 .color-green {
@@ -215,21 +214,23 @@ ul.languages > li.current-lang a {
         text-align: center;
     }
 
-    header .container {
-        padding-right: 0 !important;
-        padding-left: 0 !important;
-    }
-
 
 }
 
 /** Menu **/
 nav.navbar.main-menu {
     background-color: white !important;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
 }
 
-ul#menu-main-menu > li.menu-item {
+nav .collapse.navbar-collapse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav .menu-item {
     margin: 0 5px;
 }
 
@@ -237,7 +238,7 @@ li.menu-item a.nav-link {
     padding: 5px 15px !important;
     border-radius: 5px;
     font-weight: 700;
-    transition: background-color 0.5s;
+    transition: background-color 0.3s;
     font-size: 17px;
 }
 
@@ -245,11 +246,20 @@ li.menu-item a.nav-link:hover {
     background-color: orange;
     background-image: radial-gradient(ellipse at left bottom, #ff6f2d, #ffd300);
     color: white !important;
-    transition: background-color 0.5s;
+    transform: scale(1.05);
 }
 
 /*   Main page   */
 
+.main-page__list {
+    margin-bottom: 30px;
+}
+
+.main-page__title,
+.main-page__sub-title {
+    display: inline-block;
+    margin-bottom: 10px;
+}
 
 /*  Content  */
 .container.content {
@@ -309,10 +319,114 @@ table.booking-info td {
     padding: 8px;
 }
 
-.booked-room-card {
-    width: 100px;
-    border-radius: 2px;
+
+/*   Step 1   */
+
+.card {
+    opacity: 0.7;
+    transition: opacity 0.5s;
+    min-height: 345px;
 }
+
+.card img {
+    -webkit-filter: grayscale(90%);
+    filter: grayscale(90%);
+}
+
+.card.selected img,
+.card:hover img {
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+}
+
+.card.selected,
+.card:hover {
+    opacity: 1;
+}
+
+.card.selected::before {
+    content: '\2713';
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    bottom: 1vh;
+    right: 1vw;
+    background: #ff9900;
+    z-index: 5;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+}
+
+.card.selected .btn {
+    display: none;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.card .btn-group-toggle {
+    width: 75px;
+    margin: auto 0 0 auto;
+}
+
+.card .card-button {
+    transition: 0.2s;
+}
+
+.card .card-button:hover {
+    transform: scale(1.05);
+}
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+    .card {
+        min-height: 280px;
+        font-size: 14px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    #step-1 .form-group.col-4 {
+        max-width: 100%;
+        flex: 1;
+    }
+
+    .datepicker-here{
+        float:left;
+    }
+}
+
+/*   Step 5 - Rules   */
+.rules-tab__subtitle {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.rules-tab__list {
+    margin-bottom: 20px;
+    padding-left: 15px;
+}
+
+/*   Step 6 - Preloader   */
 
 .preloader {
     position: absolute;
@@ -351,7 +465,24 @@ table.booking-info td {
 
 p.preloader-text {
     margin: 5px 0;
-    font-weight: 500;
+    font-weight: 700;
+}
+
+/*  Preview  */
+.submit-button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-button {
+    margin-right: 25px;
+}
+
+.booked-room-card {
+    width: 80px;
+    height: auto;
+    border-radius: 2px;
+    margin-left: 5px;
 }
 
 .booking-success-submit {
@@ -363,89 +494,7 @@ p.success-text {
     font-weight: 500;
 }
 
-.submit-button-container {
-    justify-content: end;
-}
-
-.submit-button {
-    margin-right: 25px;
-}
-
-.card {
-    opacity: 0.7;
-    transition: opacity 0.5s;
-    min-height: 345px;
-}
-
-.card img {
-    -webkit-filter: grayscale(90%);
-    filter: grayscale(90%);
-}
-
-.card.selected img,
-.card:hover img {
-    -webkit-filter: grayscale(0%);
-    filter: grayscale(0%);
-}
-
-.card.selected,
-.card:hover {
-    opacity: 1;
-}
-
-.card.selected::before {
-    content: '\2713';
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    bottom: 1vh;
-    right: 1vw;
-    background: #1e7e34;
-    z-index: 5;
-    border-radius: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: white;
-}
-
-.card.selected .btn {
-    display: none;
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-}
-
-.card-title {
-    font-size: 19px;
-    font-weight: 500;
-}
-
-.card .btn-group-toggle {
-    width: 75px;
-    margin: auto 0 0 auto;
-}
-
-@media screen and (max-width: 992px) and (min-width: 768px) {
-    .card {
-        min-height: 280px;
-        font-size: 14px;
-    }
-
-    .card-body {
-        padding: 10px;
-    }
-
-    .card-title {
-        font-size: 16px;
-    }
-}
-
-
-/* footer */
+/*  Footer  */
 
 .footer-content {
     display: flex;
@@ -459,6 +508,19 @@ p.success-text {
 .footer-content span {
     padding: 10px;
 }
+
+.footer-content a {
+    color: black;
+}
+
+.footer-message {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: red;
+    margin-bottom: 20px;
+}
+
 
 
 

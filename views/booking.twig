@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="form-group col-4">
                             <label for="date">{{ function('pll_e', 'bookingTabRoomAndDateLabelDate') }}*</label>
-                            <input type="text" class="datepicker-here form-control" data-position="right top"
+                            <input type="text" class="datepicker-here form-control" data-position="top center"
                                    name="date"
                                    id="date">
                         </div>
@@ -161,18 +161,15 @@
                     </div>
                 </div>
                 <div id="step-4">
-                    <div>
-                        <strong> {{ function('pll_e', 'bookingTabResponsibleLabelText') }}:</strong>
-                    </div>
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="firstname">{{ function('pll_e', 'bookingTabResponsibleLabelFirstName') }}
                                 *</label>
-                            <input type="text" class="form-control" id="firstname" name="firstname">
+                            <input type="text" class="form-control" id="firstname" name="firstname" onkeypress="return /[a-z]/i.test(event.key)">
                         </div>
                         <div class="form-group col-6">
                             <label for="lastname">{{ function('pll_e', 'bookingTabResponsibleLabelLastName') }}*</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname">
+                            <input type="text" class="form-control" id="lastname" name="lastname" onkeypress="return /[a-z]/i.test(event.key)">
                         </div>
                     </div>
 
@@ -198,33 +195,23 @@
 
                 <div id="step-5">
                     <div class="form-group">
-                        <div>
-                            <span>Ruumide kasutaja vastutus: </span>
+                        <div class="rules-tab__subtitle">
+                            {{ function('pll_e', 'bookingTabRulesSubtitle1') }}:
                         </div>
-                        <ul>
-                            <li>Rummi kasutaja vastutab materiaalselt ruumi heakorra ja sisustuse säilitamise eest.</li>
-                            <li>Ruumi üle andes palume vaadata, et kõik oleks korras (aknad kinni, tahvel puhas jne.).
-                            </li>
+                        <ul class="rules-tab__list">
+                            <li>{{ function('pll_e', 'bookingTabRulesItem1') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem2') }}</li>
                         </ul>
-                        <div>
-                            <span>
-                                <strong>KEELATUD:</strong>
-                            </span>
+                        <div class="rules-tab__subtitle">
+                            {{ function('pll_e', 'bookingTabRulesSubtitle2') }}:
                         </div>
-                        <div>
-                            1. Suitsetada ja tarbida alkohoolseid jooke NNK sees ja NNK territooriumil
-                        </div>
-                        <div>
-                            2. Reostada NNK sees ja territooriumil
-                        </div>
-                        <div></div>
-                        <div>
-                            3. Keelatud ropendada, teise sõimata või halvustada.
-                        </div>
-                        <div>
-                            4. Keelatud tekitama ebamugavusi teiste kasutajate töö teostamiseks.
-                        </div>
-                        <br>Reeglite rikkumise korral Teie kaotate õiguse edaspidi NNK ruumi kasutada.
+                        <ul class="rules-tab__list">
+                            <li>{{ function('pll_e', 'bookingTabRulesItem3') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem4') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem5') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem6') }}</li>
+                        </ul>
+                        <span>{{ function('pll_e', 'bookingTabRulesItem7') }}</span>
                     </div>
                     <div class="form-group form-check">
                         <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
@@ -240,8 +227,8 @@
                                 <div class="loader">
                                     <img src="{{ svgPreloaderPath }}" alt="">
                                 </div>
-                                <p class="preloader-text">Koostan broneeringu ülevaadet</p>
-                                <p class="preloader-text">Palun oodake</p>
+                                <p class="preloader-text">{{ function('pll_e', 'bookingTabPreloaderString1') }}</p>
+                                <p class="preloader-text">{{ function('pll_e', 'bookingTabPreloaderString2') }}</p>
                             </div>
                         </div>
                         <div id="totalSumma">

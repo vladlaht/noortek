@@ -46,9 +46,10 @@
             <tr>
                 {% if item.type == constant('BookingDTO::TYPE_ROOM') %}
                     <td>
+                        {{ bookingForm.invoiceRows[0].name }}
                         <img class="booked-room-card"
                              src="{{ function('get_the_post_thumbnail_url', bookingForm.room.ID, 'post-thumbnail') }}"
-                             alt=""> {{ bookingForm.invoiceRows[0].name }}
+                             alt="">
                     </td>
                 {% else %}
                     <td>
