@@ -1,16 +1,14 @@
 $(document).ready(function () {
     $('.grid').masonry({
-        // options
         itemSelector: '.post-item'
     });
 
-    let disabledDays = [0, 1, 6];
+    /*    Datepicker settings [START]   */
     $('.datepicker-here').datepicker({
         format: 'dd.mm.yy',
         maxViewMode: 2,
         clearBtn: true,
         autoClose: true,
-        orientation: 'top auto',
         todayHighlight: true,
         minDate: moment().add(7, 'days').toDate(),
         onSelect: function () {
@@ -19,6 +17,7 @@ $(document).ready(function () {
             }
         },
         onRenderCell: function (date, cellType) {
+            let disabledDays = [0, 1, 6];
             if (cellType === 'day') {
                 let day = date.getDay(),
                     isDisabled = disabledDays.indexOf(day) !== -1;
@@ -29,6 +28,29 @@ $(document).ready(function () {
         }
     });
 
+    $(window).resize(function() {
+        if ($(document).width() < 992) {
+            $('.datepicker-here').attr('data-position', 'bottom center');
+            console.log("992");
+        } else {
+            $('.datepicker-here').attr('data-position', 'top center');
+            console.log("greather than 992")
+        }
+    });
+
+    $(window).width(function() {
+        if ($(document).width() < 992) {
+            $('.datepicker-here').attr('data-position', 'bottom center');
+            console.log("992");
+        } else {
+            $('.datepicker-here').attr('data-position', 'top center');
+            console.log("greather than 992")
+        }
+    });
+
+    /*    Datepicker settings [END]   */
+
+    /*    Timepicker mask [START]    */
     $('.time').mask('AB:CD', {
         translation: {
             'A': {
@@ -47,7 +69,7 @@ $(document).ready(function () {
         onKeyPress: function (a, b, c, d) {
             let m = a.match(/(\d{1})/g);
             parseInt(m[1]) === 8 ? d.translation.C.pattern = /[0-4]/ : d.translation.C.pattern = /[0-5]/;
-            parseInt(m[2]) === 4 ? d.translation.D.pattern = /[0-5]/ : d.translation.D.pattern = /[0-9]/
+            parseInt(m[2]) === 4 ? d.translation.D.pattern = /[0-5]/ : d.translation.D.pattern = /[0-9]/;
 
             let temp_value = c.val();
             c.val('');
@@ -55,11 +77,12 @@ $(document).ready(function () {
             c.val(temp_value);
         }
     });
+    /*    Timepicker mask [END]    */
 
+    /*    Smart wizard steps [START]  */
     let form = $('#nnk-booking-form');
     let wizard = $('#smartwizard');
     let preloader = $('.preloader');
-    let container = $('#totalSumma');
     let status = 'init';
 
     $('form :input').change(function () {
@@ -77,6 +100,7 @@ $(document).ready(function () {
     wizard.show();
     preloader.hide();
 
+    /*    Step 1 - Rooms cards [START]   */
     $('.room_selected').change(function () {
         $('.card').removeClass('selected');
         $('.card-button').removeClass('selected-button');
@@ -87,7 +111,9 @@ $(document).ready(function () {
             $(selectedCardButton).addClass('selected-button');
         }
     });
+    /*    Step 1 - Rooms cards [END]   */
 
+    /*    Smart wizard actions when leaving step [START]    */
     wizard.on('leaveStep', function (e, anchorObject, stepNumber) {
         let result = form.valid();
         if (result && stepNumber === 1) {
@@ -95,7 +121,7 @@ $(document).ready(function () {
             let timeFrom = $('input[name=time_from]').val();
             let timeTo = $('input[name=time_until]').val();
 
-            if(timeFrom > timeTo) {
+            if (timeFrom > timeTo) {
                 alert('Algus ei saa olla hilisem kui lõpuaeg');
                 result = false;
                 return false;
@@ -117,6 +143,9 @@ $(document).ready(function () {
         }
         return result;
     });
+    /*    Smart wizard actions when leaving step [END]    */
+
+    /*    Smart wizard actions when opening step [START]   */
 
     wizard.on('showStep', function (e, anchorObject, stepNumber) {
         if (stepNumber === 1) {
@@ -162,7 +191,7 @@ $(document).ready(function () {
                 });
                 localStorage.setItem('times', JSON.stringify(items));
 
-            }).fail(function (response) {
+            }).fail(function () {
                 alert('error');
             });
         } else if (stepNumber === 5) {
@@ -200,10 +229,11 @@ $(document).ready(function () {
                     method: 'POST'
                 }).done(function (response) {
                     status = 'overViewExist';
+                    let container = $('#totalSumma');
                     container.html(response.data.confirmationHTML);
                     preloader.hide();
 
-                    $('.bookingFormSubmitButton').on('click', function () {
+                    $('.booking-submit-button').on('click', function () {
                         $.ajax({
                             url: ajaxurl,
                             data: {
@@ -227,8 +257,11 @@ $(document).ready(function () {
             }
         }
     });
+    /*    Smart wizard actions when opening step [END]   */
 
-    jQuery.validator.addMethod('isValidTime', function (value, element) {
+    /*    Smart wizard inputs validation [START]   */
+
+    jQuery.validator.addMethod('isValidTime', function (value) {
         return value.length > 3;
     }, 'Palun sisestage korrektne aeg');
 
@@ -356,4 +389,6 @@ $(document).ready(function () {
             }
         }
     });
+    /*    Smart wizard inputs validation [END]   */
+    /*    Smart wizard steps [END]  */
 });
