@@ -2,90 +2,47 @@
     <div class="container">
 
 
-
         <div class="header-content">
-            <div class="header-left-side">
                 <div class="header-logo">
-                    <a href="/noortek/">
-                        <div class="header-logo__image">
-
-                        </div>
-                        <div class="header-logo__title">
+                    <div class="header-logo__image">
+                        <img src="
+                        <?php echo get_stylesheet_directory_uri(); ?>/images/logos/nnk-logo.png" alt="">
+                    </div>
+                    <div class="header-logo__title">
+                        <div class="header-logo__title-main">
                             <span class="color-green">Narva</span> <span class="color-orange">Noortekeskus</span>
                         </div>
-                        <div class="sub-title">Ida-Virumaa noorteportaal</div>
-                    </a>
+                        <span class="header-logo__title-sub">Ida-Virumaa noorteportaal</span>
+                    </div>
                 </div>
-            </div>
             <div class="header-right-side">
                 <div class="header-language-switch">
                     <ul class="languages">
-                        <?php pll_the_languages(array('show_flags' => 1, 'show_names' => 1)); ?></ul>
+                        <?php pll_the_languages(array('show_flags' => 1, 'show_names' => 1)); ?>
+                    </ul>
                 </div>
-                <div class="social-links">
-                    <a class="social-links__item" href="https://www.facebook.com/NOORTEKESKUS/?fref=ts" target="_blank"
+                <div class="header-social-links">
+                    <a class="header-social-links__item" href="https://www.facebook.com/NOORTEKESKUS/?fref=ts"
+                       target="_blank"
                        rel="noreferrer">
                         <i class="fab fa-facebook-f"> </i>
                     </a>
-                    <a class="social-links__item" href="https://vk.com/narvanoortekeskus" target="_blank"
+                    <a class="header-social-links__item" href="https://vk.com/narvanoortekeskus" target="_blank"
                        rel="noreferrer">
                         <i class="fab fa-vk"> </i>
                     </a>
-                    <a class="social-links__item" href="https://www.instagram.com/narva_noortekeskus/" target="_blank"
+                    <a class="header-social-links__item" href="https://www.instagram.com/narva_noortekeskus/"
+                       target="_blank"
                        rel="noreferrer">
                         <i class="fab fa-instagram"> </i>
                     </a>
-                    <a class="social-links__item" href="https://www.youtube.com/user/NoortekTV" target="_blank"
+                    <a class="header-social-links__item" href="https://www.youtube.com/user/NoortekTV" target="_blank"
                        rel="noreferrer">
                         <i class="fab fa-youtube"> </i>
                     </a>
                 </div>
             </div>
         </div>
-
-
-        <!--    <div class="container">-->
-        <!--        <div class="row header-content">-->
-        <!--            <div class="col-md-9 col-lg-6">-->
-        <!--                <div class="header-logo">-->
-        <!--                    <a href="/noortek/">-->
-        <!--                        <div class="logo">-->
-        <!--                            <span class="title">-->
-        <!--                                <span class="color-green">Narva</span><span class="color-orange">Noortekeskus</span>-->
-        <!--                            </span>-->
-        <!--                            <span class="sub-title">Ida-Virumaa noorteportaal</span>-->
-        <!--                        </div>-->
-        <!--                    </a>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="col-md-3 col-lg-6 ">-->
-        <!--                <div class="header-language-switch">-->
-        <!--                    <ul class="languages">-->
-        <!--                        -->
-        <?php //pll_the_languages(array('show_flags' => 1, 'show_names' => 1)); ?><!--</ul>-->
-        <!--                </div>-->
-        <!---->
-        <!--                <div class="social-links">-->
-        <!--                    <a class="social-links__item" href="https://www.facebook.com/NOORTEKESKUS/?fref=ts" target="_blank"-->
-        <!--                       rel="noreferrer">-->
-        <!--                        <i class="fab fa-facebook-f"></i>-->
-        <!--                    </a>-->
-        <!--                    <a class="social-links__item" href="https://vk.com/narvanoortekeskus" target="_blank"-->
-        <!--                       rel="noreferrer">-->
-        <!--                        <i class="fab fa-vk"></i>-->
-        <!--                    </a>-->
-        <!--                    <a class="social-links__item" href="https://www.instagram.com/narva_noortekeskus/" target="_blank"-->
-        <!--                       rel="noreferrer">-->
-        <!--                        <i class="fab fa-instagram"></i>-->
-        <!--                    </a>-->
-        <!--                    <a class="social-links__item" href="https://www.youtube.com/user/NoortekTV" target="_blank"-->
-        <!--                       rel="noreferrer">-->
-        <!--                        <i class="fab fa-youtube"></i>-->
-        <!--                    </a>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--    </div>-->
         <nav class="navbar navbar-expand-md navbar-light bg-light main-menu" role="navigation">
             <div class="container">
                 <?php
