@@ -1,0 +1,94 @@
+<div>
+    <label for="status">Status</label>
+    <select id="status" name="status">
+        {% for item in statuses %}
+            <option {{ (status == item) ? 'selected' : '' }} value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div>
+    <label for="room">Ruum</label>
+    <select id="room" name="room">
+        {% for item in rooms %}
+            <option {{ item.ID == room.ID ? 'selected' : '' }} value="{{ item.ID }}">{{ item.post_title }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div>
+    <label for="date"> Kuupäev</label>
+    <input type="text" id="date" name="date" value="{{ date }}">
+</div>
+
+<div>
+    <label for="time_from"> Aeg alates </label>
+    <input type="text" id="time_from" name="time_from" value="{{ time_from }}">
+</div>
+
+<div>
+    <label for="time_until"> Aeg kuni </label>
+    <input type="text" id="time_until" name="time_until" value="{{ time_until }}">
+</div>
+
+<div>
+    <label for="participants_num"> Osalejate arv </label>
+    <input type="text" id="participants_num" name="participants_num" value="{{ participants_num }}">
+</div>
+
+<div>
+    <label for="purpose"> Eesmärk</label>
+    <input type="text" id="purpose" name="purpose" value="{{ purpose }}">
+</div>
+
+<div>
+    <label for="resources"> Vajalikud vahendid </label>
+    {% for key, item in resources %}
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="resources{{ key }}"
+                   name="resources[]"
+                   value="{{ item.ID }}"
+                    {% for equipment in resource %}
+                        {{ item.ID == equipment ? 'checked' : '' }}
+                    {% endfor %}
+            >
+            <label class="form-check-label" for="resources{{ key }}">
+                {{ item.post_title }}
+            </label>
+        </div>
+    {% endfor %}
+</div>
+
+<div>
+    <label for="info"> Lisainfo</label>
+    <input type="text" id="info" name="info" value="{{ info }}">
+</div>
+
+<div>
+    <label for="firstname"> Eesnimi</label>
+    <input type="text" id="firstname" name="firstname" value="{{ firstname }}">
+</div>
+
+<div>
+    <label for="lastname"> Perekonnanimi</label>
+    <input type="text" id="lastname" name="lastname" value="{{ lastname }}">
+</div>
+
+<div>
+    <label for="address"> Aadress</label>
+    <input type="text" id="address" name="address" value="{{ address }}">
+</div>
+
+<div>
+    <label for="phone"> Tel .</label>
+    <input type="text" id="phone" name="phone" value="{{ phone }}">
+</div>
+
+<div>
+    <label for="email"> Email</label>
+    <input type="email" id="email" name="email" value="{{ email }}">
+</div>
+
+<div>
+    <label for="summa"> Summa</label>
+    <input type="text" id="summa" name="summa" value="{{ summa }}">
+</div>

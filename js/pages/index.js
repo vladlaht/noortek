@@ -1,43 +1,289 @@
 $(document).ready(function () {
     $('.grid').masonry({
-        // options
         itemSelector: '.post-item'
     });
 
-    $('.datepicker.date').datepicker({
-        format: "dd.mm.yy",
+    /*    Datepicker settings [START]   */
+    $('.datepicker-here').datepicker({
+        format: 'dd.mm.yy',
         maxViewMode: 2,
         clearBtn: true,
-        autoclose: true,
-        orientation: "top auto",
-        todayHighlight: true
-    });
-
-    $('.timepicker').timepicker();
-
-
-    var form = $('#nnk-booking-form');
-    var wizard = $('#smartwizard');
-    wizard.smartWizard(
-        {
-            toolbarSettings: {
-                toolbarExtraButtons: [
-                    $('<button></button>').text('Finish')
-                        .addClass('btn btn-info')
-
-                    ]
+        autoClose: true,
+        todayHighlight: true,
+        minDate: moment().add(7, 'days').toDate(),
+        onSelect: function () {
+            if (status === 'overViewExist') {
+                status = 'dataChanged';
             }
-
-        });
-    wizard.show();
-    wizard.on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
-        if(stepDirection != "backward"){
-            var result = form.valid();
-            return result;
+        },
+        onRenderCell: function (date, cellType) {
+            let disabledDays = [0, 1, 6];
+            if (cellType === 'day') {
+                let day = date.getDay(),
+                    isDisabled = disabledDays.indexOf(day) !== -1;
+                return {
+                    disabled: isDisabled
+                }
+            }
         }
     });
 
+    $(window).resize(function() {
+        if ($(document).width() < 992) {
+            $('.datepicker-here').attr('data-position', 'bottom center');
+            console.log("992");
+        } else {
+            $('.datepicker-here').attr('data-position', 'top center');
+            console.log("greather than 992")
+        }
+    });
+
+    $(window).width(function() {
+        if ($(document).width() < 992) {
+            $('.datepicker-here').attr('data-position', 'bottom center');
+            console.log("992");
+        } else {
+            $('.datepicker-here').attr('data-position', 'top center');
+            console.log("greather than 992")
+        }
+    });
+
+    /*    Datepicker settings [END]   */
+
+    /*    Timepicker mask [START]    */
+    $('.time').mask('AB:CD', {
+        translation: {
+            'A': {
+                pattern: /[1]/, optional: false
+            },
+            'B': {
+                pattern: /[0-8]/, optional: false
+            },
+            'C': {
+                pattern: /[0-5]/, optional: false
+            },
+            'D': {
+                pattern: /[0-9]/, optional: false
+            }
+        },
+        onKeyPress: function (a, b, c, d) {
+            let m = a.match(/(\d{1})/g);
+            parseInt(m[1]) === 8 ? d.translation.C.pattern = /[0-4]/ : d.translation.C.pattern = /[0-5]/;
+            parseInt(m[2]) === 4 ? d.translation.D.pattern = /[0-5]/ : d.translation.D.pattern = /[0-9]/;
+
+            let temp_value = c.val();
+            c.val('');
+            c.unmask().mask('AB:CD', d);
+            c.val(temp_value);
+        }
+    });
+    /*    Timepicker mask [END]    */
+
+    /*    Smart wizard steps [START]  */
+    let form = $('#nnk-booking-form');
+    let wizard = $('#smartwizard');
+    let preloader = $('.preloader');
+    let status = 'init';
+
+    $('form :input').change(function () {
+        if (status === 'overViewExist') {
+            status = 'dataChanged';
+        }
+    });
+
+    wizard.smartWizard({
+        useURLhash: false,
+        showStepURLhash: false
+    });
+
+    let buttonNext = $('.sw-btn-next');
+    wizard.show();
+    preloader.hide();
+
+    /*    Step 1 - Rooms cards [START]   */
+    $('.room_selected').change(function () {
+        $('.card').removeClass('selected');
+        $('.card-button').removeClass('selected-button');
+        if ($(this).is(':checked')) {
+            let selectedCard = this.closest('.card');
+            let selectedCardButton = this.closest('.card-button');
+            $(selectedCard).addClass('selected');
+            $(selectedCardButton).addClass('selected-button');
+        }
+    });
+    /*    Step 1 - Rooms cards [END]   */
+
+    /*    Smart wizard actions when leaving step [START]    */
+    wizard.on('leaveStep', function (e, anchorObject, stepNumber) {
+        let result = form.valid();
+        if (result && stepNumber === 1) {
+            let allItems = JSON.parse(localStorage.getItem('times'));
+            let timeFrom = $('input[name=time_from]').val();
+            let timeTo = $('input[name=time_until]').val();
+
+            if (timeFrom > timeTo) {
+                alert('Algus ei saa olla hilisem kui lõpuaeg');
+                result = false;
+                return false;
+            }
+
+            timeFrom = moment($('input#date').val() + ' ' + timeFrom, 'DD.MM.YYYY HH:ii');
+            timeTo = moment($('input#date').val() + ' ' + timeTo, 'DD.MM.YYYY HH:ii');
+            $.each(allItems, function (index, item) {
+                if (moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
+                    || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)) {
+                    alert('Palun sisestage aeg, mis ei kattu olemas olevate broneeringutega');
+                    result = false;
+                    return false;
+                }
+            })
+
+        } else if (stepNumber === 5) {
+            buttonNext.show();
+        }
+        return result;
+    });
+    /*    Smart wizard actions when leaving step [END]    */
+
+    /*    Smart wizard actions when opening step [START]   */
+
+    wizard.on('showStep', function (e, anchorObject, stepNumber) {
+        if (stepNumber === 1) {
+            let timetable = $('.timetable');
+            timetable.fullCalendar('destroy');
+            timetable.fullCalendar({
+                header: {
+                    left: 'title',
+                    center: '',
+                    right: ''
+                },
+                timeFormat: 'HH:mm',
+                height: 150,
+                schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+                defaultDate: moment($('input#date').val(), 'DD.MM.YYYY'),
+                defaultView: 'timelineDay',
+                minTime: '10:00',
+                maxTime: '19:00'
+            });
+
+            $.ajax({
+                url: ajaxurl,
+                data: {
+                    action: 'room_booking_time',
+                    date: $('input#date').val(),
+                    room: $('input[name=room]:checked').val()
+                },
+                method: 'POST'
+            }).done(function (response) {
+                let items = [];
+                $.each(response.data, function (index, value) {
+                    timetable.fullCalendar('renderEvent', {
+                        id: index,
+                        title: value.title,
+                        start: moment(value.from.date),
+                        end: moment(value.to.date)
+                    });
+                    items.push({
+                        title: value.title,
+                        start: moment(value.from.date),
+                        end: moment(value.to.date)
+                    });
+                });
+                localStorage.setItem('times', JSON.stringify(items));
+
+            }).fail(function () {
+                alert('error');
+            });
+        } else if (stepNumber === 5) {
+            buttonNext.hide();
+            if (status === 'init' || status === 'dataChanged') {
+                preloader.show();
+                let checkboxes = document.getElementsByName('resources[]');
+                let vals = [];
+                for (let i = 0, n = checkboxes.length; i < n; i++) {
+                    if (checkboxes[i].checked) {
+                        vals.push(checkboxes[i].value);
+                    }
+                }
+                let dataForm = {
+                    date: $('input#date').val(),
+                    room: $('input[name=room]:checked').val(),
+                    timeFrom: $('input#timeFrom').val(),
+                    timeUntil: $('input#timeUntil').val(),
+                    resources: vals,
+                    participants: $('input#participants').val(),
+                    purpose: $('input#purpose').val(),
+                    info: $('textarea#info').val(),
+                    firstName: $('input#firstname').val(),
+                    lastName: $('input#lastname').val(),
+                    phone: $('input#phone').val(),
+                    email: $('input#email').val(),
+                    address: $('input#address').val(),
+                };
+                $.ajax({
+                    url: ajaxurl,
+                    data: {
+                        action: 'filled_form',
+                        form: dataForm
+                    },
+                    method: 'POST'
+                }).done(function (response) {
+                    status = 'overViewExist';
+                    let container = $('#totalSumma');
+                    container.html(response.data.confirmationHTML);
+                    preloader.hide();
+
+                    $('.booking-submit-button').on('click', function () {
+                        $.ajax({
+                            url: ajaxurl,
+                            data: {
+                                action: 'booking_submit',
+                                form: dataForm
+                            },
+                            method: 'POST'
+                        }).done(function (response) {
+                            $('.booking-form').html(response.data.submitSucces);
+
+                        }).fail(function (response) {
+                            console.log('error');
+                            console.log(response);
+                        });
+                    });
+                    console.log(response);
+                }).fail(function (response) {
+                    console.log('error');
+                    console.log(response);
+                });
+            }
+        }
+    });
+    /*    Smart wizard actions when opening step [END]   */
+
+    /*    Smart wizard inputs validation [START]   */
+
+    jQuery.validator.addMethod('isValidTime', function (value) {
+        return value.length > 3;
+    }, 'Palun sisestage korrektne aeg');
+
     form.validate({
+        errorContainer: '#messageBox1',
+        errorElement: 'div',
+        errorClass: 'is-invalid',
+        validClass: 'is-valid',
+        success: function (label) {
+            let id = label.attr('id');
+            $(id).remove();
+        },
+        errorPlacement: function (errorLabel, inputElement) {
+            let parent = inputElement.closest('.form-group');
+            let errorElement = errorLabel.removeClass('is-invalid').addClass('invalid-feedback');
+            let existedErrorElements = parent.find('.invalid-feedback');
+            if (existedErrorElements.length === 0) {
+                parent.append(errorElement);
+            } else if (existedErrorElements.length === 1 && errorElement.text() !== existedErrorElements.text()) {
+                existedErrorElements.text(errorElement.text());
+            }
+        },
         rules: {
             room: {
                 required: true
@@ -46,10 +292,12 @@ $(document).ready(function () {
                 required: true
             },
             time_from: {
-                required: true
+                required: true,
+                isValidTime: true
             },
             time_until: {
-                required: true
+                required: true,
+                isValidTime: true
             },
             participants_num: {
                 required: true,
@@ -78,15 +326,15 @@ $(document).ready(function () {
             },
             phone: {
                 required: true,
-                maxlength: 12
+                maxlength: 15
             },
             email: {
                 required: true,
                 email: true,
                 maxlength: 60
             },
-            rules:{
-              required: true
+            rules: {
+                required: true
             }
         },
         messages: {
@@ -129,7 +377,7 @@ $(document).ready(function () {
             },
             phone: {
                 required: 'See väli on kohustuslik',
-                max: 'Telefoninumber ei tohi olla pikkem kui 12 sümbolit'
+                max: 'Telefoninumber ei tohi olla pikkem kui 15 sümbolit'
             },
             email: {
                 required: 'See väli on kohustuslik',
@@ -141,4 +389,6 @@ $(document).ready(function () {
             }
         }
     });
+    /*    Smart wizard inputs validation [END]   */
+    /*    Smart wizard steps [END]  */
 });

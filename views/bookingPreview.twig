@@ -1,0 +1,195 @@
+<div class="booking-container">
+    <div class="booking-preview-header">
+        <div class="booking-preview-title">{{ function('pll_e', 'bookingTabConfirmationLabelReview') }}</div>
+        <div class="alert alert-warning" role="alert">
+            {{ function('pll_e', 'bookingTabConfirmationLabelMessage') }}.
+        </div>
+    </div>
+    <div class="booking-preview-content">
+        <div class="booking-preview-content__info">
+            <div class="booking-info">
+                <div class="booking-preview-content__info-item">
+                    <span class="item-name">Täisnimi:</span>
+                    <div class="item-value">{{ bookingForm.firstName }} {{ bookingForm.lastName }}</div>
+                </div>
+
+                <div class="booking-preview-content__info-item">
+                    <span class="item-name">Telefon:</span>
+                    <div class="item-value">{{ bookingForm.phone }}</div>
+                </div>
+
+                <div class="booking-preview-content__info-item">
+                    <span class="item-name">Email:</span>
+                    <div class="item-value">{{ bookingForm.email }}</div>
+                </div>
+
+                <div class="booking-preview-content__info-item">
+                    <span class="item-name">Address:</span>
+                    <div class="item-value">{{ bookingForm.address }}</div>
+                </div>
+            </div>
+            <div class="booking-info">
+                <div class="booking-preview-content__info-item">
+                    <span class="item-name">Kuupaev:</span>
+                    <div class="item-value">{{ bookingForm.date }}</div>
+                </div>
+
+                <div class="booking-preview-content__info-item">
+                    <span class="item-name">Eesmark:</span>
+                    <div class="item-value">{{ bookingForm.purpose }}</div>
+                </div>
+
+                <div class="booking-preview-content__info-item">
+                    <span class="item-name">Osalejaid:</span>
+                    <div class="item-value">{{ bookingForm.participants }}</div>
+                </div>
+            </div>
+            {% if bookingForm.info %}
+                <div class="booking-info-additional">
+                    <div class="booking-preview-content__info-item">
+                        <span class="item-name">Lisainfo:</span>
+                        <div class="item-value">{{ bookingForm.info }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <table class="booking-preview-content__table">
+            <tr>
+                <th>{{ function('pll_e', 'bookingTabConfirmationLabelRoomName') }}</th>
+                <th>{{ function('pll_e', 'bookingTabConfirmationLabelTime') }}</th>
+                <th>{{ function('pll_e', 'bookingTabConfirmationLabelItemPrice') }}</th>
+                <th>{{ function('pll_e', 'bookingTabConfirmationLabelItemTotalPrice') }}</th>
+            </tr>
+            {% for item in bookingForm.invoiceRows %}
+                <tr>
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ bookingForm.timeFrom }}-{{ bookingForm.timeUntil }}
+                            {% if item.amount == 1 %}
+                                ({{ item.amount }} {{ function('pll_e', 'bookingTabConfirmationLabelTimeUnit') }})
+                            {% elseif item.amount == 0 or item.amount >= 5 %}
+                                ({{ item.amount }} {{ function('pll_e', 'bookingTabConfirmationLabelTimeUnitsSecond') }})
+                            {% else %}
+                                ({{ item.amount }} {{ function('pll_e', 'bookingTabConfirmationLabelTimeUnitsFirst') }})
+                            {% endif %}
+                    </td>
+                    <td>
+                        {{ item.price }} EUR
+                    </td>
+                    <td>
+                        {{ item.total }} EUR
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="booking-preview-footer">
+        <div class="booking-preview-footer__total alert alert-dark" role="alert">
+            {{ function('pll_e', 'bookingTabConfirmationLabelTotalAmount') }}
+            : {{ bookingForm.totalAmount }} EUR
+        </div>
+        <button type="button" class="booking-submit-button btn btn-primary">
+            {{ function('pll_e', 'bookingTabConfirmationLabelSubmitButton') }}
+        </button>
+    </div>
+</div>
+
+
+{#   OLD    #}
+{#<div class="booking-container">#}
+{#    <p><h4><strong>{{ function('pll_e', 'bookingTabConfirmationLabelReview') }}</strong></h4></p>#}
+{#    <div class="alert alert-warning" role="alert">#}
+{#        {{ function('pll_e', 'bookingTabConfirmationLabelMessage') }}.#}
+{#    </div>#}
+{#    <div class="row">#}
+{#        <div class="col-xl-2  col-md-3 col-sm-4">#}
+{#            <strong>#}
+{#                {{ function('pll_e', 'bookingTabConfirmationLabelBooker') }}:</strong>#}
+{#        </div>#}
+{#        <div class="booker col-xl-10 col-md-9 col-sm-8">#}
+{#            <div>{{ bookingForm.firstName }} {{ bookingForm.lastName }}</div>#}
+{#            <div>+372 {{ bookingForm.phone }}</div>#}
+{#            <div>{{ bookingForm.email }}</div>#}
+{#            <div>{{ bookingForm.address }}</div>#}
+{#            <br>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#<div>#}
+{#    <p><strong>{{ function('pll_e', 'bookingTabConfirmationLabelDate') }}: </strong>{{ bookingForm.date }}</p>#}
+{#</div>#}
+{#<div>#}
+{#    <p><strong>{{ function('pll_e', 'bookingTabConfirmationLabelGoal') }}: </strong>{{ bookingForm.purpose }}</p>#}
+{#</div>#}
+{#<div>#}
+{#    <p><strong>{{ function('pll_e', 'bookingTabConfirmationLabelParticipants') }}#}
+{#            : </strong>{{ bookingForm.participants }}</p>#}
+{#</div>#}
+{#<div>#}
+{#    <p><strong>{{ function('pll_e', 'bookingTabConfirmationLabelInfo') }}: </strong>#}
+{#        <br>#}
+{#        {{ bookingForm.info }}#}
+{#    </p>#}
+
+{#</div>#}
+{#<div>#}
+{#    <table class="booking-info">#}
+{#        <tr>#}
+{#            <th>{{ function('pll_e', 'bookingTabConfirmationLabelRoomName') }}</th>#}
+{#            <th>{{ function('pll_e', 'bookingTabConfirmationLabelTime') }}</th>#}
+{#            <th>{{ function('pll_e', 'bookingTabConfirmationLabelItemPrice') }}</th>#}
+{#            <th>{{ function('pll_e', 'bookingTabConfirmationLabelItemTotalPrice') }}</th>#}
+{#        </tr>#}
+{#        {% for item in bookingForm.invoiceRows %}#}
+{#            <tr>#}
+{#                {% if item.type == constant('BookingDTO::TYPE_ROOM') %}#}
+{#                    <td>#}
+{#                        {{ bookingForm.invoiceRows[0].name }}#}
+{#                        <img class="booked-room-card"#}
+{#                             src="{{ function('get_the_post_thumbnail_url', bookingForm.room.ID, 'post-thumbnail') }}"#}
+{#                             alt="">#}
+{#                    </td>#}
+{#                {% else %}#}
+{#                    <td>#}
+{#                        {{ item.name }}#}
+{#                    </td>#}
+{#                {% endif %}#}
+{#                <td>#}
+{#                    {{ bookingForm.timeFrom }}-{{ bookingForm.timeUntil }}#}
+{#                    {% if item.amount == 1 %}#}
+{#                        ({{ item.amount }} {{ function('pll_e', 'bookingTabConfirmationLabelTimeUnit') }})#}
+{#                    {% elseif item.amount == 0 or item.amount >= 5 %}#}
+{#                        ({{ item.amount }} {{ function('pll_e', 'bookingTabConfirmationLabelTimeUnitsSecond') }})#}
+{#                    {% else %}#}
+{#                        ({{ item.amount }} {{ function('pll_e', 'bookingTabConfirmationLabelTimeUnitsFirst') }})#}
+{#                    {% endif %}#}
+{#                </td>#}
+{#                <td>#}
+{#                    {{ item.price }} EUR#}
+{#                </td>#}
+{#                <td>#}
+{#                    {{ item.total }} EUR#}
+{#                </td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#        <tr>#}
+{#            <td></td>#}
+{#            <td></td>#}
+{#            <td></td>#}
+{#            <td>#}
+{#                <div class="alert alert-dark" role="alert">#}
+{#                    {{ function('pll_e', 'bookingTabConfirmationLabelTotalAmount') }}: {{ bookingForm.totalAmount }} EUR#}
+{#                </div>#}
+{#            </td>#}
+{#        </tr>#}
+{#    </table>#}
+{#    <div class="row submit-button-container">#}
+{#        <div class="submit-button">#}
+{#            <button type="button" class="booking-submit-button btn btn-primary">#}
+{#                {{ function('pll_e', 'bookingTabConfirmationLabelSubmitButton') }}#}
+{#            </button>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}

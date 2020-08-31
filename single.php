@@ -7,12 +7,12 @@
 <?php get_header(); ?>
 <div class="container content">
     <h2><?php _e("Viimased uudised", "noortek") ?></h2>
-    <?php $the_query = new WP_Query( ['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 8] ); ?>
+    <?php $the_query = new WP_Query(['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 8]); ?>
     <?php if ($the_query->have_posts()) : ?>
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
-                    <?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
+                    <?php while ($the_query->have_posts()) : $the_query->the_post(); ?>
                         <div class="card col-4" style="width: 18rem;">
                             <img src="<?php echo get_the_post_thumbnail_url($ID) ?>" class="card-img-top" alt="...">
                             <div class="card-body">
