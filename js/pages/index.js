@@ -27,27 +27,6 @@ $(document).ready(function () {
             }
         }
     });
-
-    $(window).resize(function() {
-        if ($(document).width() < 992) {
-            $('.datepicker-here').attr('data-position', 'bottom center');
-            console.log("992");
-        } else {
-            $('.datepicker-here').attr('data-position', 'top center');
-            console.log("greather than 992")
-        }
-    });
-
-    $(window).width(function() {
-        if ($(document).width() < 992) {
-            $('.datepicker-here').attr('data-position', 'bottom center');
-            console.log("992");
-        } else {
-            $('.datepicker-here').attr('data-position', 'top center');
-            console.log("greather than 992")
-        }
-    });
-
     /*    Datepicker settings [END]   */
 
     /*    Timepicker mask [START]    */
@@ -84,6 +63,7 @@ $(document).ready(function () {
     let wizard = $('#smartwizard');
     let preloader = $('.preloader');
     let status = 'init';
+    let inputDate = $('input#date');
 
     $('form :input').change(function () {
         if (status === 'overViewExist') {
@@ -127,8 +107,8 @@ $(document).ready(function () {
                 return false;
             }
 
-            timeFrom = moment($('input#date').val() + ' ' + timeFrom, 'DD.MM.YYYY HH:ii');
-            timeTo = moment($('input#date').val() + ' ' + timeTo, 'DD.MM.YYYY HH:ii');
+            timeFrom = moment(inputDate.val() + ' ' + timeFrom, 'DD.MM.YYYY HH:ii');
+            timeTo = moment(inputDate.val() + ' ' + timeTo, 'DD.MM.YYYY HH:ii');
             $.each(allItems, function (index, item) {
                 if (moment(item.start).isBetween(timeFrom, timeTo) || moment(item.end).isBetween(timeFrom, timeTo)
                     || moment(timeFrom).isBetween(item.start, item.end) || moment(timeTo).isBetween(item.start, item.end)) {
@@ -160,7 +140,7 @@ $(document).ready(function () {
                 timeFormat: 'HH:mm',
                 height: 150,
                 schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-                defaultDate: moment($('input#date').val(), 'DD.MM.YYYY'),
+                defaultDate: moment(inputDate.val(), 'DD.MM.YYYY'),
                 defaultView: 'timelineDay',
                 minTime: '10:00',
                 maxTime: '19:00'
@@ -170,7 +150,7 @@ $(document).ready(function () {
                 url: ajaxurl,
                 data: {
                     action: 'room_booking_time',
-                    date: $('input#date').val(),
+                    date: inputDate.val(),
                     room: $('input[name=room]:checked').val()
                 },
                 method: 'POST'
@@ -206,7 +186,7 @@ $(document).ready(function () {
                     }
                 }
                 let dataForm = {
-                    date: $('input#date').val(),
+                    date: inputDate.val(),
                     room: $('input[name=room]:checked').val(),
                     timeFrom: $('input#timeFrom').val(),
                     timeUntil: $('input#timeUntil').val(),
@@ -249,7 +229,6 @@ $(document).ready(function () {
                             console.log(response);
                         });
                     });
-                    console.log(response);
                 }).fail(function (response) {
                     console.log('error');
                     console.log(response);

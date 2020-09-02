@@ -299,6 +299,7 @@ ul.languages > li.current-lang a {
 @media screen and (max-width: 767px) {
     .navbar-nav {
         flex-direction: row;
+        justify-content: center;
     }
 }
 
