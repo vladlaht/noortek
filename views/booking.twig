@@ -1,189 +1,244 @@
 <div class="booking-form">
-    <form id="nnk-booking-form" action="http://localhost/noortek/wp-admin/admin-post.php" method="POST">
+    <form autocomplete="off" id="nnk-booking-form" action="http://localhost/noortek/wp-admin/admin-post.php"
+          method="POST">
         <input type="hidden" name="action" value="custom_action_hook">
-        <div>
-            <strong> Ruumi broneerimiseks palun täitke alljärgnev vorm:</strong>
-            <p style="color:red;">* Tärniga tähistatud alad on kohustuslikud.</p>
-        </div>
 
-        <div id="smartwizard" style="display: none;">
-            <ul>
-                <li><a href="#step-1">Samm 1<br/>
-                        <small>Ruum ja kuupäev</small>
-                    </a></li>
-                <li><a href="#step-2">Samm 2<br/>
-                        <small>Aeg</small>
-                    </a></li>
-                <li><a href="#step-3">Samm 3<br/>
-                        <small>Vahendid,osalejad,eesmärk,lisainfo</small>
-                    </a></li>
-                <li><a href="#step-4">Samm 4<br/>
-                        <small>Eesmärk,lisainfo, vastutav isik</small>
-                    </a></li>
-                <li><a href="#step-5">Samm 5<br/>
-                        <small>Summa ja kinnitamine</small>
-                    </a></li>
+        <div id="smartwizard" class="smartwizard" style="display: none;">
+            <ul class="smart-wizard-menu-steps">
+                <li class="smart-wizard-menu-steps-item">
+                    <a href="#step-1">
+                        {{ function('pll_e', 'bookingTabRoomAndDate') }}
+                    </a>
+                </li>
+                <li class="smart-wizard-menu-steps-item">
+                    <a href="#step-2">
+                        {{ function('pll_e', 'bookingTabTimeAndEquipments') }}
+                    </a>
+                </li>
+                <li class="smart-wizard-menu-steps-item">
+                    <a href="#step-3">
+                        {{ function('pll_e', 'bookingTabGoal') }}
+                    </a>
+                </li>
+                <li class="smart-wizard-menu-steps-item">
+                    <a href="#step-4">
+                        {{ function('pll_e', 'bookingTabResponsible') }}
+                    </a>
+                </li>
+                <li class="smart-wizard-menu-steps-item">
+                    <a href="#step-5">
+                        {{ function('pll_e', 'bookingTabRules') }}
+                    </a>
+                </li>
+                <li class="smart-wizard-menu-steps-item">
+                    <a href="#step-6">
+                        {{ function('pll_e', 'bookingTabConfirmation') }}
+                    </a>
+                </li>
             </ul>
 
-            <div>
-                <div id="step-1" class="">
-                    <div class="form-group">
-                        <label for="select-room">Ruum*</label>
-                        <select class="form-control" id="select-room" name="room" id="room" required="required">
-                            <option disabled selected value hidden> -- Valige ruumi --</option>
-                            {% for room in rooms %}
-                                <option value="{{ room.ID }}">{{ room.post_title }}</option>
-                            {% endfor %}
-                        </select>
+            <div class="smart-wizard-steps">
+                <div id="step-1" class="step-1">
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-md-4">
+                            <label for="date">{{ function('pll_e', 'bookingTabRoomAndDateLabelDate') }}*</label>
+                            <input type="text" class="datepicker-here form-control" data-position="bottom center"
+                                   name="date"
+                                   id="date">
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="select-date">Kuupäev*</label>
-                        <input type="text" class="datepicker-here" data-position="right top" name="date" id="date">
-                    </div>
-                </div>
-
-                <div id="step-2" class="">
-                    <div class="form-group">
-                        <div class="timepicker">
-                            <label for="select-time-from">Aeg alates*</label>
-                            <input type="text" class="form-control" id="select-time-from" name="time_from"
-                                   id="time_from">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-time"></span>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="select-room">{{ function('pll_e', 'bookingTabRoomAndDateLabelRoom') }}*</label>
+                            <div class="row">
+                                {% for room in rooms %}
+                                    <div class="col-md-4">
+                                        <div class="card ">
+                                            <img class="card-img-top"
+                                                 src="{{ function('get_the_post_thumbnail_url', room.ID, 'post-thumbnail') }}"
+                                                 alt="">
+                                            <div class="card-body">
+                                                <span class="card-title">
+                                                    {{ room.post_title }}
+                                                </span>
+                                                <div class="price">
+                                                    <strong>{{ function('pll_e', 'bookingTabRoomAndDateLabelPrice') }}
+                                                        :</strong> {{ room.price }} EUR
+                                                    / {{ function('pll_e', 'bookingTabRoomAndDatePriceUnit') }}
+                                                </div>
+                                                <div class="btn-group btn-group-toggle"
+                                                     data-toggle="buttons">
+                                                    <label class="btn btn-secondary btn-sm card-button ">
+                                                        <input type="radio" name="room" id="option{{ room.ID }}"
+                                                               class="room_selected"
+                                                               autocomplete="off"
+                                                               value="{{ room.ID }}"> {{ function('pll_e', 'bookingTabRoomAndDateLabelSelect') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <div class="timepicker">
-                            <label for="select-time-until">Aeg kuni*</label>
-                            <input type="text" class="form-control" id="select-time-until" name="time_until"
-                                   id="time_until">
-                            <span class="input-group-addon">
-        <span class="glyphicon glyphicon-time"></span>
-    </span>
-                        </div>
-                    </div>
                 </div>
 
-                <div id="step-3" class="">
+                <div id="step-2" class="step-2">
+                    <div class="timepicker_area">
+                        <div class="row">
+                            <div class="form-group col-md-5 col-sm-12">
+                                <div class="timepicker">
+                                    <label for="timeFrom">{{ function('pll_e', 'bookingTabTimeAndEquipmentsLabelTimeFrom') }}
+                                        *</label>
+                                    <input type="text" class="form-control time" name="time_from"
+                                           id="timeFrom">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-time"> </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5 col-sm-12">
+                                <div class="timepicker">
+                                    <label for="timeUntil">{{ function('pll_e', 'bookingTabTimeAndEquipmentsLabelTimeUntil') }}
+                                        *</label>
+                                    <input type="text" class="form-control time" name="time_until"
+                                           id="timeUntil">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-time"> </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="timetable"></div>
+                        </div>
+                    </div>
+                    <label for="resources"><strong>{{ function('pll_e', 'bookingTabTimeAndEquipmentsLabelResources') }}
+                            :</strong></label>
                     <div class="form-group">
-                        <label for="select-resources">Vajalikud vahendid</label>
                         {% for key, item in equipment %}
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="check-resources{{ key }}"
+                                <input type="checkbox" class="form-check-input" id="resources{{ key }}"
                                        name="resources[]"
                                        value="{{ item.ID }}">
-                                <label class="form-check-label" for="check-resources{{ key }}">
+                                <label class="form-check-label" for="resources{{ key }}">
                                     {{ item.post_title }}
-
-                                    {{ item.hind }}€ / tund
-
-
+                                    {{ item.price }} EUR
+                                    / {{ item.unit }}
                                 </label>
                             </div>
                         {% endfor %}
                     </div>
 
-                    <div class="form-group">
-                        <label for="select-participants-num">Osalejate arv*</label>
-                        <input type="number" class="form-control" id="select-participants-num" name="participants_num"
-                               id="participants_num"
-                               placeholder="Maksimum 30 inimest"
-                               onfocus="placeholder = ''" onblur="placeholder = 'Maksimum 30 inimest'">
-                    </div>
+                </div>
 
+                <div id="step-3" class="step-3">
                     <div class="form-group">
-                        <label for="select-purpose">Eesmärk*</label>
-                        <input type="text" class="form-control" id="select-purpose" name="purpose"
-                               placeholder="Kirjelda lühidalt ruumi kasutamise eesmärk"
+                        <label for="participants">{{ function('pll_e', 'bookingTabGoalLabelParticipants') }}*</label>
+                        <input type="number" class="form-control" id="participants" name="participants_num"
+                               onkeydown="return event.keyCode !== 69"
+                               placeholder="{{ function('pll_e', 'bookingTabGoalLabelParticipantsPlaceholder') }}"
                                onfocus="placeholder = ''"
-                               onblur="placeholder = 'Kirjelda lühidalt ruumi kasutamise eesmärk'">
+                               onblur="placeholder = '{{ function('pll_e', 'bookingTabGoalLabelParticipantsPlaceholder') }}'">
                     </div>
-
                     <div class="form-group">
-                        <label for="select-info">Lisainfo</label>
-                        <textarea rows='2' class="form-control" id="select-info" name="info" rows="3"
-                                  placeholder="Kui Teil on soov midagi lisada, siis kirjutage siia"
+                        <label for="purpose">{{ function('pll_e', 'bookingTabGoalLabelGoal') }}*</label>
+                        <input type="text" class="form-control" id="purpose" name="purpose"
+                               placeholder="{{ function('pll_e', 'bookingTabGoalLabelGoalPlaceholder') }}"
+                               onfocus="placeholder = ''"
+                               onblur="placeholder = '{{ function('pll_e', 'bookingTabGoalLabelGoalPlaceholder') }}'">
+                    </div>
+                    <div class="form-group">
+                        <label for="info">{{ function('pll_e', 'bookingTabGoalLabelInfo') }}</label>
+                        <textarea class="form-control" id="info" name="info" rows="3"
+                                  placeholder="{{ function('pll_e', 'bookingTabGoalLabelInfoPlaceholder') }}"
                                   onfocus="placeholder = ''"
-                                  onblur="placeholder = 'Kui Teil on soov midagi lisada, siis kirjutage siia'"
-                        ></textarea>
+                                  onblur="placeholder = '{{ function('pll_e', 'bookingTabGoalLabelInfoPlaceholder') }}'"
+                        > </textarea>
                     </div>
                 </div>
-                <div id="step-4" class="">
-                    <div>
-                        <strong> Vastutava isiku andmed:</strong>
-                    </div>
+                <div id="step-4" class="step-4">
                     <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="select-lastname">Eesnimi*</label>
-                            <input type="text" class="form-control" id="select-firstname" name="firstname">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="firstname">{{ function('pll_e', 'bookingTabResponsibleLabelFirstName') }}
+                                *</label>
+                            <input type="text" class="form-control" id="firstname" name="firstname"
+                                   onkeypress="return /[a-z]/i.test(event.key)">
                         </div>
-                        <div class="form-group col-6">
-                            <label for="select-lastname">Perekonnanimi*</label>
-                            <input type="text" class="form-control" id="select-lastname" name="lastname">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="lastname">{{ function('pll_e', 'bookingTabResponsibleLabelLastName') }}*</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname"
+                                   onkeypress="return /[a-z]/i.test(event.key)">
                         </div>
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="select-phone">Telefoninumber*</label>
-                            <input type="number" class="form-control" id="select-phone" name="phone">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="phone">{{ function('pll_e', 'bookingTabResponsibleLabelPhone') }}*</label>
+                            <input type="number" class="form-control" id="phone" name="phone"
+                                   onkeydown="return event.keyCode !== 69">
                         </div>
-                        <div class="form-group col-6">
-                            <label for="select-email">Email aadress*</label>
-                            <input type="email" class="form-control" id="select-email" name="email">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="email">{{ function('pll_e', 'bookingTabResponsibleLabelEmail') }}*</label>
+                            <input type="email" class="form-control" id="email" name="email">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="select-address">Aadress*</label>
-                        <input type="text" class="form-control" id="select-address" name="address"
-                               placeholder="Linn, tänav, maja number"
-                               onfocus="placeholder = ''" onblur="placeholder = 'Linn, tänav, maja number'">
+                        <label for="address">{{ function('pll_e', 'bookingTabResponsibleLabelAddress') }}*</label>
+                        <input type="text" class="form-control" id="address" name="address"
+                               placeholder="{{ function('pll_e', 'bookingTabResponsibleLabelAddressPlaceholder') }}"
+                               onfocus="placeholder = ''"
+                               onblur="placeholder = '{{ function('pll_e', 'bookingTabResponsibleLabelAddressPlaceholder') }}'">
                     </div>
                 </div>
 
-                <div id="step-5" class="">
+                <div id="step-5" class="step-5">
                     <div class="form-group">
-                        <div>
-                            <span>Ruumide kasutaja vastutus: </span>
+                        <div class="rules-tab__subtitle">
+                            {{ function('pll_e', 'bookingTabRulesSubtitle1') }}:
                         </div>
-                        <ul>
-                            <li>Rummi kasutaja vastutab materiaalselt ruumi heakorra ja sisustuse säilitamise eest.</li>
-                            <li>Ruumi üle andes palume vaadata, et kõik oleks korras (aknad kinni, tahvel puhas jne.).</li>
+                        <ul class="rules-tab__list">
+                            <li>{{ function('pll_e', 'bookingTabRulesItem1') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem2') }}</li>
                         </ul>
-                        <div>
-                            <span >
-                                <strong>KEELATUD:</strong>
-                            </span>
+                        <div class="rules-tab__subtitle">
+                            {{ function('pll_e', 'bookingTabRulesSubtitle2') }}:
                         </div>
-                        <div>
-                            1. Suitsetada ja tarbida alkohoolseid jooke NNK sees ja NNK territooriumil
+                        <ul class="rules-tab__list">
+                            <li>{{ function('pll_e', 'bookingTabRulesItem3') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem4') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem5') }}</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem6') }}</li>
+                        </ul>
+                        <span>{{ function('pll_e', 'bookingTabRulesItem7') }}</span>
+                    </div>
+                    <div class="form-group form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
+                        <label class="form-check-label" for="rules_checkbox">
+                            {{ function('pll_e', 'bookingTabRulesLabelConfirm') }}.
+                        </label>
+                    </div>
+                </div>
+                <div id="step-6" class="step-6">
+                    <div class="form-group position-relative preloader-container">
+                        <div class="preloader">
+                            <div class="preloader-with-text">
+                                <div class="loader">
+                                    <img src="{{ svgPreloaderPath }}" alt="">
+                                </div>
+                                <p class="preloader-text">{{ function('pll_e', 'bookingTabPreloaderString1') }}</p>
+                                <p class="preloader-text">{{ function('pll_e', 'bookingTabPreloaderString2') }}</p>
+                            </div>
                         </div>
-                        <div>
-                            2. Reostada NNK sees ja territooriumil
+                        <div id="totalSumma">
                         </div>
-                        <div></div>
-                        <div>
-                            3. Keelatud ropendada, teise sõimata või halvustada.
-                        </div>
-                        <div>
-                            4. Keelatud tekitama ebamugavusi teiste kasutajate töö teostamiseks.
-                        </div>
-                        <br>Reeglite rikkumise korral Teie kaotate õiguse edaspidi NNK ruumi kasutada.
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
-                            <label class="form-check-label" for="rules_checkbox">
-                                Olen lugenud reegleid ja nõustun neid järgima.
-                            </label>
-                        </div>
-
                     </div>
                 </div>
             </div>
+        </div>
     </form>
 </div>

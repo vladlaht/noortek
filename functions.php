@@ -1,23 +1,23 @@
 <?php
+
 require_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
+include 'themeClass/RoomBooking.php';
+include 'translations/NnkTranslations.php';
 
 $theme = new NoortekWPTheme();
 
 class NoortekWPTheme
 {
+
     public function __construct()
     {
         add_action('wp_enqueue_scripts', [$this, 'register_styles']);
         add_action('wp_enqueue_scripts', [$this, 'register_scripts']);
         add_action('init', [$this, 'register_menu_spaces']);
-        add_action('init', [$this, 'register_custom_post_types']);
         add_action('after_setup_theme', [$this, 'add_support']);
         add_theme_support("post-thumbnails");
-        $this->register_short_codes();
-        add_action('admin_post_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
-        add_action('admin_post_custom_action_hook', [$this, 'the_action_hook_callback']);
-        add_action('admin_ajax_custom_action_hook', [$this, 'the_action_hook_callback']);
-        add_action('admin_ajax_nopriv_custom_action_hook', [$this, 'the_action_hook_callback']);
+        $this->enableFeatures();
+        NnkTranslations::register_strings();
     }
 
     function add_support()
@@ -35,8 +35,9 @@ class NoortekWPTheme
         wp_enqueue_style('smart_wizard', get_theme_file_uri() . '/css/smart_wizard.min.css');
         wp_enqueue_style('smart_wizard_theme_arrows', get_theme_file_uri() . '/css/smart_wizard_theme_arrows.min.css');
         wp_enqueue_style('font-awesome', get_theme_file_uri() . '/css/fontawesome/css/all.min.css');
+        wp_enqueue_style('fullcalendar', get_theme_file_uri() . '/css/fullcalendar.min.css');
+        wp_enqueue_style('fullcalendarscheduler', get_theme_file_uri() . '/css/scheduler.min.css');
         wp_enqueue_style('style', get_theme_file_uri() . '/style.css');
-
     }
 
     function register_scripts()
@@ -49,17 +50,19 @@ class NoortekWPTheme
         wp_enqueue_script('smart_wizard', get_theme_file_uri() . '/js/jquery.smartWizard.min.js', false, 1, true);
         wp_enqueue_script('masonry', get_theme_file_uri() . '/js/masonry.pkgd.min.js', false, 1, true);
         wp_enqueue_script('jquery.validate', get_theme_file_uri() . '/js/jquery.validate.min.js', false, 1, true);
+        wp_enqueue_script('moment', get_theme_file_uri() . '/js/moment-with-locale.js', false, 1, true);
+        wp_enqueue_script('fullcalendar', get_theme_file_uri() . '/js/fullcalendar.min.js', false, 1, true);
+        wp_enqueue_script('fullcalendarscheduler', get_theme_file_uri() . '/js/scheduler.min.js', false, 1, true);
+        wp_enqueue_script('mask', get_theme_file_uri() . '/js/jquery.mask.min.js', false, 1, true);
 
         if (true) {
-            wp_enqueue_script('index-page', get_theme_file_uri() . '/js/pages/index.js', false, 1, true);
+            wp_enqueue_script('index-page', get_theme_file_uri() . './js/pages/index.js', false, 1, true);
         }
     }
 
-    function register_custom_post_types()
+    function enableFeatures()
     {
-        $this->register_custom_post_type('booking', 'Broneering', 'Broneeringud');
-        $this->register_custom_post_type('booking-room', 'Ruum', 'Ruumid');
-        $this->register_custom_post_type('booking-equipment', 'Vahend', 'Vahendid');
+        new RoomBooking();
     }
 
     function register_menu_spaces()
@@ -72,7 +75,7 @@ class NoortekWPTheme
         );
     }
 
-    function register_custom_post_type($slug, $singular, $plural)
+    public static function register_custom_post_type($slug, $singular, $plural)
     {
         $theme = 'noortek-theme';
 
@@ -98,7 +101,7 @@ class NoortekWPTheme
             'supports' => array('title', 'thumbnail', 'custom-fields'),
             'taxonomies' => array('genres'),
             'hierarchical' => false,
-            'public' => false,
+            'public' => true,
             'show_ui' => true,
             'show_in_menu' => true,
             'show_in_nav_menus' => false,
@@ -112,75 +115,5 @@ class NoortekWPTheme
         );
         register_post_type($slug, $args);
     }
-
-    function register_short_codes()
-    {
-        add_shortcode('booking', [$this, 'register_booking_short_code']);
-    }
-
-    function register_booking_short_code()
-    {
-        $rooms = ['post_type' => 'booking-room'];
-        $equipment = ['post_type' => 'booking-equipment'];
-        $get_rooms = get_posts($rooms);
-        $get_equipments = get_posts($equipment);
-        return Timber::compile('/views/booking.twig', [
-            'rooms' => $get_rooms,
-            'equipment' => $get_equipments
-        ]);
-    }
-
-    function the_action_hook_callback()
-    {
-
-        try {
-            $post_Id = wp_insert_post([
-                'post_title' => "Broneering",
-                'post_type' => 'booking',
-                'post_status' => 'publish'
-            ]);
-
-            add_post_meta($post_Id, 'room', $_POST['room']);
-
-            $selected_date = $_POST['date'];
-            $new_date = date('Ymd', strtotime($selected_date));
-            add_post_meta($post_Id, 'date', $new_date);
-            $field_date = get_field_object('date', $post_Id);
-            add_post_meta($post_Id, '_date', $field_date['key']);
-
-            add_post_meta($post_Id, 'time_from', $_POST['time_from']);
-            add_post_meta($post_Id, 'time_until', $_POST['time_until']);
-            add_post_meta($post_Id, 'participants_num', $_POST['participants_num']);
-            add_post_meta($post_Id, 'purpose', $_POST['purpose']);
-            $equipment = $_POST['resources'];
-            $field = get_field_object('resources', $post_Id);
-            if (!empty($equipment)){
-            add_post_meta($post_Id, 'resources', count($equipment));
-            add_post_meta($post_Id, '_resources', $field['key']);
-                foreach ($equipment as $key=> $equipmentId){
-                    $metaKey = 'resources_'.$key.'_vahend';
-                    add_post_meta($post_Id, $metaKey , $equipmentId) ;
-                    add_post_meta($post_Id, "_".$metaKey, 'field_5c7591d790f76' );
-                }
-            }
-            add_post_meta($post_Id, 'info', $_POST['info']);
-            add_post_meta($post_Id, 'firstname', $_POST['firstname']);
-            add_post_meta($post_Id, 'lastname', $_POST['lastname']);
-            add_post_meta($post_Id, 'address', $_POST['address']);
-            add_post_meta($post_Id, 'phone', $_POST['phone']);
-            add_post_meta($post_Id, 'email', $_POST['email']);
-
-            echo "Andmed salvestatud" . $post_Id;
-        } catch (Exception $e) {
-
-            wp_die('', '', 500);
-        }
-
-
-    }
-
-
-
-
 }
 
