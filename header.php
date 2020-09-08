@@ -1,7 +1,5 @@
 <header>
     <div class="container">
-
-
         <div class="header-content">
                 <div class="header-logo">
                     <div class="header-logo__image">
@@ -43,20 +41,4 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-expand-md navbar-light bg-light main-menu" role="navigation">
-            <div class="container">
-                <?php
-                wp_nav_menu(array(
-                    'theme_location' => 'main-menu',
-                    'depth' => 2,
-                    'container' => 'div',
-                    'container_class' => 'collapse navbar-collapse',
-                    'container_id' => 'bs-example-navbar-collapse-1',
-                    'menu_class' => 'nav navbar-nav',
-                    'fallback_cb' => 'WP_Bootstrap_Navwalker::fallback',
-                    'walker' => new WP_Bootstrap_Navwalker(),
-                ));
-                ?>
-            </div>
-        </nav>
 </header>

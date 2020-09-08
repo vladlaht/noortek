@@ -1,6 +1,6 @@
 /*
 Theme Name: Narva Noortekeskus
-Description: Narva Noortekeskuse Ruumide Broneerimise Wordpress Theme.
+Description: Narva noortekeskuse ruumide broneerimise Wordpress Theme.
 Version: 1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -8,8 +8,6 @@ Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, 
 */
 
 /*  Fonts  */
-
-/* roboto-300 - latin */
 /* roboto-300 - latin_cyrillic */
 @font-face {
     font-family: 'Roboto';
@@ -253,76 +251,6 @@ ul.languages > li.current-lang a {
     }
 }
 
-/*  Menu   */
-.navbar.main-menu {
-    background-color: white !important;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.main-menu .collapse {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.nav .menu-item {
-    margin: 5px;
-    height: 37px;
-    min-width: 142px;
-}
-
-.menu-item .nav-link {
-    padding: 5px 15px;
-    border-radius: 5px;
-    font-weight: 700;
-    transition: all 0.3s;
-    font-size: 17px;
-    text-align: center;
-    background: #ffb100;
-    color: rgba(0, 0, 0, .6);
-    box-sizing: border-box;
-    -webkit-font-smoothing: subpixel-antialiased;
-}
-
-.main-menu .menu-item .nav-link:hover {
-    background-color: orange;
-    color: rgba(0, 0, 0, .65);
-    transform: scale(1.05);
-}
-
-.main-menu .nav .active > .nav-link {
-    border: 1px solid black;
-    color: rgba(0, 0, 0, .6);
-    padding: 4px 14px;
-}
-
-@media screen and (max-width: 767px) {
-    .navbar-nav {
-        flex-direction: row;
-        justify-content: center;
-    }
-}
-
-@media screen and (max-width: 346px) {
-    .navbar-nav {
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
-
-/*   Main page   */
-
-.main-page__list {
-    margin-bottom: 30px;
-}
-
-.main-page__title,
-.main-page__sub-title {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
 /*  Content  */
 .container.content {
     background-color: white;
@@ -376,13 +304,8 @@ input[type=number] {
     margin-bottom: 10px;
 }
 
-.smart-wizard-menu-steps-item {
-
-}
-
-.smart-wizard-menu-steps .step-3,
-.smart-wizard-menu-steps .step-4,
-.smart-wizard-menu-steps .step-5 {
+.smart-wizard-steps .step-4,
+.smart-wizard-steps .step-5 {
     min-height: 332px;
 }
 
@@ -439,8 +362,24 @@ input[type=number] {
 
 }
 
+/*   Step 1 - Rules   */
+.rules-tab__subtitle {
 
-/*   Step 1   */
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.rules-tab__list {
+    margin-bottom: 30px;
+    padding-left: 15px;
+}
+
+/*   Step 2   */
+
+.step-2 .form-control[readonly] {
+    background-color: inherit;
+    opacity: 1;
+}
 
 .card {
     opacity: 0.7;
@@ -529,23 +468,11 @@ input[type=number] {
     }
 }
 
-/*   Step 2 - TIME   */
+/*   Step 3 - TIME   */
 .timetable {
     margin-bottom: 20px;
 }
 
-
-/*   Step 5 - Rules   */
-.rules-tab__subtitle {
-
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.rules-tab__list {
-    margin-bottom: 30px;
-    padding-left: 15px;
-}
 
 /*   Step 6 - Preloader   */
 

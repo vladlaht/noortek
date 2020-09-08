@@ -20,6 +20,21 @@ class NnkTranslations
         pll_register_string(self::NAME, 'bookingTabRules', $tabsGroup);
         pll_register_string(self::NAME, 'bookingTabConfirmation', $tabsGroup);
 
+        $tabRulesGroup = "bookingTabRules";
+        pll_register_string(self::NAME, 'bookingTabRulesSubtitle1', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem1', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem2', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesSubtitle2', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem3', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem4', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem5', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem6', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem7', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem8', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem9', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesItem10', $tabRulesGroup);
+        pll_register_string(self::NAME, 'bookingTabRulesLabelConfirm', $tabRulesGroup);
+
         $tabRoomAndDateGroup = "bookingTabRoomAndDate";
         pll_register_string(self::NAME, 'bookingTabRoomAndDateLabelDate', $tabRoomAndDateGroup);
         pll_register_string(self::NAME, 'bookingTabRoomAndDateLabelRoom', $tabRoomAndDateGroup);
@@ -48,18 +63,6 @@ class NnkTranslations
         pll_register_string(self::NAME, 'bookingTabResponsibleLabelEmail', $tabResponsibleGroup);
         pll_register_string(self::NAME, 'bookingTabResponsibleLabelAddress', $tabResponsibleGroup);
         pll_register_string(self::NAME, 'bookingTabResponsibleLabelAddressPlaceholder', $tabResponsibleGroup);
-
-        $tabRulesGroup = "bookingTabRules";
-        pll_register_string(self::NAME, 'bookingTabRulesSubtitle1', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesItem1', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesItem2', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesSubtitle2', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesItem3', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesItem4', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesItem5', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesItem6', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesItem7', $tabRulesGroup);
-        pll_register_string(self::NAME, 'bookingTabRulesLabelConfirm', $tabRulesGroup);
 
         $tabRulesGroup = "bookingTabPreloader";
         pll_register_string(self::NAME, 'bookingTabPreloaderString1', $tabRulesGroup);

@@ -2,32 +2,31 @@
     <form autocomplete="off" id="nnk-booking-form" action="http://localhost/noortek/wp-admin/admin-post.php"
           method="POST">
         <input type="hidden" name="action" value="custom_action_hook">
-
         <div id="smartwizard" class="smartwizard" style="display: none;">
             <ul class="smart-wizard-menu-steps">
                 <li class="smart-wizard-menu-steps-item">
                     <a href="#step-1">
-                        {{ function('pll_e', 'bookingTabRoomAndDate') }}
+                        {{ function('pll_e', 'bookingTabRules') }}
                     </a>
                 </li>
                 <li class="smart-wizard-menu-steps-item">
                     <a href="#step-2">
-                        {{ function('pll_e', 'bookingTabTimeAndEquipments') }}
+                        {{ function('pll_e', 'bookingTabRoomAndDate') }}
                     </a>
                 </li>
                 <li class="smart-wizard-menu-steps-item">
                     <a href="#step-3">
-                        {{ function('pll_e', 'bookingTabGoal') }}
+                        {{ function('pll_e', 'bookingTabTimeAndEquipments') }}
                     </a>
                 </li>
                 <li class="smart-wizard-menu-steps-item">
                     <a href="#step-4">
-                        {{ function('pll_e', 'bookingTabResponsible') }}
+                        {{ function('pll_e', 'bookingTabGoal') }}
                     </a>
                 </li>
                 <li class="smart-wizard-menu-steps-item">
                     <a href="#step-5">
-                        {{ function('pll_e', 'bookingTabRules') }}
+                        {{ function('pll_e', 'bookingTabResponsible') }}
                     </a>
                 </li>
                 <li class="smart-wizard-menu-steps-item">
@@ -36,15 +35,43 @@
                     </a>
                 </li>
             </ul>
-
             <div class="smart-wizard-steps">
                 <div id="step-1" class="step-1">
+                    <div class="form-group">
+                        <div class="rules-tab__subtitle">
+                            {{ function('pll_e', 'bookingTabRulesSubtitle1') }}:
+                        </div>
+                        <ul class="rules-tab__list">
+                            <li>{{ function('pll_e', 'bookingTabRulesItem1') }}.</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem2') }}.</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem3') }}.</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem4') }}.</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem5') }}.</li>
+                        </ul>
+                        <div class="rules-tab__subtitle">
+                            {{ function('pll_e', 'bookingTabRulesSubtitle2') }}:
+                        </div>
+                        <ul class="rules-tab__list">
+                            <li>{{ function('pll_e', 'bookingTabRulesItem6') }}.</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem7') }}.</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem8') }}.</li>
+                            <li>{{ function('pll_e', 'bookingTabRulesItem9') }}.</li>
+                        </ul>
+                        <span>{{ function('pll_e', 'bookingTabRulesItem10') }}.</span>
+                    </div>
+                    <div class="form-group form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
+                        <label class="form-check-label" for="rules_checkbox">
+                            {{ function('pll_e', 'bookingTabRulesLabelConfirm') }}.
+                        </label>
+                    </div>
+                </div>
+                <div id="step-2" class="step-2">
                     <div class="row">
                         <div class="form-group col-sm-6 col-md-4">
                             <label for="date">{{ function('pll_e', 'bookingTabRoomAndDateLabelDate') }}*</label>
-                            <input type="text" class="datepicker-here form-control" data-position="bottom center"
-                                   name="date"
-                                   id="date">
+                            <input type="text" id="date" class="datepicker-here form-control"
+                                   data-position="bottom center" readonly name="date">
                         </div>
                     </div>
                     <div class="row">
@@ -56,7 +83,7 @@
                                         <div class="card ">
                                             <img class="card-img-top"
                                                  src="{{ function('get_the_post_thumbnail_url', room.ID, 'post-thumbnail') }}"
-                                                 alt="">
+                                                 alt="room-picture">
                                             <div class="card-body">
                                                 <span class="card-title">
                                                     {{ room.post_title }}
@@ -83,8 +110,7 @@
                         </div>
                     </div>
                 </div>
-
-                <div id="step-2" class="step-2">
+                <div id="step-3" class="step-3">
                     <div class="timepicker_area">
                         <div class="row">
                             <div class="form-group col-md-5 col-sm-12">
@@ -132,10 +158,8 @@
                             </div>
                         {% endfor %}
                     </div>
-
                 </div>
-
-                <div id="step-3" class="step-3">
+                <div id="step-4" class="step-4">
                     <div class="form-group">
                         <label for="participants">{{ function('pll_e', 'bookingTabGoalLabelParticipants') }}*</label>
                         <input type="number" class="form-control" id="participants" name="participants_num"
@@ -160,18 +184,16 @@
                         > </textarea>
                     </div>
                 </div>
-                <div id="step-4" class="step-4">
+                <div id="step-5" class="step-5">
                     <div class="form-row">
                         <div class="form-group col-md-6 col-sm-12">
                             <label for="firstname">{{ function('pll_e', 'bookingTabResponsibleLabelFirstName') }}
                                 *</label>
-                            <input type="text" class="form-control" id="firstname" name="firstname"
-                                   onkeypress="return /[a-z]/i.test(event.key)">
+                            <input type="text" class="form-control" id="firstname" name="firstname">
                         </div>
                         <div class="form-group col-md-6 col-sm-12">
                             <label for="lastname">{{ function('pll_e', 'bookingTabResponsibleLabelLastName') }}*</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname"
-                                   onkeypress="return /[a-z]/i.test(event.key)">
+                            <input type="text" class="form-control" id="lastname" name="lastname">
                         </div>
                     </div>
 
@@ -193,34 +215,6 @@
                                placeholder="{{ function('pll_e', 'bookingTabResponsibleLabelAddressPlaceholder') }}"
                                onfocus="placeholder = ''"
                                onblur="placeholder = '{{ function('pll_e', 'bookingTabResponsibleLabelAddressPlaceholder') }}'">
-                    </div>
-                </div>
-
-                <div id="step-5" class="step-5">
-                    <div class="form-group">
-                        <div class="rules-tab__subtitle">
-                            {{ function('pll_e', 'bookingTabRulesSubtitle1') }}:
-                        </div>
-                        <ul class="rules-tab__list">
-                            <li>{{ function('pll_e', 'bookingTabRulesItem1') }}</li>
-                            <li>{{ function('pll_e', 'bookingTabRulesItem2') }}</li>
-                        </ul>
-                        <div class="rules-tab__subtitle">
-                            {{ function('pll_e', 'bookingTabRulesSubtitle2') }}:
-                        </div>
-                        <ul class="rules-tab__list">
-                            <li>{{ function('pll_e', 'bookingTabRulesItem3') }}</li>
-                            <li>{{ function('pll_e', 'bookingTabRulesItem4') }}</li>
-                            <li>{{ function('pll_e', 'bookingTabRulesItem5') }}</li>
-                            <li>{{ function('pll_e', 'bookingTabRulesItem6') }}</li>
-                        </ul>
-                        <span>{{ function('pll_e', 'bookingTabRulesItem7') }}</span>
-                    </div>
-                    <div class="form-group form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="rules_checkbox" name="rules">
-                        <label class="form-check-label" for="rules_checkbox">
-                            {{ function('pll_e', 'bookingTabRulesLabelConfirm') }}.
-                        </label>
                     </div>
                 </div>
                 <div id="step-6" class="step-6">
