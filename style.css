@@ -9,6 +9,9 @@ Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, 
 
 /*  Fonts  */
 /* roboto-300 - latin_cyrillic */
+
+
+
 @font-face {
     font-family: 'Roboto';
     font-style: normal;
@@ -122,6 +125,10 @@ header .container {
     width: 440px;
     height: 120px;
     padding: 5px;
+
+}
+
+.header-logo .header-logo__link {
     display: flex;
 }
 
